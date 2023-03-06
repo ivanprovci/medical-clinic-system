@@ -1,4 +1,4 @@
-
+package com.kpu.student.Project;
 public class DoctorAccount {
 private String profile;
 private ConfidentialRecord relatedRecords;

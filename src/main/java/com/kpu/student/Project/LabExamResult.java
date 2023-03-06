@@ -1,4 +1,4 @@
-
+package com.kpu.student.Project;
 public class LabExamResult {
 	private int result;
 	private int normalRange;

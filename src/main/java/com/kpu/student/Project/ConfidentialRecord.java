@@ -1,4 +1,4 @@
-
+package com.kpu.student.Project;
 public class ConfidentialRecord {
 private int recordID;
 private PatientAccount relatedPatient;

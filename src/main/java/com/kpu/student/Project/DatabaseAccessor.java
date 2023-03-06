@@ -1,4 +1,4 @@
-
+package com.kpu.student.Project;
 public class DatabaseAccessor {
 
 	public String retrievePasswordHash(String email) {

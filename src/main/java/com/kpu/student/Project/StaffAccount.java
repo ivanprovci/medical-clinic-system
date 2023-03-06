@@ -1,4 +1,4 @@
-
+package com.kpu.student.Project;
 public class StaffAccount {
 	
 	//move notifyUser from class "Account" because of professor's feedbacks

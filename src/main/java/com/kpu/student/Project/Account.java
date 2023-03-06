@@ -1,4 +1,4 @@
-
+package com.kpu.student.Project;
 public class Account {
 
 	private String email;
