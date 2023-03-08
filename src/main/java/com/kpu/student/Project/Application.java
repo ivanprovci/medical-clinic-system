@@ -17,6 +17,8 @@ public class Application {
     }
     
     @GetMapping("/checkPassword")
+    //Sends an email/hashed password combo to be checked
+    //Returns true if the combination is valid, false otherwise - Liam
     public boolean checkPassword(@RequestParam(value = "email", defaultValue = "") String email,
     		@RequestParam(value = "password", defaultValue = "") String password) {
     	
@@ -24,6 +26,9 @@ public class Application {
     }
     
     @GetMapping("/getRecords")
+    //Gets an array of records from the database
+    //Going to add parameters later (type of record, email of person looking up records, etc)
+    //For now, we just want to make sure we can pass them along properly to the JavaScript - Liam
     public ConfidentialRecord[] getRecords() {
     	ConfidentialRecord[] recordList = new ConfidentialRecord[2];
     	recordList[0] = new VisitRecord(0, new PatientAccount("patient-johndoe@gmail.com", "johndoepassword"), 

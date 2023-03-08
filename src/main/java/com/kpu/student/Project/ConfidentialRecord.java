@@ -13,7 +13,16 @@ public ConfidentialRecord(int ID, PatientAccount patient, DoctorAccount doctor) 
 
 public boolean isAccessAllowed(Account accessor) {
 	if (accessor.equals(this.getRelatedPatient())) {
-		
+		//If this is the patient referenced in the record
+		return true;
+	}
+	if (accessor.equals(this.getPrescribingDoctor())) {
+		//If this is the doctor referenced in the record
+		return true;
+	}
+	if (accessor instanceof StaffAccount) {
+		//If this is a staff account (staff have read permissions for everything)
+		return true;
 	}
 	return false;
 }

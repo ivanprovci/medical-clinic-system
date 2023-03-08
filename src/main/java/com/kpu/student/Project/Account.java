@@ -13,12 +13,12 @@ public class Account {
 		this.setPassword(password);
 	}
 	
-	public boolean checkPassword(String password) {
-		return null != null;
-	}
-	
-	public void login(String password){
-		
+	public Account(String email, String password, String firstname, String lastName, String phoneNumber) {
+		this.email = email;
+		this.password = password;
+		this.firstName = firstname;
+		this.lastName = lastName;
+		this.phoneNo = phoneNumber;
 	}
 	
     public static PatientAccount registerNewPatient(String email, String password) {
@@ -68,5 +68,35 @@ public class Account {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
+	//Check the password method
+		public Boolean checkPassword(String password) {
+			return this.password.equals(password);
+			//This method might be redundant, we already have retrievePasswordHash() in DatabaseAccessor - Liam
+		}
+		
+		//Login in method check if he can login successfull or not maybe use a boolean with if statements 
+		public Boolean login(String password) {
+			if(checkPassword(password)) {
+			
+				return true; //once the check password method run and if the password match login will be successful
+			}else {
+				
+				return false;	//password not correct meaning login insuccessful 
+			}
+		}
+		
+		public void notifyUser(String message) {
+			//Send an email to this.getEmail() with 'message' as the contents
+			//Not sure how to implement this yet - Liam
+		}
+		
+		//Create the patient class for the regesterNewPatient Method
+		public PatientAccount registerNewPatient(String email, String password, String firstName, String lastName, String phoneNumber) {
+			PatientAccount newPatient = new PatientAccount(email,password);
+			
+			
+			return newPatient;
+		}
 }
 
