@@ -1,18 +1,22 @@
 package com.kpu.student.Project;
 public class DatabaseAccessor {
 
-	public String retrievePasswordHash(String email) {
-		return email;}
-	public Account retrieveAccountInfo(Account email) {
-		return email;
+	public static String retrievePasswordHash(String email) {
+		return "";
 	}
-	public ConfidentialRecord retrieveRecord (ConfidentialRecord recordID) {
-		return recordID;
+	public static Account retrieveAccountInfo(String email) {
+		Account retrievedAccount = new Account("", "");
+		
+		return retrievedAccount;
 	}
-	public void addAccount (Account newAccount) {
+	public static ConfidentialRecord retrieveRecord (int recordID) {
+		ConfidentialRecord retrievedRecord = new ConfidentialRecord(0, null, null);
+		return retrievedRecord;
+	}
+	public static void addAccount (Account newAccount) {
 		
 	}
-	public void addRecord(ConfidentialRecord newRecord) {
+	public static void addRecord(ConfidentialRecord newRecord) {
 		
 	}
 }

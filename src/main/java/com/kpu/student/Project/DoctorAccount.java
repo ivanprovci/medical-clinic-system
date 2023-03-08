@@ -1,5 +1,10 @@
 package com.kpu.student.Project;
-public class DoctorAccount {
+public class DoctorAccount extends Account {
+	
+public DoctorAccount(String email, String password) {
+		super(email, password);
+		// TODO Auto-generated constructor stub
+	}
 private String profile;
 private ConfidentialRecord relatedRecords;
 

@@ -1,5 +1,11 @@
 package com.kpu.student.Project;
-public class LabExamResult {
+public class LabExamResult extends ConfidentialRecord {
+
+	public LabExamResult(int ID, LabExam exam) {
+		super(ID, exam.getRelatedPatient(), exam.getPrescribingDoctor());
+		exam.setExamResults(this);
+		// TODO Auto-generated constructor stub
+	}
 	private int result;
 	private int normalRange;
 	private boolean isNormalResult;

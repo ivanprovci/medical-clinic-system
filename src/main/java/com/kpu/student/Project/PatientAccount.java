@@ -1,5 +1,10 @@
 package com.kpu.student.Project;
-public class PatientAccount {
+public class PatientAccount extends Account{
+
+public PatientAccount(String email, String password) {
+		super(email, password);
+		// TODO Auto-generated constructor stub
+	}
 
 private boolean isVerified;
 private StaffAccount verifiedBy; 
@@ -7,9 +12,6 @@ private String address;
 private String healthNo;
 private ConfidentialRecord relatedRecord;
 
-//create constructor PatientAccount
-public PatientAccount(String email, String password) {
-}
 private void viewDoctorProfile(DoctorAccount doctor) {
 }
 //getters and setters

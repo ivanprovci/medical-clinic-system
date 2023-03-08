@@ -15,5 +15,20 @@ public class Application {
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
       return String.format("Hello %s!", name);
     }
+    
+    @GetMapping("/checkPassword")
+    public boolean checkPassword(@RequestParam(value = "email", defaultValue = "") String email,
+    		@RequestParam(value = "password", defaultValue = "") String password) {
+    	
+    	return (password == DatabaseAccessor.retrievePasswordHash(email));
+    }
+    
+    @GetMapping("/getRecords")
+    public ConfidentialRecord[] getRecords() {
+    	ConfidentialRecord[] recordList = new ConfidentialRecord[2];
+    	recordList[0] = new Prescription(0, null, null);
+    	recordList[1] = new VisitRecord(0, null, null);
+		return recordList;
+    }
 }
 

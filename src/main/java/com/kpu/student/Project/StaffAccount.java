@@ -1,6 +1,11 @@
 package com.kpu.student.Project;
-public class StaffAccount {
-	
+public class StaffAccount extends Account {
+
+	public StaffAccount(String email, String password) {
+		super(email, password);
+		// TODO Auto-generated constructor stub
+	}
+
 	//move notifyUser from class "Account" because of professor's feedbacks
 public void notifyUser(String message){
 	}

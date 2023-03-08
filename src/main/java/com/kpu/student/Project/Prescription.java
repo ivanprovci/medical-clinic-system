@@ -1,17 +1,19 @@
 package com.kpu.student.Project;
 import java.util.Date;
 
-public class Prescription {
+public class Prescription extends ConfidentialRecord {
+	
+public Prescription(int ID, PatientAccount patient, DoctorAccount doctor) {
+		super(ID, patient, doctor);
+		// TODO Auto-generated constructor stub
+	}
+
 private Date datePrescribed;
 private String medicineName;
 private String medicineQuantity;
 private String medicineDose;
 private boolean isRefillable;
 
-//constructor
-public Prescription(Date datePrescribed) {
-    this.datePrescribed = datePrescribed;
-}
 
 // getters and setters
 public Date getDatePrescribed() {

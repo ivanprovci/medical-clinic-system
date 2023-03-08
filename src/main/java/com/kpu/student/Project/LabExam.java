@@ -1,8 +1,13 @@
 package com.kpu.student.Project;
 import java.util.Date;
 
-public class LabExam {
+public class LabExam extends ConfidentialRecord{
 
+
+	public LabExam(int ID, PatientAccount patient, DoctorAccount doctor) {
+		super(ID, patient, doctor);
+		// TODO Auto-generated constructor stub
+	}
 	private Date examDate;
 	private String patientHealthNo;
 	private String examItem;

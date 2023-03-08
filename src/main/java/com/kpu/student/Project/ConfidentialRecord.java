@@ -5,11 +5,17 @@ private PatientAccount relatedPatient;
 private DoctorAccount prescribingDoctor;
 
 //create constructor ConfidentialRecord
-public ConfidentialRecord(int recordID) {
+public ConfidentialRecord(int ID, PatientAccount patient, DoctorAccount doctor) {
+	this.setRecordID(ID);
+	this.setRelatedPatient(patient);
+	this.setPrescribingDoctor(doctor);
 }
 
 public boolean isAccessAllowed(Account accessor) {
-	return null != null;
+	if (accessor.equals(this.getRelatedPatient())) {
+		
+	}
+	return false;
 }
 
 //getters and setters

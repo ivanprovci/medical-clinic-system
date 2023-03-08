@@ -1,8 +1,12 @@
 package com.kpu.student.Project;
 import java.util.Date;
 
-public class VisitRecord {
+public class VisitRecord extends ConfidentialRecord {
 
+	public VisitRecord(int ID, PatientAccount patient, DoctorAccount doctor) {
+		super(ID, patient, doctor);
+		// TODO Auto-generated constructor stub
+	}
 	private Date visitDate;
 	private Prescription prescribedMedications;
 	private LabExam prescribedLabExams;
@@ -11,6 +15,7 @@ public class VisitRecord {
 	public Date getVisitDate() {
 		return visitDate;
 	}
+	
 	public void setVisitDate(Date visitDate) {
 		this.visitDate = visitDate;
 	}
