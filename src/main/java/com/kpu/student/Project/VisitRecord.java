@@ -1,5 +1,6 @@
 package com.kpu.student.Project;
 import java.util.Date;
+import java.util.LinkedList;
 
 public class VisitRecord extends ConfidentialRecord {
 
@@ -8,8 +9,8 @@ public class VisitRecord extends ConfidentialRecord {
 		// TODO Auto-generated constructor stub
 	}
 	private Date visitDate;
-	private Prescription prescribedMedications;
-	private LabExam prescribedLabExams;
+	private LinkedList<Prescription> prescribedMedications;
+	private LinkedList<LabExam> prescribedLabExams;
 	
 	//getters and setters
 	public Date getVisitDate() {
@@ -19,16 +20,25 @@ public class VisitRecord extends ConfidentialRecord {
 	public void setVisitDate(Date visitDate) {
 		this.visitDate = visitDate;
 	}
-	public Prescription getPrescribedMedications() {
+	public LinkedList<Prescription> getPrescribedMedications() {
 		return prescribedMedications;
 	}
-	public void setPrescribedMedications(Prescription prescribedMedications) {
+	public void setPrescribedMedications(LinkedList<Prescription> prescribedMedications) {
 		this.prescribedMedications = prescribedMedications;
 	}
-	public LabExam getPrescribedLabExams() {
+	public LinkedList<LabExam> getPrescribedLabExams() {
 		return prescribedLabExams;
 	}
-	public void setPrescribedLabExams(LabExam prescribedLabExams) {
+	
+	public void addExam(LabExam exam) {
+		prescribedLabExams.add(exam);
+	}
+	
+	public void addPrescription(Prescription med) {
+		prescribedMedications.add(med);
+	}
+	
+	public void setPrescribedLabExams(LinkedList<LabExam> prescribedLabExams) {
 		this.prescribedLabExams = prescribedLabExams;
 	}
 }

@@ -26,8 +26,9 @@ public class Application {
     @GetMapping("/getRecords")
     public ConfidentialRecord[] getRecords() {
     	ConfidentialRecord[] recordList = new ConfidentialRecord[2];
-    	recordList[0] = new Prescription(0, null, null);
-    	recordList[1] = new VisitRecord(0, null, null);
+    	recordList[0] = new VisitRecord(0, new PatientAccount("patient-johndoe@gmail.com", "johndoepassword"), 
+    			new DoctorAccount("doctorsmith@gmail.com", "drsmithpassword"));
+    	recordList[1] = new Prescription(1, (VisitRecord) recordList[0]);
 		return recordList;
     }
 }

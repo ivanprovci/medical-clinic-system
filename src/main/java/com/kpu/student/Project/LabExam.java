@@ -4,8 +4,10 @@ import java.util.Date;
 public class LabExam extends ConfidentialRecord{
 
 
-	public LabExam(int ID, PatientAccount patient, DoctorAccount doctor) {
-		super(ID, patient, doctor);
+	public LabExam(int ID, VisitRecord visit) {
+		super(ID, visit.getRelatedPatient(), visit.getPrescribingDoctor());
+		this.setPatientHealthNo(visit.getRelatedPatient().getHealthNo());
+		visit.addExam(this);;
 		// TODO Auto-generated constructor stub
 	}
 	private Date examDate;

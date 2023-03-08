@@ -3,8 +3,9 @@ import java.util.Date;
 
 public class Prescription extends ConfidentialRecord {
 	
-public Prescription(int ID, PatientAccount patient, DoctorAccount doctor) {
-		super(ID, patient, doctor);
+public Prescription(int ID, VisitRecord visit) {
+	super(ID, visit.getRelatedPatient(), visit.getPrescribingDoctor());
+	visit.addPrescription(this);
 		// TODO Auto-generated constructor stub
 	}
 

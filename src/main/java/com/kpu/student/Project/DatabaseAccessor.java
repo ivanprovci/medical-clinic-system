@@ -2,7 +2,7 @@ package com.kpu.student.Project;
 public class DatabaseAccessor {
 
 	public static String retrievePasswordHash(String email) {
-		return "";
+		return "password";
 	}
 	public static Account retrieveAccountInfo(String email) {
 		Account retrievedAccount = new Account("", "");
