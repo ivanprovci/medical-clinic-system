@@ -22,7 +22,7 @@ public class Application {
     public boolean checkPassword(@RequestParam(value = "email", defaultValue = "") String email,
     		@RequestParam(value = "password", defaultValue = "") String password) {
     	
-    	return (password == DatabaseAccessor.retrievePasswordHash(email));
+    	return (password.equals(DatabaseAccessor.retrievePasswordHash(email)));
     }
     
     @GetMapping("/getRecords")
