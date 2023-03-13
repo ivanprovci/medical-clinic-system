@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <title>Staff Account</title>  
+      <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <header>
+          <div class="container">
+            <a href="#" class="logo">B.C Health & wellness</a> 
+  
+    
+
+            <div class="menu">
+              <form class="search-form">
+                <input type="text" placeholder="Search...">
+                <button type="submit">Go</button>
+              </form>
+            </div>
+          </div>
+            
+          <nav class="top-nav">
+            <div class="container">
+              <ul>
+                <li><a href="homePage.html">HOME</a></li>
+                <li><a href="#">ACCOUNT</a></li>
+              </ul>
+            </div>
+          </nav>
+         </header>
+
+         <main>
+
+        <nav class="side-nav">
+            <ul>
+
+              <button class="dropdown-btn">Add User Account<i class="down"></i></button>
+              <div class="dropdown-container">
+                  <a href="CreatePatientAccount.html">Add Patient</a>
+                  <a href="#">Add Doctor</a>
+              </div>
+              
+                <li><a href="#">Modify User Account</a>
+                <li><a href="#">Delete User Account</a>
+                <li><a href="#">Veiw records</a>
+            </ul>
+        </nav>
+
+      
+        <script>
+          /* dropdown nav (found on Wschoool) */
+          var dropdown = document.getElementsByClassName("dropdown-btn");
+          var i;
+          
+          for (i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function() {
+              this.classList.toggle("active");
+              var dropdownContent = this.nextElementSibling;
+              if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+              } else {
+                dropdownContent.style.display = "block";
+              }
+            });
+          }
+          </script>
+
+        <div class="Staff-Page-tile">
+          <h1>Staff Account Details</h1>
+          <form class="Input-form"></form>
+          <label for="NAME">NAME:</label> <input type="text" placeholder="FirstName,LastNAme...">
+          <form class="Input-form"></form>
+          <label for="EMAIL">EMAIL:</label> <input type="text" placeholder="EMAIL...">
+          <form class="Input-form"></form>
+          <label for="phone">Phone:</label> <input type="tel" placeholder="XXX-XXX-XXXX">
+          <form class="Input-form"></form>
+          <label for="Address">ADDRESS:</label> <input type="text" placeholder="ADDRESS...">
+          <form class="Input-form"></form>
+          <label for="Health-Card">HEALTH CARD #:</label> <input type="text" placeholder="Health-Card">
+          <form class="Input-form"></form>
+          <input type="submit">
+        </div>
+
+        
+
+         </main>
+
+
+         
+    </body>
+  
+</main>
+    
+</html>
