@@ -89,21 +89,6 @@ header .logo
     color: #7AD7F0;
 }
 
-/* The search bar at the top right*/
-.search-form input[type="text"] {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 20px;
-  }
-
-.search-form button {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 20px;
-    background-color: #fff;
-    color: #7AD7F0;
-  }
-
 
 /*menu class for header */
 .menu {
@@ -410,3 +395,24 @@ label
     margin-bottom: 10px;
 }
 
+.search-bar {
+  padding-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input[type="text"] {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border:none;
+  border-radius: 20px;
+}
+
+.search-bar button[type="submit"] {
+  background-color: #fff;
+  color: #7AD7F0;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  padding: 5px 12px;
+}
