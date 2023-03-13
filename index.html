@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            html, body {
+                margin: 0;
+                background-image: url("https://media.istockphoto.com/id/954802966/photo/healthcare-photos.jpg?s=612x612&w=0&k=20&c=DlouWo1_kZGmDwylkTElgkQUMWhFAy62D8BoyGiZX_0=");
+                background-size: cover;
+            }
+            input[type=text], input[type=password] {
+                padding: 10px;
+                margin-bottom: 10px;
+                border-radius: 7px;
+                border: groove 2px;
+            }
+            input[type=text]:focus, input[type=password]:focus {
+                outline-color: #0000008f;
+            }
+            input[type=submit] {
+                background: #0d3d80;
+                border-radius: 7px;
+                font-family: Arial;
+                color: #ffffff;
+                font-size: 14px;
+                padding: 3px 20px 3px 20px;
+                border: solid #0d3772 2px;
+                width: 100%;
+                cursor: pointer;
+            }
+            #banner {
+                height: 10%;
+                background: linear-gradient(90deg, rgba(93,168,227,1) 25%, rgba(25,142,235,1) 50%, rgba(93,168,227,1) 75%);
+            }
+            h1{
+                text-align: center;
+                text-shadow: 2px 1px 9px rgba(0,0,0,0.43);
+                padding-top: 2%;
+                font-size: 3.5em;
+                font-family: palatino, serif;
+                font-weight: 500;
+            }
+            #login { 
+                margin-top: 5%;
+                display: inline-block;
+                padding: 20px;
+                border: ridge 2px;
+                border-radius: 5px;
+                background-color: #ffffff;
+            }
+            #container {
+                display: flex;
+                justify-content: center;
+            }
+            p {
+                text-align: center;
+                font-size: 12px;
+            }
+        </style>
+        <script>
+            async function getText(){
+                let email = document.getElementById("loginEmail").value;
+                let password = document.getElementById("loginPassword").value;
+
+                let url = "http://localhost:8080/checkPassword?password=" + password;
+                let response = await fetch(url);
+                let text = await response.text();
+
+                alert(text);
+            }
+        </script>
+    </head>
+    <body>
+        <div id="banner">
+            <h1>BC Health and Wellness Medical Clinic</h1>
+        </div>
+        <div id="container">
+            <div id="login">
+                <!-- action="" fill quotes with file name that retrieves email and pw into the db-->
+                <form action="" method="get">
+                    <input type="text" id="loginEmail" placeholder="Email" size="25" required> <br>
+                    <input type="password" id="loginPassword" placeholder="Password" size="25" required> <br>
+                    <input type="submit" value="Login" onclick="getText()">
+                </form>
+                <p>	&mdash;&mdash; or &mdash;&mdash;<br><br><a href="register.html">Register new account</a></p>
+            </div>
+        </div>
+    </body>
+</html>
