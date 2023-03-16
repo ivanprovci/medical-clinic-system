@@ -1,4 +1,9 @@
 package com.kpu.student.Project;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+
 public class DatabaseAccessor {
 
 	public static String retrievePasswordHash(String email) {
@@ -18,5 +23,24 @@ public class DatabaseAccessor {
 	}
 	public static void addRecord(ConfidentialRecord newRecord) {
 		
+	}
+	
+	public static Connection connect() {
+
+		Connection conn = null;
+		try {
+		    conn =
+		       DriverManager.getConnection("jdbc:mysql://localhost/INFO2413DB?" +
+		                                   "user=accessor&password=DB_Accessor");
+		
+		    // Do something with the Connection
+		
+		} catch (SQLException ex) {
+		    // handle any errors
+		    //System.out.println("SQLException: " + ex.getMessage());
+		    //System.out.println("SQLState: " + ex.getSQLState());
+		    //System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		return conn;
 	}
 }
