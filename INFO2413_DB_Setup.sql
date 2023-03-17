@@ -87,7 +87,7 @@ ENGINE = InnoDB;
 -- Table `INFO2413DB`.`ConfidentialRecord`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `INFO2413DB`.`ConfidentialRecord` (
-  `recordID` CHAR(10) NOT NULL,
+  `recordID` INT NOT NULL AUTO_INCREMENT,
   `relatedPatient` VARCHAR(50) NULL,
   `relatedDoctor` VARCHAR(50) NULL,
   PRIMARY KEY (`recordID`),
@@ -110,7 +110,7 @@ ENGINE = InnoDB;
 -- Table `INFO2413DB`.`VisitRecord`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `INFO2413DB`.`VisitRecord` (
-  `recordID` CHAR(10) NOT NULL,
+  `recordID` INT NOT NULL,
   `date` DATE NULL,
   PRIMARY KEY (`recordID`),
   CONSTRAINT `visitID`
@@ -125,8 +125,8 @@ ENGINE = InnoDB;
 -- Table `INFO2413DB`.`Prescription`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `INFO2413DB`.`Prescription` (
-  `recordID` CHAR(10) NOT NULL,
-  `relatedVisitRecord` CHAR(10) NULL,
+  `recordID` INT NOT NULL,
+  `relatedVisitRecord` INT NULL,
   `medName` VARCHAR(45) NULL,
   `medQuantity` VARCHAR(45) NULL,
   `medDose` VARCHAR(45) NULL,
@@ -150,8 +150,8 @@ ENGINE = InnoDB;
 -- Table `INFO2413DB`.`LabExam`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `INFO2413DB`.`LabExam` (
-  `recordID` CHAR(10) NOT NULL,
-  `relatedVisitRecord` CHAR(10) NULL,
+  `recordID` INT NOT NULL,
+  `relatedVisitRecord` INT NULL,
   `date` DATE NULL,
   `examItem` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`recordID`),
@@ -173,8 +173,8 @@ ENGINE = InnoDB;
 -- Table `INFO2413DB`.`LabExamResult`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `INFO2413DB`.`LabExamResult` (
-  `recordID` CHAR(10) NOT NULL,
-  `relatedLabExam` CHAR(10) NOT NULL,
+  `recordID` INT NOT NULL,
+  `relatedLabExam` INT NOT NULL,
   `result` INT NULL,
   `upperBound` INT NULL,
   `lowerBound` INT NULL,
