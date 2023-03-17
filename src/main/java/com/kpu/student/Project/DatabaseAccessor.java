@@ -1,12 +1,22 @@
 package com.kpu.student.Project;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 
 public class DatabaseAccessor {
 
 	public static String retrievePasswordHash(String email) {
+		Connection c = DatabaseAccessor.connect();
+		try {
+			PreparedStatement getPW = c.prepareStatement(
+					"GET password FROM Account WHERE ");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return "password";
 	}
 	public static Account retrieveAccountInfo(String email) {
@@ -32,11 +42,11 @@ public class DatabaseAccessor {
 		    conn =
 		       DriverManager.getConnection("jdbc:mysql://localhost/INFO2413DB?" +
 		                                   "user=accessor&password=DB_Accessor");
-		
-		    // Do something with the Connection
+		    //Create connection with database to return - Liam
 		
 		} catch (SQLException ex) {
-		    // handle any errors
+			//Not sure how to handle these, maybe a log file?
+			//We definitely can't just print them to console - Liam
 		    //System.out.println("SQLException: " + ex.getMessage());
 		    //System.out.println("SQLState: " + ex.getSQLState());
 		    //System.out.println("VendorError: " + ex.getErrorCode());
