@@ -2,22 +2,27 @@ package com.kpu.student.Project;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
 public class DatabaseAccessor {
 
 	public static String retrievePasswordHash(String email) {
+		String pwHash = "";
 		Connection c = DatabaseAccessor.connect();
 		try {
 			PreparedStatement getPW = c.prepareStatement(
-					"GET password FROM Account WHERE ");
+					"SELECT passwordHash FROM Account WHERE email = ?");
+			getPW.setString(1, email);
+			ResultSet results = getPW.executeQuery();
+			pwHash = results.getString(0);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return "password";
+		return pwHash;
 	}
 	public static Account retrieveAccountInfo(String email) {
 		Account retrievedAccount = new Account("", "");
@@ -30,8 +35,26 @@ public class DatabaseAccessor {
 	}
 	public static void addAccount (Account newAccount) {
 		
+		if (newAccount instanceof PatientAccount) {
+			
+		} else if (newAccount instanceof DoctorAccount) {
+			
+		} else if (newAccount instanceof StaffAccount) {
+			
+		}
+		
 	}
 	public static void addRecord(ConfidentialRecord newRecord) {
+		
+		if (newRecord instanceof VisitRecord) {
+			
+		} else if (newRecord instanceof Prescription) {
+			
+		} else if (newRecord instanceof LabExam) {
+			
+		} else if (newRecord instanceof LabExamResult) {
+			
+		}
 		
 	}
 	
