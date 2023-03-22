@@ -12,7 +12,7 @@ public class StaffAccount extends Account {
 		//Method to verifyPatient 
 		public void verifyPatient(PatientAccount patient) {
 			patient.setVerified(true);
-			patient.setVerifiedBy(this);
+			patient.setVerifiedBy(this.getEmail());
 			
 		}
 		//Method Create account 

@@ -1,4 +1,7 @@
 package com.kpu.student.Project;
+
+import java.util.LinkedList;
+
 public class PatientAccount extends Account{
 
 public PatientAccount(String email, String password) {
@@ -7,10 +10,10 @@ public PatientAccount(String email, String password) {
 	}
 
 private boolean isVerified;
-private StaffAccount verifiedBy; 
+private String verifiedBy; 
 private String address;
 private String healthNo;
-private ConfidentialRecord relatedRecord;
+private LinkedList<Integer> relatedRecords;
 
 private void viewDoctorProfile(DoctorAccount doctor) {
 }
@@ -21,10 +24,10 @@ public boolean isVerified() {
 public void setVerified(boolean isVerified) {
 	this.isVerified = isVerified;
 }
-public StaffAccount getVerifiedBy() {
+public String getVerifiedBy() {
 	return verifiedBy;
 }
-public void setVerifiedBy(StaffAccount verifiedBy) {
+public void setVerifiedBy(String verifiedBy) {
 	this.verifiedBy = verifiedBy;
 }
 public String getAddress() {
@@ -39,10 +42,10 @@ public String getHealthNo() {
 public void setHealthNo(String healthNo) {
 	this.healthNo = healthNo;
 }
-public ConfidentialRecord getRelatedRecord() {
-	return relatedRecord;
+public LinkedList<Integer> getRelatedRecord() {
+	return relatedRecords;
 }
-public void setRelatedRecord(ConfidentialRecord relatedRecord) {
-	this.relatedRecord = relatedRecord;
+public void setRelatedRecord(LinkedList<Integer> relatedRecord) {
+	this.relatedRecords = relatedRecord;
 }
 }

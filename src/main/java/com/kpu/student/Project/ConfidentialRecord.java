@@ -1,14 +1,20 @@
 package com.kpu.student.Project;
 public class ConfidentialRecord {
 private int recordID;
-private PatientAccount relatedPatient;
-private DoctorAccount prescribingDoctor;
+private String relatedPatient;
+private String prescribingDoctor;
 
 //create constructor ConfidentialRecord
 public ConfidentialRecord(int ID, PatientAccount patient, DoctorAccount doctor) {
 	this.setRecordID(ID);
-	this.setRelatedPatient(patient);
-	this.setPrescribingDoctor(doctor);
+	this.setRelatedPatient(patient.getEmail());
+	this.setPrescribingDoctor(doctor.getEmail());
+}
+
+public ConfidentialRecord(int ID, String patientEmail, String doctorEmail) {
+	this.setRecordID(ID);
+	this.setRelatedPatient(patientEmail);
+	this.setPrescribingDoctor(doctorEmail);
 }
 
 public boolean isAccessAllowed(Account accessor) {
@@ -36,19 +42,19 @@ public void setRecordID(int recordID) {
 	this.recordID = recordID;
 }
 
-public DoctorAccount getPrescribingDoctor() {
+public String getPrescribingDoctor() {
 	return prescribingDoctor;
 }
 
-public void setPrescribingDoctor(DoctorAccount prescribingDoctor) {
+public void setPrescribingDoctor(String prescribingDoctor) {
 	this.prescribingDoctor = prescribingDoctor;
 }
 
-public PatientAccount getRelatedPatient() {
+public String getRelatedPatient() {
 	return relatedPatient;
 }
 
-public void setRelatedPatient(PatientAccount relatedPatient) {
-	this.relatedPatient = relatedPatient;
+public void setRelatedPatient(String string) {
+	this.relatedPatient = string;
 }
 }

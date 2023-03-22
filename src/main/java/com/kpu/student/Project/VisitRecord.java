@@ -9,8 +9,8 @@ public class VisitRecord extends ConfidentialRecord {
 		// TODO Auto-generated constructor stub
 	}
 	private Date visitDate;
-	private LinkedList<Prescription> prescribedMedications;
-	private LinkedList<LabExam> prescribedLabExams;
+	private LinkedList<Integer> prescribedMedications;
+	private LinkedList<Integer> prescribedLabExams;
 	
 	//getters and setters
 	public Date getVisitDate() {
@@ -20,25 +20,25 @@ public class VisitRecord extends ConfidentialRecord {
 	public void setVisitDate(Date visitDate) {
 		this.visitDate = visitDate;
 	}
-	public LinkedList<Prescription> getPrescribedMedications() {
+	public LinkedList<Integer> getPrescribedMedications() {
 		return prescribedMedications;
 	}
-	public void setPrescribedMedications(LinkedList<Prescription> prescribedMedications) {
+	public void setPrescribedMedications(LinkedList<Integer> prescribedMedications) {
 		this.prescribedMedications = prescribedMedications;
 	}
-	public LinkedList<LabExam> getPrescribedLabExams() {
+	public LinkedList<Integer> getPrescribedLabExams() {
 		return prescribedLabExams;
 	}
 	
 	public void addExam(LabExam exam) {
-		prescribedLabExams.add(exam);
+		prescribedLabExams.add(exam.getRecordID());
 	}
 	
 	public void addPrescription(Prescription med) {
-		prescribedMedications.add(med);
+		prescribedMedications.add(med.getRecordID());
 	}
 	
-	public void setPrescribedLabExams(LinkedList<LabExam> prescribedLabExams) {
+	public void setPrescribedLabExams(LinkedList<Integer> prescribedLabExams) {
 		this.prescribedLabExams = prescribedLabExams;
 	}
 }

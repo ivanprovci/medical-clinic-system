@@ -1,4 +1,7 @@
 package com.kpu.student.Project;
+
+import java.util.LinkedList;
+
 public class DoctorAccount extends Account {
 	
 public DoctorAccount(String email, String password) {
@@ -6,7 +9,7 @@ public DoctorAccount(String email, String password) {
 		// TODO Auto-generated constructor stub
 	}
 private String profile;
-private ConfidentialRecord relatedRecords;
+private LinkedList<Integer> relatedRecords;
 
 //getters and setters
 public String getProfile() {
@@ -15,10 +18,10 @@ public String getProfile() {
 public void setProfile(String profile) {
 	this.profile = profile;
 }
-public ConfidentialRecord getRelatedRecords() {
+public LinkedList<Integer> getRelatedRecords() {
 	return relatedRecords;
 }
-public void setRelatedRecords(ConfidentialRecord relatedRecords) {
+public void setRelatedRecords(LinkedList<Integer> relatedRecords) {
 	this.relatedRecords = relatedRecords;
 }
 //methods I created because of professor's feedbacks

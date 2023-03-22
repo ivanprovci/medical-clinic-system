@@ -6,14 +6,14 @@ public class LabExam extends ConfidentialRecord{
 
 	public LabExam(int ID, VisitRecord visit) {
 		super(ID, visit.getRelatedPatient(), visit.getPrescribingDoctor());
-		this.setPatientHealthNo(visit.getRelatedPatient().getHealthNo());
+		//TODO: retrieve patient's health number from database dynamically
+		//this.setPatientHealthNo(visit.getRelatedPatient().getHealthNo());
 		visit.addExam(this);;
-		// TODO Auto-generated constructor stub
 	}
 	private Date examDate;
 	private String patientHealthNo;
 	private String examItem;
-	private LabExamResult examResults;
+	private int examResults;
 	
 	//getters and setters
 	public Date getExamDate() {
@@ -34,10 +34,10 @@ public class LabExam extends ConfidentialRecord{
 	public void setExamItem(String examItem) {
 		this.examItem = examItem;
 	}
-	public LabExamResult getExamResults() {
+	public int getExamResults() {
 		return examResults;
 	}
-	public void setExamResults(LabExamResult examResults) {
+	public void setExamResults(int examResults) {
 		this.examResults = examResults;
 	}
 }

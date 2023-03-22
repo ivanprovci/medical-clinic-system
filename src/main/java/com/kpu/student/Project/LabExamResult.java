@@ -3,7 +3,7 @@ public class LabExamResult extends ConfidentialRecord {
 
 	public LabExamResult(int ID, LabExam exam) {
 		super(ID, exam.getRelatedPatient(), exam.getPrescribingDoctor());
-		exam.setExamResults(this);
+		exam.setExamResults(this.getRecordID());
 		// TODO Auto-generated constructor stub
 	}
 	private int result;
