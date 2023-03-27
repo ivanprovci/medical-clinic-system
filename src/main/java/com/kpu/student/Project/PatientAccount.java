@@ -6,6 +6,7 @@ public class PatientAccount extends Account{
 
 public PatientAccount(String email, String password) {
 		super(email, password);
+		this.setRelatedRecords(new LinkedList<Integer>());
 		// TODO Auto-generated constructor stub
 	}
 
@@ -42,10 +43,10 @@ public String getHealthNo() {
 public void setHealthNo(String healthNo) {
 	this.healthNo = healthNo;
 }
-public LinkedList<Integer> getRelatedRecord() {
+public LinkedList<Integer> getRelatedRecords() {
 	return relatedRecords;
 }
-public void setRelatedRecord(LinkedList<Integer> relatedRecord) {
+public void setRelatedRecords(LinkedList<Integer> relatedRecord) {
 	this.relatedRecords = relatedRecord;
 }
 }

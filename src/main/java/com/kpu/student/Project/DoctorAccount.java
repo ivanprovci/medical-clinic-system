@@ -6,6 +6,7 @@ public class DoctorAccount extends Account {
 	
 public DoctorAccount(String email, String password) {
 		super(email, password);
+		this.setRelatedRecords(new LinkedList<Integer>());
 		// TODO Auto-generated constructor stub
 	}
 private String profile;

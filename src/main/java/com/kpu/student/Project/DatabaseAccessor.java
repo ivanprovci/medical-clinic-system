@@ -240,6 +240,13 @@ public class DatabaseAccessor {
 	}
 	
 	public static Connection connect() {
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		Connection conn = null;
 		try {
@@ -251,10 +258,7 @@ public class DatabaseAccessor {
 		} catch (SQLException ex) {
 			//Not sure how to handle these, maybe a log file?
 			//We definitely can't just print them to console - Liam
-			
-		    //System.out.println("SQLException: " + ex.getMessage());
-		    //System.out.println("SQLState: " + ex.getSQLState());
-		    //System.out.println("VendorError: " + ex.getErrorCode());
+			ex.printStackTrace();
 		}
 		return conn;
 	}
