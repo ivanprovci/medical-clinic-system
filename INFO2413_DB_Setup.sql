@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `INFO2413DB`.`PatientAccount` (
   CONSTRAINT `verifiedBy`
     FOREIGN KEY (`verifyingStaffMember`)
     REFERENCES `INFO2413DB`.`StaffAccount` (`email`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
@@ -90,6 +90,7 @@ CREATE TABLE IF NOT EXISTS `INFO2413DB`.`ConfidentialRecord` (
   `recordID` INT NOT NULL AUTO_INCREMENT,
   `relatedPatient` VARCHAR(50) NULL,
   `relatedDoctor` VARCHAR(50) NULL,
+  `createdTimeStamp` TIMESTAMP,
   PRIMARY KEY (`recordID`),
   INDEX `relatedToPatient_idx` (`relatedPatient` ASC) VISIBLE,
   INDEX `relatedToDoctor_idx` (`relatedDoctor` ASC) VISIBLE,
