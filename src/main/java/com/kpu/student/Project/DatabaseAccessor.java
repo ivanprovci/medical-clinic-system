@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.Instant;
 
 
 public class DatabaseAccessor {
@@ -218,7 +219,7 @@ public class DatabaseAccessor {
 	public static void addRecord(ConfidentialRecord newRecord) {
 		
 		Connection c = DatabaseAccessor.connect();
-		Timestamp t = new Timestamp(0);
+		Timestamp t = new Timestamp(Instant.now().toEpochMilli());
 		
 		//Add row in ConfidentialRecord table
 		if (newRecord instanceof VisitRecord) {
