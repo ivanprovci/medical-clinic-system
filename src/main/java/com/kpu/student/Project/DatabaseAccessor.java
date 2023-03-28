@@ -19,7 +19,9 @@ public class DatabaseAccessor {
 					"SELECT passwordHash FROM Account WHERE email = ?");
 			getPW.setString(1, email);
 			ResultSet results = getPW.executeQuery();
-			pwHash = results.getString("passwordHash");
+			if (results.isBeforeFirst()) {
+				pwHash = results.getString("passwordHash");
+			}
 			c.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -241,12 +243,14 @@ public class DatabaseAccessor {
 	
 	public static Connection connect() {
 		
+		/*
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 
 		Connection conn = null;
 		try {

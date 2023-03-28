@@ -47,8 +47,10 @@ public class Controller {
     @GetMapping("/checkPassword")
     public Boolean checkPassword(@RequestParam(value = "email", defaultValue = "") String email,
     		@RequestParam(value = "password", defaultValue = "") String password) {
-    	Boolean val = (password.equals(DatabaseAccessor.retrievePasswordHash(email)));
-    	System.out.print(val);
+    	String s = DatabaseAccessor.retrievePasswordHash(email);
+    	Boolean val = (password.equals(s));
+    	System.out.print("val = " + val);
+    	System.out.print(" s = (" + s + ")");
     	return val;
     }
 
