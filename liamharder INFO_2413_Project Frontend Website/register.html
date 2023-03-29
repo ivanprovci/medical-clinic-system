@@ -1,0 +1,90 @@
+<html>
+    <head>
+	 <title>Register</title>
+        <style>
+            html, body {
+                margin: 0;
+                background: radial-gradient(circle at center, #87cfd9 , #0062ff)
+            }
+            #container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #register { 
+                display: inline-block;
+                padding: 40px;
+                border: ridge 2px;
+                border-radius: 5px;
+                background-color: #ffffff;
+            }
+            input[type=text], input[type=password] {
+                padding: 15px;
+                font-size:1em;
+                margin-bottom: 15px;
+                border-radius: 7px;
+                border: groove 2px;
+            }
+            input[type=text]:focus, input[type=password]:focus {
+                outline-color: #0000008f;
+            }
+            input[type=submit] {
+                background: #0d3d80;
+                font-family: Arial;
+                color: #ffffff;
+                font-size: 1.1em;
+                margin-top:20px;
+                padding: 10px 20px 10px 20px;
+                border: solid #0d3772 2px;
+                width: 100%;
+                cursor: pointer;
+            }
+            h1 {
+                font-size: 80px;
+                margin: 0 0 7% 5%;
+                padding-top: 5%;
+                padding-bottom: 20px;
+                border-bottom: groove black 2px;
+                font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+            }
+        </style>
+        <script>
+            // highlights the Confirm Password text border in red to indicate the passwords don't match
+            function validatePassword(){
+                var password = document.getElementById("password");
+                var confirmPassword = document.getElementById("confirmPassword");
+                var warning = document.getElementById("differentPasswords");
+
+                if(password.value != confirmPassword.value){
+                    confirmPassword.style.border = "groove red 2px";
+                    
+                    warning.innerHTML = "Passwords must match. <br>";
+                    warning.style.color = "red";
+                    warning.style.fontFamily = "Trebuchet MS"
+                }
+                else {
+                    confirmPassword.style.border = "groove 2px";
+                    warning.innerHTML="";
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Register an account.</h1>
+        <div id="container">
+            <div id="register">
+                <!-- fill action-"" with file name that creates new account in db-->
+                <form action="" method="post">
+                    <input type="text" id="email" placeholder="Email" size="40" required> <br>
+                    <input type="password" id="password" placeholder="Password" size="40" oninput="validatePassword()" required> <br>
+                    <span id="differentPasswords"></span>
+                    <input type="password" id="confirmPassword" placeholder="Confirm Password" size="40" oninput="validatePassword()"required> <br>
+                    <input type="text" id="firstName" placeholder="First Name" size="15" required> 
+                    <input type="text" id="lastName" placeholder="Last Name" size="16" required> <br>
+                    <input type="text" id="phoneNumber" placeholder="Phone Number" size="40" required> <br>
+                    <input type="submit" value="Create Account">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
