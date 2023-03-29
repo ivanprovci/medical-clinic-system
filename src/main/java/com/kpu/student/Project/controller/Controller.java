@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.kpu.student.Project.ConfidentialRecord;
 import com.kpu.student.Project.DatabaseAccessor;
+import com.kpu.student.Project.LabExam;
 import com.kpu.student.Project.Prescription;
 import com.kpu.student.Project.VisitRecord;
 
@@ -35,6 +36,13 @@ public class Controller {
     	((Prescription) record2).setMedicineName("Cough Syrup");
     	((Prescription) record2).setMedicineQuantity("250ml bottle");
     	((Prescription) record2).setRefillable(true);
+    	((VisitRecord) record1).addExam(new LabExam(6));
+    	((VisitRecord) record1).addExam(new LabExam(7));
+    	((VisitRecord) record1).addExam(new LabExam(8));
+    	((VisitRecord) record1).addExam(new LabExam(9));
+    	((VisitRecord) record1).addPrescription(new Prescription(15));
+    	((VisitRecord) record1).addPrescription(new Prescription(16));
+    	((VisitRecord) record1).addPrescription(new Prescription(17));
     	recordList.add(record1);
     	recordList.add(record2);
     	return recordList;
@@ -42,13 +50,13 @@ public class Controller {
 	 
     //Sends an email/hashed password combo to be checked
     //Returns true if the combination is valid, false otherwise - Liam
-    @PostMapping("/checkPassword")
+    @RequestMapping("/checkPassword")
     public Boolean checkPassword(@RequestParam(value = "email", defaultValue = "") String email,
     		@RequestParam(value = "password", defaultValue = "") String password) {
     	String s = DatabaseAccessor.retrievePasswordHash(email);
     	Boolean val = (password.equals(s));
-    	System.out.print("val = " + val);
-    	System.out.print(" s = (" + s + ")");
+    	System.out.print("CHECKING PASSWORD for email " + email + " (given password is " 
+    			+ password + ") - retrieved value is " + s + ", match " + val);
     	return val;
     }
 

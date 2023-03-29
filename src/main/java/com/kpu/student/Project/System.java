@@ -8,4 +8,9 @@ public class System {
 	  public class Account {}
 	  
 	  public class ConfidentialRecord {}
+	  
+	  public static void main(String[] args) {
+		  PatientAccount acc = new PatientAccount("steve@email.com", "stevepassword");
+		  DatabaseAccessor.addAccount(acc);
+	  }
 }

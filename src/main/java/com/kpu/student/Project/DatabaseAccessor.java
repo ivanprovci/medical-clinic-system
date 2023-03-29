@@ -22,6 +22,7 @@ public class DatabaseAccessor {
 			getPW.setString(1, email);
 			ResultSet results = getPW.executeQuery();
 			if (results.isBeforeFirst()) {
+				results.first();
 				pwHash = results.getString("passwordHash");
 			}
 			c.close();
@@ -63,18 +64,22 @@ public class DatabaseAccessor {
 				//Check to see if provided email is in StaffAccount table - in other words, is this a staff account?
 				//If it is, we'll return a StaffAccount object
 				retrievedAccount = new StaffAccount(email, 
-						DatabaseAccessor.retrievePasswordHash(email));				
+						DatabaseAccessor.retrievePasswordHash(email));		
 				
 			} else if (doctorResults.isBeforeFirst()) {
 				//Same as above, but for DoctorAccount
 				retrievedAccount = new DoctorAccount(email, 
 						DatabaseAccessor.retrievePasswordHash(email));
+				doctorResults.first();
+				
 				((DoctorAccount) retrievedAccount).setProfile(doctorResults.getString("profile"));
 				
 			} else if (patientResults.isBeforeFirst()) {
 				//Same as above, but for PatientAccount
 				retrievedAccount = new PatientAccount(email, 
 						DatabaseAccessor.retrievePasswordHash(email));
+				patientResults.first();
+				
 				((PatientAccount) retrievedAccount).setAddress(patientResults.getString("address"));
 				((PatientAccount) retrievedAccount).setHealthNo(patientResults.getString("healthNo"));
 				
@@ -102,6 +107,7 @@ public class DatabaseAccessor {
 			
 			if (accountResults.isBeforeFirst()) {
 				//Ensure the account actually exists first, just in case
+				accountResults.first();
 				retrievedAccount.setFirstName(accountResults.getString("firstName"));
 				retrievedAccount.setLastName(accountResults.getString("lastName"));
 				retrievedAccount.setPhoneNo(accountResults.getString("phoneNo"));
@@ -158,9 +164,12 @@ public class DatabaseAccessor {
 				
 				if (visitResults.isBeforeFirst()) {
 					retrievedRecord = new VisitRecord(recordID);
-					((VisitRecord) retrievedRecord).setVisitDate(visitResults.getDate("date"));					
+					visitResults.first();
+					((VisitRecord) retrievedRecord).setVisitDate(visitResults.getDate("date"));		
+					
 				} else if (prescriptionResults.isBeforeFirst()) {
 					retrievedRecord = new Prescription(recordID);
+					prescriptionResults.first();
 					
 					int relatedVisit = prescriptionResults.getInt("relatedVisitRecord");
 					((Prescription) retrievedRecord).setDatePrescribed(
@@ -173,12 +182,14 @@ public class DatabaseAccessor {
 					
 				} else if (examResults.isBeforeFirst()) {
 					retrievedRecord = new LabExam(recordID);
+					examResults.first();
 					
 					((LabExam) retrievedRecord).setExamItem(prescriptionResults.getString("examItem"));
 					((LabExam) retrievedRecord).setExamDate(prescriptionResults.getDate("date"));
 					
 				} else if (examDataResults.isBeforeFirst()) {
 					retrievedRecord = new LabExamResult(recordID);
+					examDataResults.first();
 					
 					int upper = examDataResults.getInt("upperBound");
 					int lower = examDataResults.getInt("lowerBound");
@@ -191,6 +202,7 @@ public class DatabaseAccessor {
 					((LabExamResult) retrievedRecord).setNormalResult(
 							(lower <= result) && (result <= upper));
 				}
+				recordResults.first();
 				retrievedRecord.setPrescribingDoctor(recordResults.getString("relatedDoctor"));
 				retrievedRecord.setRelatedPatient(recordResults.getString("relatedPatient"));
 				
@@ -293,8 +305,21 @@ public class DatabaseAccessor {
 		
 		Connection c = DatabaseAccessor.connect();
 		Timestamp t = new Timestamp(Instant.now().toEpochMilli());
+		PreparedStatement addToRecord, addToVisit, addToPrescription, addToExam, addToExamResult;
 		
 		//Add row in ConfidentialRecord table
+		try {
+			addToRecord = c.prepareStatement(
+					"INSERT INTO ConfidentialRecord (relatedPatient, relatedDoctor, createdTimeStamp) "
+					+ "VALUES (?, ?, ?)");
+			addToRecord.setString(1, newRecord.getPrescribingDoctor());
+			addToRecord.setString(2, newRecord.getRelatedPatient());
+			addToRecord.setTimestamp(3, t);
+			addToRecord.executeUpdate();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		if (newRecord instanceof VisitRecord) {
 			//If visit record, add row in VisitRecord table
 		} else if (newRecord instanceof Prescription) {
@@ -317,27 +342,20 @@ public class DatabaseAccessor {
 	
 	public static Connection connect() {
 		
-		/*
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
 
 		Connection conn = null;
 		try {
 		    conn =
 		       DriverManager.getConnection("jdbc:mysql://localhost/INFO2413DB?" +
 		                                   "user=accessor&password=DB_Accessor");
-		    //Create connection with database - Liam
-		
+		    //Create connection with database - Liam    	
+		    
 		} catch (SQLException ex) {
 			//Not sure how to handle these, maybe a log file?
 			//We definitely can't just print them to console - Liam
 			ex.printStackTrace();
 		}
+
 		return conn;
 	}
 }
