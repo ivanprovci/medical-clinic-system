@@ -12,6 +12,9 @@ public class Account {
 	private String lastName;
 	private String phoneNo;
 	
+	@Autowired
+	private JavaMailSender javaMailSender;
+	
 	//create constructor "Account" to pass "Account" object containing email to "retrieveAccountInfo" method (DatabaseAccessor class)
 	public Account(String email, String password) {
 		this.setEmail(email);
@@ -94,6 +97,11 @@ public class Account {
 		public void notifyUser(String message) {
 			//Send an email to this.getEmail() with 'message' as the contents
 			//Not sure how to implement this yet - Liam
+			 SimpleMailMessage mail = new SimpleMailMessage();
+			    mail.setTo(this.getEmail());
+			    mail.setSubject("Notification");
+			    mail.setText(message);
+			    javaMailSender.send(mail);
 		}
 		
 		//Create the patient class for the regesterNewPatient Method
