@@ -3,7 +3,19 @@
     <head>
       <title>HOME Page </title>  
       <link rel="stylesheet" type="text/css" href="css/style.css">
-  
+      <script>
+        function redirect(){
+          let accountType = 1;
+
+          if (accountType == 0){
+            window.location.assign("accountDetailsPatient.html");
+          } else if (accountType == 1) {
+            window.location.assign("accountDetailsStaff.html");
+          } else {
+            window.location.assign("accountDetailsDoctor.html");
+          }
+        }
+      </script>
     </head>
     <body>
       <body>
@@ -23,7 +35,7 @@
     
         <div class="nav">
           <a href="homePage.html">HOME</a>
-          <a href="accountDetailsPatient.html">ACCOUNT</a>
+          <a onclick="redirect()">ACCOUNT</a>
         </div>
 
          <div class="tile">

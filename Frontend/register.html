@@ -28,7 +28,7 @@
             input[type=text]:focus, input[type=password]:focus {
                 outline-color: #0000008f;
             }
-            input[type=submit] {
+            input[type=button] {
                 background: #0d3d80;
                 font-family: Arial;
                 color: #ffffff;
@@ -67,6 +67,10 @@
                     warning.innerHTML="";
                 }
             }
+            function submitForm(){
+                // return to login page once form is submitted
+                window.location.assign('index.html')
+            }
         </script>
     </head>
     <body>
@@ -82,7 +86,7 @@
                     <input type="text" id="firstName" placeholder="First Name" size="15" required> 
                     <input type="text" id="lastName" placeholder="Last Name" size="16" required> <br>
                     <input type="text" id="phoneNumber" placeholder="Phone Number" size="40" required> <br>
-                    <input type="submit" value="Create Account">
+                    <input type="button" value="Create Account" onclick="submitForm()">
                 </form>
             </div>
         </div>
