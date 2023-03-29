@@ -9,6 +9,11 @@ public Prescription(int ID, VisitRecord visit) {
 		// TODO Auto-generated constructor stub
 	}
 
+public Prescription(int ID) {
+	super(ID);
+	// TODO Auto-generated constructor stub
+}
+
 private Date datePrescribed;
 private String medicineName;
 private String medicineQuantity;

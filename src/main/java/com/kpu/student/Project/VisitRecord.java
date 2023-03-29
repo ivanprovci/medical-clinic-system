@@ -17,6 +17,10 @@ public class VisitRecord extends ConfidentialRecord {
 		this.setPrescribedMedications(new LinkedList<Integer>());
 		// TODO Auto-generated constructor stub
 	}
+	public VisitRecord(int ID) {
+		super(ID);
+		// TODO Auto-generated constructor stub
+	}
 	private Date visitDate;
 	private LinkedList<Integer> prescribedMedications;
 	private LinkedList<Integer> prescribedLabExams;

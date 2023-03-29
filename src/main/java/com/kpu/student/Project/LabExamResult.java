@@ -6,6 +6,12 @@ public class LabExamResult extends ConfidentialRecord {
 		exam.setExamResults(this.getRecordID());
 		// TODO Auto-generated constructor stub
 	}
+	
+	public LabExamResult(int ID) {
+		super(ID);
+		// TODO Auto-generated constructor stub
+	}
+	
 	private int result;
 	private int normalRange;
 	private boolean isNormalResult;

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.Instant;
 
 
@@ -58,24 +59,25 @@ public class DatabaseAccessor {
 			checkIfPatient.setString(1, email);
 			ResultSet patientResults = checkIfPatient.executeQuery();
 			
-			if (staffResults.getString("email") != null) {
+			if (staffResults.isBeforeFirst()) {
 				//Check to see if provided email is in StaffAccount table - in other words, is this a staff account?
 				//If it is, we'll return a StaffAccount object
 				retrievedAccount = new StaffAccount(email, 
 						DatabaseAccessor.retrievePasswordHash(email));				
 				
-			} else if (doctorResults.getString("email") != null) {
+			} else if (doctorResults.isBeforeFirst()) {
 				//Same as above, but for DoctorAccount
 				retrievedAccount = new DoctorAccount(email, 
 						DatabaseAccessor.retrievePasswordHash(email));
 				((DoctorAccount) retrievedAccount).setProfile(doctorResults.getString("profile"));
 				
-			} else if (patientResults.getString("email") != null) {
+			} else if (patientResults.isBeforeFirst()) {
 				//Same as above, but for PatientAccount
 				retrievedAccount = new PatientAccount(email, 
 						DatabaseAccessor.retrievePasswordHash(email));
 				((PatientAccount) retrievedAccount).setAddress(patientResults.getString("address"));
 				((PatientAccount) retrievedAccount).setHealthNo(patientResults.getString("healthNo"));
+				
 				if (patientResults.getString("verifyingStaffMember") != null) {
 					//If the patient has a staff member that verified them
 					//Set verified to true
@@ -84,7 +86,9 @@ public class DatabaseAccessor {
 					((PatientAccount) retrievedAccount).setVerifiedBy(patientResults.getString("verifyingStaffMember"));
 				} else {
 					//If the patient is unverified
+					//Set verified to false
 					((PatientAccount) retrievedAccount).setVerified(false);
+					//Nobody verified them, so set verifiedBy to null
 					((PatientAccount) retrievedAccount).setVerifiedBy(null);
 				}
 				
@@ -95,9 +99,15 @@ public class DatabaseAccessor {
 					"SELECT * FROM Account WHERE email = ?");
 			checkIfPatient.setString(1, email);
 			ResultSet accountResults = generalAccountInfo.executeQuery();
-			retrievedAccount.setFirstName(accountResults.getString("firstName"));
-			retrievedAccount.setLastName(accountResults.getString("lastName"));
-			retrievedAccount.setPhoneNo(accountResults.getString("phoneNo"));
+			
+			if (accountResults.isBeforeFirst()) {
+				//Ensure the account actually exists first, just in case
+				retrievedAccount.setFirstName(accountResults.getString("firstName"));
+				retrievedAccount.setLastName(accountResults.getString("lastName"));
+				retrievedAccount.setPhoneNo(accountResults.getString("phoneNo"));
+			} else {
+				
+			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -125,19 +135,56 @@ public class DatabaseAccessor {
 			ResultSet visitResults = checkIfVisit.executeQuery();
 			
 			PreparedStatement checkIfPrescription = c.prepareStatement(
-					"SELECT * FROM DoctorAccount WHERE email = ?");
+					"SELECT * FROM Prescription WHERE recordID = ?");
 			checkIfPrescription.setInt(1, recordID);
 			ResultSet prescriptionResults = checkIfPrescription.executeQuery();
 			
 			PreparedStatement checkIfExam = c.prepareStatement(
-					"SELECT * FROM PatientAccount WHERE email = ?");
+					"SELECT * FROM LabExam WHERE recordID = ?");
 			checkIfExam.setInt(1, recordID);
 			ResultSet examResults = checkIfExam.executeQuery();
 			
 			PreparedStatement checkIfExamData = c.prepareStatement(
-					"SELECT * FROM PatientAccount WHERE email = ?");
+					"SELECT * FROM LabExamResult WHERE recordID = ?");
 			checkIfExamData.setInt(1, recordID);
 			ResultSet examDataResults = checkIfExamData.executeQuery();
+			
+			PreparedStatement genericRecordData = c.prepareStatement(
+					"SELECT * FROM ConfidentialRecord WHERE recordID = ?");
+			checkIfExamData.setInt(1, recordID);
+			ResultSet recordResults = genericRecordData.executeQuery();
+			
+			if (recordResults.isBeforeFirst()) {
+				
+				if (visitResults.isBeforeFirst()) {
+					retrievedRecord = new VisitRecord(recordID);
+					((VisitRecord) retrievedRecord).setVisitDate(visitResults.getDate("date"));					
+				} else if (prescriptionResults.isBeforeFirst()) {
+					retrievedRecord = new Prescription(recordID);
+					
+					int relatedVisit = prescriptionResults.getInt("relatedVisitRecord");
+					((Prescription) retrievedRecord).setDatePrescribed(
+							((VisitRecord) DatabaseAccessor.retrieveRecord(relatedVisit)).getVisitDate());
+					
+					((Prescription) retrievedRecord).setMedicineDose(prescriptionResults.getString("medDose"));
+					((Prescription) retrievedRecord).setMedicineName(prescriptionResults.getString("medName"));
+					((Prescription) retrievedRecord).setMedicineQuantity(prescriptionResults.getString("medQuantity"));
+					((Prescription) retrievedRecord).setRefillable(prescriptionResults.getBoolean("refillable"));
+					
+					
+				} else if (examResults.isBeforeFirst()) {
+					retrievedRecord = new LabExam(recordID);
+					
+				} else if (examDataResults.isBeforeFirst()) {
+					retrievedRecord = new LabExamResult(recordID);
+					
+				}
+				retrievedRecord.setPrescribingDoctor(recordResults.getString("relatedDoctor"));
+				retrievedRecord.setRelatedPatient(recordResults.getString("relatedPatient"));
+				
+			} else {
+				
+			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -169,6 +216,7 @@ public class DatabaseAccessor {
 			addToAccount.setString(3, newAccount.getFirstName());
 			addToAccount.setString(4, newAccount.getLastName());
 			addToAccount.setString(5, newAccount.getPhoneNo());
+			addToAccount.executeUpdate();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -178,8 +226,17 @@ public class DatabaseAccessor {
 			//If patient, add row in PatientAccount table
 			try {
 				addToPatient = c.prepareStatement(
-						"INSERT INTO PatientAccount (email, passwordHash, firstName, lastName, phoneNo) "
-						+ "VALUES (?, ?, ?, ?, ?)");
+						"INSERT INTO PatientAccount (email, verifyingStaffMember, address, healthNo) "
+						+ "VALUES (?, ?, ?, ?)");
+				addToPatient.setString(1, ((PatientAccount) newAccount).getEmail());
+				if (((PatientAccount) newAccount).isVerified()) {
+					addToPatient.setString(2, ((PatientAccount) newAccount).getVerifiedBy());
+				} else {
+					addToPatient.setNull(2, Types.VARCHAR);
+				}
+				addToPatient.setString(3, ((PatientAccount) newAccount).getAddress());
+				addToPatient.setString(4, ((PatientAccount) newAccount).getHealthNo());
+				addToPatient.executeUpdate();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -187,8 +244,11 @@ public class DatabaseAccessor {
 		} else if (newAccount instanceof DoctorAccount) {
 			try {
 				addToDoctor = c.prepareStatement(
-						"INSERT INTO DoctorAccount (email, passwordHash, firstName, lastName, phoneNo) "
-						+ "VALUES (?, ?, ?, ?, ?)");
+						"INSERT INTO DoctorAccount (email, profile) "
+						+ "VALUES (?, ?)");
+				addToDoctor.setString(1, ((DoctorAccount) newAccount).getEmail());
+				addToDoctor.setString(2, ((DoctorAccount) newAccount).getProfile());
+				addToDoctor.executeUpdate();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -200,6 +260,7 @@ public class DatabaseAccessor {
 						"INSERT INTO StaffAccount (email) "
 						+ "VALUES (?)");
 				addToStaff.setString(1, newAccount.getEmail());
+				addToStaff.executeUpdate();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

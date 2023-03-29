@@ -17,6 +17,10 @@ public ConfidentialRecord(int ID, String patientEmail, String doctorEmail) {
 	this.setPrescribingDoctor(doctorEmail);
 }
 
+public ConfidentialRecord(int ID) {
+	this.setRecordID(ID);
+}
+
 public boolean isAccessAllowed(Account accessor) {
 	if (accessor.getEmail().equals(this.getRelatedPatient())) {
 		//If this is the patient referenced in the record
