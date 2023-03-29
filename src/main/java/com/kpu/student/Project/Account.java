@@ -96,7 +96,6 @@ public class Account {
 		
 		public void notifyUser(String message) {
 			//Send an email to this.getEmail() with 'message' as the contents
-			//Not sure how to implement this yet - Liam
 			 SimpleMailMessage mail = new SimpleMailMessage();
 			    mail.setTo(this.getEmail());
 			    mail.setSubject("Notification");

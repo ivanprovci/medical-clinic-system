@@ -171,13 +171,25 @@ public class DatabaseAccessor {
 					((Prescription) retrievedRecord).setMedicineQuantity(prescriptionResults.getString("medQuantity"));
 					((Prescription) retrievedRecord).setRefillable(prescriptionResults.getBoolean("refillable"));
 					
-					
 				} else if (examResults.isBeforeFirst()) {
 					retrievedRecord = new LabExam(recordID);
+					
+					((LabExam) retrievedRecord).setExamItem(prescriptionResults.getString("examItem"));
+					((LabExam) retrievedRecord).setExamDate(prescriptionResults.getDate("date"));
 					
 				} else if (examDataResults.isBeforeFirst()) {
 					retrievedRecord = new LabExamResult(recordID);
 					
+					int upper = examDataResults.getInt("upperBound");
+					int lower = examDataResults.getInt("lowerBound");
+					int result = examDataResults.getInt("result");
+					
+					((LabExamResult) retrievedRecord).setRelatedExam(examDataResults.getInt("relatedLabExam"));
+					((LabExamResult) retrievedRecord).setNormalUpperBound(upper);
+					((LabExamResult) retrievedRecord).setNormalLowerBound(lower);
+					((LabExamResult) retrievedRecord).setResult(result);
+					((LabExamResult) retrievedRecord).setNormalResult(
+							(lower <= result) && (result <= upper));
 				}
 				retrievedRecord.setPrescribingDoctor(recordResults.getString("relatedDoctor"));
 				retrievedRecord.setRelatedPatient(recordResults.getString("relatedPatient"));
