@@ -269,6 +269,33 @@ public class Controller {
 		}
     }
     
+    @RequestMapping("/retrieveAccount")
+    public Account retrieveAccount(@RequestParam(value = "email", required = true) String email, 
+    		@RequestParam(value = "password", required = true) String password) {
+    	try {
+			if (password.equals(DatabaseAccessor.retrievePasswordHash(email))) {
+				return DatabaseAccessor.retrieveAccountInfo(email);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return null;
+    }
+    
+    @RequestMapping("/getDoctorProfile")
+    public String getDoctorProfile(@RequestParam(value = "email", required = true) String doctorEmail) {
+    	try {
+			if ((DatabaseAccessor.retrieveAccountInfo(doctorEmail)) instanceof DoctorAccount) {
+				return ((DoctorAccount) DatabaseAccessor.retrieveAccountInfo(doctorEmail)).getProfile();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return "Error: could not retrieve doctor profile.";
+    }
+    
 	@GetMapping("/viewRecords")
 	public ModelAndView viewRecords (Model model) {
 		List<ConfidentialRecord> recordList = getRecords("World");
