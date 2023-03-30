@@ -4,6 +4,7 @@ public class LabExamResult extends ConfidentialRecord {
 	public LabExamResult(int ID, LabExam exam) {
 		super(ID, exam.getRelatedPatient(), exam.getPrescribingDoctor());
 		exam.setExamResults(this.getRecordID());
+		this.setRelatedExam(exam.getRecordID());
 		// TODO Auto-generated constructor stub
 	}
 	

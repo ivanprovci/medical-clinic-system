@@ -9,6 +9,7 @@ public class LabExam extends ConfidentialRecord{
 		//TODO: retrieve patient's health number from database dynamically
 		//this.setPatientHealthNo(visit.getRelatedPatient().getHealthNo());
 		visit.addExam(this);
+		this.setPrescribedDuring(visit.getRecordID());
 	}
 	
 	public LabExam(int ID) {
@@ -16,6 +17,7 @@ public class LabExam extends ConfidentialRecord{
 		// TODO Auto-generated constructor stub
 	}
 	
+	private int prescribedDuring;
 	private Date examDate;
 	private String patientHealthNo;
 	private String examItem;
@@ -45,5 +47,13 @@ public class LabExam extends ConfidentialRecord{
 	}
 	public void setExamResults(int examResults) {
 		this.examResults = examResults;
+	}
+
+	public int getPrescribedDuring() {
+		return prescribedDuring;
+	}
+
+	public void setPrescribedDuring(int prescribedDuring) {
+		this.prescribedDuring = prescribedDuring;
 	}
 }

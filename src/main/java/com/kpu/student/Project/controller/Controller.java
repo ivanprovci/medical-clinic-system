@@ -1,6 +1,7 @@
 package com.kpu.student.Project.controller;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,11 +54,19 @@ public class Controller {
     @RequestMapping("/checkPassword")
     public Boolean checkPassword(@RequestParam(value = "email", defaultValue = "") String email,
     		@RequestParam(value = "password", defaultValue = "") String password) {
-    	String s = DatabaseAccessor.retrievePasswordHash(email);
-    	Boolean val = (password.equals(s));
-    	System.out.print("CHECKING PASSWORD for email " + email + " (given password is " 
-    			+ password + ") - retrieved value is " + s + ", match " + val);
-    	return val;
+    	String s;
+		try {
+			s = DatabaseAccessor.retrievePasswordHash(email);
+	    	Boolean val = (password.equals(s));
+	    	System.out.println("CHECKING PASSWORD for email " + email + " (given password is " 
+	    			+ password + ") - retrieved value is " + s + ", match " + val);
+	    	return val;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+
     }
 
 }

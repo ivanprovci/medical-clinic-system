@@ -6,6 +6,7 @@ public class Prescription extends ConfidentialRecord {
 public Prescription(int ID, VisitRecord visit) {
 	super(ID, visit.getRelatedPatient(), visit.getPrescribingDoctor());
 	visit.addPrescription(this);
+	this.setPrescribedDuring(visit.getRecordID());
 		// TODO Auto-generated constructor stub
 	}
 
@@ -14,6 +15,7 @@ public Prescription(int ID) {
 	// TODO Auto-generated constructor stub
 }
 
+private int prescribedDuring;
 private Date datePrescribed;
 private String medicineName;
 private String medicineQuantity;
@@ -60,5 +62,13 @@ public boolean isRefillable() {
 
 public void setRefillable(boolean isRefillable) {
 	this.isRefillable = isRefillable;
+}
+
+public int getPrescribedDuring() {
+	return prescribedDuring;
+}
+
+public void setPrescribedDuring(int prescribedDuring) {
+	this.prescribedDuring = prescribedDuring;
 }
 }
