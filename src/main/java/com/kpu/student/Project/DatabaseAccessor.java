@@ -424,6 +424,28 @@ public class DatabaseAccessor {
 		c.close();
 
 	}
+	
+	public static void deleteAccount(Account a) throws SQLException {
+		Connection c = DatabaseAccessor.connect();
+		
+		// Delete the row in Account table
+		// ON DELETE CASCADE will do the rest of the work for us
+		PreparedStatement deleteAccount = c.prepareStatement("DELETE FROM Account WHERE email = ?");
+		deleteAccount.setString(1, a.getEmail());
+		deleteAccount.executeUpdate();
+		c.close();
+	}
+	
+	public static void deleteRecord(ConfidentialRecord r) throws SQLException {
+		Connection c = DatabaseAccessor.connect();
+		
+		// Delete the row in ConfidentialRecord table
+		// ON DELETE CASCADE will do the rest of the work for us
+		PreparedStatement deleteRecord = c.prepareStatement("DELETE FROM ConfidentialRecord WHERE recordID = ?");
+		deleteRecord.setInt(1, r.getRecordID());
+		deleteRecord.executeUpdate();
+		c.close();
+	}
 
 	public static Connection connect() throws SQLException {
 
