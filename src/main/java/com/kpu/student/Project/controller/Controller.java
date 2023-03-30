@@ -145,6 +145,29 @@ public class Controller {
 		}
     }
     
+    @RequestMapping("/registerNewDoctor")
+    public void registerNewDoctor(@RequestParam(value = "email", required = true) String email, 
+    		@RequestParam(value = "password", required = true) String password,
+    		@RequestParam(value = "firstName", defaultValue = "") String fName,
+    		@RequestParam(value = "lastName", defaultValue = "") String lName,
+    		@RequestParam(value = "profile", defaultValue = "") String profile,
+    		@RequestParam(value = "staffEmail", required = true) String staffEmail,
+    		@RequestParam(value = "staffPassword", required = true) String staffPassword) {
+    	
+    	try {
+			if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail))) {
+				DoctorAccount d = new DoctorAccount(email, password);
+				d.setFirstName(fName);
+				d.setLastName(lName);
+				d.setProfile(profile);
+				DatabaseAccessor.addAccount(d);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
 	@GetMapping("/viewRecords")
 	public ModelAndView viewRecords (Model model) {
 		List<ConfidentialRecord> recordList = getRecords("World");
