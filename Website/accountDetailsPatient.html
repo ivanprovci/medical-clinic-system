@@ -162,6 +162,7 @@
 		border-radius:25px;
 		} 
     </style>
+	
   </head>
   <body>
     <div class="header">
@@ -189,15 +190,18 @@
           
 		  <h2>Account Details</h2>
 		  <ul> 
-		  <li>Name:</li><br>
-		  <li>Date Of Birth:</li><br>
-		  <li>Email:</li><br>
-		  <li>Phone Number:</li><br>
-		  <li>Home Address:</li><br>
-		  <li>Health Card Number:</li><br>
-		  <li>Close contact</li><br>
+			<li>Name:</li><br>
+			<li>Date Of Birth:</li><br>
+			<li id="liEmail">Email:</li><br>
+			<li>Phone Number:</li><br>
+			<li>Home Address:</li><br>
+			<li>Health Card Number:</li><br>
+			<li>Close contact</li><br>
 		  </ul>
-		  
+		  <script>
+			//get email from session storage
+			document.getElementById("liEmail").innerText = "Email: " + sessionStorage.getItem("email")
+		</script>
       </div>
       <div class="column3">
 		<nav class="column3-1">

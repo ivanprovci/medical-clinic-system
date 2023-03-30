@@ -63,16 +63,17 @@
                 });
             }
 
-            function handleData(){
+            async function handleData(){
                 //hash password
+                var email = document.getElementById("loginEmail").value
+                //store email in sessionStorage for querying db later
+                sessionStorage.setItem("email", email)
                 var plaintextPassword = document.getElementById("loginPassword").value
-                var hashedPassword
+                var hashedPassword = await sha512(plaintextPassword)
                 
-                sha512(plaintextPassword).then(x => {
-                    hashedPassword = x
-                    console.log(hashedPassword)
-                })
+                window.location.assign("accountDetailsPatient.html")
             }
+
         </script>
     </head>
     <body>
