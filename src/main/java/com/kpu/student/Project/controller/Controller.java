@@ -29,14 +29,11 @@ import org.springframework.ui.Model;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class Controller {
-	
-    @RequestMapping("/hello")
-    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-      return String.format("Hello %s!!!!!", name);
-    }
     
+
     @RequestMapping("/getRecords")
     public List<ConfidentialRecord> getRecords(@RequestParam(value = "email", required = true) String requestingEmail) {
+    	// Gets all the records that this account is allowed to see
     	List<ConfidentialRecord> recordList = new ArrayList<ConfidentialRecord>();
     	
 		try {
@@ -52,11 +49,12 @@ public class Controller {
     	return recordList;
     }
 	 
-    //Sends an email/hashed password combo to be checked
-    //Returns true if the combination is valid, false otherwise - Liam
+
     @RequestMapping("/checkPassword")
     public Boolean checkPassword(@RequestParam(value = "email", defaultValue = "") String email,
     		@RequestParam(value = "password", defaultValue = "") String password) {
+        //Sends an email/hashed password combo to be checked
+        //Returns true if the combination is valid, false otherwise - Liam
     	String s;
 		try {
 			s = DatabaseAccessor.retrievePasswordHash(email);
@@ -120,12 +118,13 @@ public class Controller {
     }
     
     @RequestMapping("/registerNewPatient")
-    public void registerNewPatient(@RequestParam(value = "email", required = true) String email, 
-    		@RequestParam(value = "password", required = true) String password,
+    public void registerNewPatient(@RequestParam(value = "newPatientEmail", required = true) String email, 
+    		@RequestParam(value = "newPatientPassword", required = true) String password,
     		@RequestParam(value = "firstName", defaultValue = "") String fName,
     		@RequestParam(value = "lastName", defaultValue = "") String lName,
     		@RequestParam(value = "address", defaultValue = "") String address,
     		@RequestParam(value = "healthNo", defaultValue = "") String healthNo) {
+    	// Adds a new patient account to the database
     	PatientAccount p = new PatientAccount(email, password);
     	p.setFirstName(fName);
     	p.setLastName(lName);
@@ -180,6 +179,93 @@ public class Controller {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+    }
+    
+    @RequestMapping("/updatePatient")
+    public void updatePatient(@RequestParam(value = "email", required = true) String email, 
+    		@RequestParam(value = "password", required = true) String password,
+    		@RequestParam(value = "firstName", defaultValue = "") String fName,
+    		@RequestParam(value = "lastName", defaultValue = "") String lName,
+    		@RequestParam(value = "address", defaultValue = "") String address,
+    		@RequestParam(value = "healthNo", defaultValue = "") String healthNo) {
+    	// Updates an existing patient account's information
+    	
+    	try {
+			if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
+					(DatabaseAccessor.retrieveAccountInfo(email)) instanceof PatientAccount) {
+				PatientAccount p = (PatientAccount) DatabaseAccessor.retrieveAccountInfo(email);
+		    	if (!(fName.equals(""))) {
+					p.setFirstName(fName);
+		    	}
+		    	if (!(lName.equals(""))) {
+					p.setLastName(lName);
+		    	}
+		    	if (!(address.equals(""))) {
+			    	p.setAddress(address);
+		    	}
+		    	if (!(healthNo.equals(""))) {
+		    		p.setHealthNo(healthNo);
+		    	}
+		    	DatabaseAccessor.updateAccount(p);
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    }
+    
+    @RequestMapping("/updateDoctor")
+    public void updateDoctor(@RequestParam(value = "email", required = true) String email, 
+    		@RequestParam(value = "password", required = true) String password,
+    		@RequestParam(value = "firstName", defaultValue = "") String fName,
+    		@RequestParam(value = "lastName", defaultValue = "") String lName,
+    		@RequestParam(value = "profile", defaultValue = "") String profile) {
+    	// Updates an existing patient account's information
+    	
+    	try {
+			if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
+					(DatabaseAccessor.retrieveAccountInfo(email)) instanceof DoctorAccount) {
+				DoctorAccount d = (DoctorAccount) DatabaseAccessor.retrieveAccountInfo(email);
+		    	if (!(fName.equals(""))) {
+					d.setFirstName(fName);
+		    	}
+		    	if (!(lName.equals(""))) {
+					d.setLastName(lName);
+		    	}
+		    	if (!(profile.equals(""))) {
+			    	d.setProfile(profile);
+		    	}
+		    	DatabaseAccessor.updateAccount(d);
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    }
+    
+    @RequestMapping("/updateStaff")
+    public void updateStaff(@RequestParam(value = "email", required = true) String email, 
+    		@RequestParam(value = "password", required = true) String password,
+    		@RequestParam(value = "firstName", defaultValue = "") String fName,
+    		@RequestParam(value = "lastName", defaultValue = "") String lName) {
+    	// Updates an existing patient account's information
+    	
+    	try {
+			if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
+					(DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) {
+				StaffAccount s = (StaffAccount) DatabaseAccessor.retrieveAccountInfo(email);
+		    	if (!(fName.equals(""))) {
+					s.setFirstName(fName);
+		    	}
+		    	if (!(lName.equals(""))) {
+					s.setLastName(lName);
+		    	}
+		    	DatabaseAccessor.updateAccount(s);
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
     }
     
