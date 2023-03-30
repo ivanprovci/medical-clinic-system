@@ -327,6 +327,12 @@ header .logo
     color: #333;
   }
 
+  .Staff-Page-tile ul {
+    text-align: left;
+    color: #333;
+  }
+
+
 
   .Staff-Page-tile p {
     text-align: center;

@@ -17,6 +17,9 @@ import com.kpu.student.Project.LabExam;
 import com.kpu.student.Project.Prescription;
 import com.kpu.student.Project.VisitRecord;
 
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ui.Model;
+
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class Controller {
@@ -68,5 +71,12 @@ public class Controller {
 		return false;
 
     }
+
+	@GetMapping("/viewRecords")
+	public ModelAndView viewRecords (Model model) {
+		List<ConfidentialRecord> recordList = getRecords("World");
+		model.addAttribute("records", recordList);
+		return new ModelAndView("New");
+	}
 
 }

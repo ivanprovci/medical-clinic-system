@@ -1,44 +1,75 @@
 <!DOCTYPE html>
 <html>
     <head>
-      <title>View Records</title>  
-      <link rel="stylesheet" type="text/css" href="css/style.css">
+        <title>Staff Account</title>  
+        <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
-      <div class="header">
-    <div class="logo">
-       <h1> B.C Health & Wellness</h1>
-      </div>
-    </div>
-  
-  <div class="menu">
-      <form class="search-bar">
-    <form action="#" method="get">
-      <input type="text" name="search" placeholder="Search...">
-      <button type="submit">Go</button>
-      </form>
-  </div>
-  
-      <div class="nav">
-        <a href="homePage.html">HOME</a>
-        <a href="accountDetailsPatient.html">ACCOUNT</a>
-      </div>
-   
-<!-- Using the Same format that was used in the Staff Account Details page fo this one -->
-
-        
-        <div class="Staff-Page-tile"> 
-          <h1>View records</h1>
+        <div class="header">
+            <div class="logo">
+                <h1>B.C Health & Wellness</h1>
+            </div>
         </div>
 
-        
+        <div class="menu">
+            <form class="search-bar">
+                <form action="#" method="get">
+                    <input type="text" name="search" placeholder="Search...">
+                    <button type="submit">Go</button>
+                </form>
+        </div>
 
-         </main>
+        <div class="nav">
+            <a href="homePage.html">HOME</a>
+            <a href="accountDetailsPatient.html">ACCOUNT</a>
+        </div>
 
+        <!-- Using the Same format that was used in the Staff Account Details page for this one -->
+        <div class="Staff-Page-tile"> 
+            <h1>View records</h1>
+            <ul id="recordList"> 
+            </ul>
+        </div>
+        <script>
+            // Retrieve records data from the API
+            fetch('http://localhost:8080/getRecords')
+            //converting json object to text formating
+            .then(response => response.json()) 
+            .then(data => {
+                // Loop through each record and add it to the recordList unordered list
+                const recordList = document.getElementById('recordList');
+                data.forEach(record => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<b>Record ID:</b> ${record.recordID}<br>
+                                    <b>Related Patient:</b> ${record.relatedPatient}<br>
+                                    <b>Prescribing Doctor:</b> ${record.prescribingDoctor}<br>`;
+                            
+                                if (record.datePrescribed) {
 
-         
+                    // Prescription record
+                    //// Add prescription details to list item
+                    li.innerHTML +=`<b>Date Prescribed:</b> ${record.datePrescribed}<br>
+                                    <b>Medicine Name:</b> ${record.medicineName ? record.medicineName: 'N/A'}<br>
+                                    <b>Medicine Quantity:</b> ${record.medicineQuantity ? record.medicineQuantity : 'N/A'}<br>
+                                    <b>Medicine Dose:</b> ${record.medicineDose ? record.medicineDose + ' ' + record.medicineDoseUnit : 'N/A'}<br>
+                                    <b>Refillable:</b> ${record.refillable}<br>`;
+
+                                 } else {
+
+                    // VisitRecord
+                    // Add Vist details to the list item
+                    li.innerHTML +=`<b>Visit Date:</b> ${record.visitDate ? record.visitDate: 'N/A'}<br>
+                                    <b>Prescribed Medications:</b> ${record.prescribedMedications.length > 0 ? record.prescribedMedications.join(', ') : 'N/A'}<br>
+                                    <b>Prescribed Lab Exam:</b> ${record.prescribedLabExams.length > 0 ? record.prescribedLabExams.join(', ') : 'N/A'}<br>`;
+
+                                }
+
+                    //line between each record.
+                    li.innerHTML += '<b><hr></b>';
+
+                    recordList.appendChild(li);
+                });
+            });
+        </script>
     </body>
-  
-</main>
-    
 </html>
