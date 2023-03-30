@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.Instant;
+import java.util.LinkedList;
+import java.util.List;
 
 public class DatabaseAccessor {
 
@@ -445,6 +447,37 @@ public class DatabaseAccessor {
 		deleteRecord.setInt(1, r.getRecordID());
 		deleteRecord.executeUpdate();
 		c.close();
+	}
+	
+	public static List<Integer> getRecordsForAccount(String email) throws SQLException {
+		return DatabaseAccessor.getRecordsForAccount(DatabaseAccessor.retrieveAccountInfo(email));
+	}
+	
+	public static List<Integer> getRecordsForAccount(Account account) throws SQLException {
+		List<Integer> records = new LinkedList<Integer>();
+		Connection c = DatabaseAccessor.connect();
+		PreparedStatement getRecords;
+		
+		if (account instanceof StaffAccount) {
+			getRecords = c.prepareStatement("SELECT recordID FROM ConfidentialRecords");
+			
+		} else if (account instanceof PatientAccount) {
+			getRecords = c.prepareStatement("SELECT recordID FROM ConfidentialRecords WHERE relatedPatient = ?");
+			getRecords.setString(1, account.getEmail());
+			
+		} else if (account instanceof DoctorAccount) {
+			getRecords = c.prepareStatement("SELECT recordID FROM ConfidentialRecords WHERE relatedDoctor = ?");
+			getRecords.setString(1, account.getEmail());
+			
+		} else {
+			return null;
+		}
+		ResultSet results = getRecords.executeQuery();
+		while (results.next()) {
+			records.add(results.getInt("recordID"));
+		}
+		
+		return records;
 	}
 
 	public static Connection connect() throws SQLException {
