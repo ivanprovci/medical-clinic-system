@@ -125,6 +125,26 @@ public class Controller {
     	return recordType;
     }
     
+    @RequestMapping("/registerNewPatient")
+    public void registerNewPatient(@RequestParam(value = "email", required = true) String email, 
+    		@RequestParam(value = "password", required = true) String password,
+    		@RequestParam(value = "firstName", defaultValue = "") String fName,
+    		@RequestParam(value = "lastName", defaultValue = "") String lName,
+    		@RequestParam(value = "address", defaultValue = "") String address,
+    		@RequestParam(value = "healthNo", defaultValue = "") String healthNo) {
+    	PatientAccount p = new PatientAccount(email, password);
+    	p.setFirstName(fName);
+    	p.setLastName(lName);
+    	p.setAddress(address);
+    	p.setHealthNo(healthNo);
+    	try {
+			DatabaseAccessor.addAccount(p);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
 	@GetMapping("/viewRecords")
 	public ModelAndView viewRecords (Model model) {
 		List<ConfidentialRecord> recordList = getRecords("World");
