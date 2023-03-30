@@ -32,12 +32,26 @@ public class Controller {
     
 
     @RequestMapping("/getRecords")
-    public List<ConfidentialRecord> getRecords(@RequestParam(value = "email", required = true) String requestingEmail) {
+    public List<ConfidentialRecord> getRecords(@RequestParam(value = "email", required = true) String requestingEmail,
+    		@RequestParam(value = "recordType", defaultValue = "all") String recordType) {
     	// Gets all the records that this account is allowed to see
     	List<ConfidentialRecord> recordList = new ArrayList<ConfidentialRecord>();
+    	char type = ' ';
+    	
+    	if (recordType.toLowerCase().equals("all")) {
+    		type = 'a';
+    	} else if (recordType.toLowerCase().equals("visit")) {
+    		type = 'v';
+    	} else if (recordType.toLowerCase().equals("prescription")) {
+    		type = 'p';
+    	} else if (recordType.toLowerCase().equals("labexam")) {
+    		type = 'e';
+    	} else if (recordType.toLowerCase().equals("labexamresult")) {
+    		type = 'r';
+    	}
     	
 		try {
-			List<Integer> idList = DatabaseAccessor.getRecordsForAccount(requestingEmail);
+			List<Integer> idList = DatabaseAccessor.getRecordsForAccount(requestingEmail, type);
 			for (Integer i : idList) {
 	    		recordList.add(DatabaseAccessor.retrieveRecord(i));
 	    	}
@@ -315,9 +329,45 @@ public class Controller {
 		}
     }
     
+    //@RequestMapping("/createVisitRecord")
+    //Takes doctor email/password, date, related patient email
+    
+    //@RequestMapping("/createPrescription")
+    //Takes doctor email/password, id of related visit record, medicine name, quantity, dose, refillable
+    
+    //@RequestMapping("/createLabExam")
+    //Takes doctor email/password, id of related visit record, exam item, date of exam
+    
+    //@RequestMapping("/createLabExamResult")
+    //Takes staff email/password, id of related lab exam, result, upper bound, lower bound
+    
+    //@RequestMapping("/updateVisitRecord")
+    //Takes staff or doctor email/password, record id, optional - date, related patient email
+    
+    //@RequestMapping("/updatePrescription")
+    //Takes staff or doctor email/password, record id, optional - medicine name, quantity, dose, refillable
+    
+    //@RequestMapping("/updateLabExam")
+    //Takes staff or doctor email/password, record id, optional - exam item, date of exam
+    
+    //@RequestMapping("/updateLabExamResult")
+    //Takes staff email/password, record id, optional - result, upper bound, lower bound
+    
+    //@RequestMapping("/deleteRecord")
+    //Takes staff or doctor email/password, record id
+    
+    //@RequestMapping("/getUnverifiedPatients")
+    //Takes staff email/password
+    
+    //@RequestMapping("/verifyPatient")
+    //Takes staff email/password, email of patient to be verified
+    
+    //@RequestMapping("/generateReport")
+    //Takes staff email/password, date, boolean annualReport (true = annual, false = yearly)
+    
 	@GetMapping("/viewRecords")
 	public ModelAndView viewRecords (Model model) {
-		List<ConfidentialRecord> recordList = getRecords("World");
+		List<ConfidentialRecord> recordList = getRecords("World", "all");
 		model.addAttribute("records", recordList);
 		return new ModelAndView("New");
 	}

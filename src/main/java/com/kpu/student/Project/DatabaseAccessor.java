@@ -449,25 +449,50 @@ public class DatabaseAccessor {
 		c.close();
 	}
 	
-	public static List<Integer> getRecordsForAccount(String email) throws SQLException {
-		return DatabaseAccessor.getRecordsForAccount(DatabaseAccessor.retrieveAccountInfo(email));
+	public static List<Integer> getRecordsForAccount(String email, char recordType) throws SQLException {
+		return DatabaseAccessor.getRecordsForAccount(DatabaseAccessor.retrieveAccountInfo(email), recordType);
 	}
 	
-	public static List<Integer> getRecordsForAccount(Account account) throws SQLException {
+	public static List<Integer> getRecordsForAccount(Account account, char recordType) throws SQLException {
 		List<Integer> records = new LinkedList<Integer>();
 		Connection c = DatabaseAccessor.connect();
 		PreparedStatement getRecords;
+		String table = "";
+		
+		switch (recordType) {
+		case 'a':
+			table = "ConfidentialRecord";
+			break;
+		case 'v':
+			table = "VisitRecord";
+			break;
+		case 'p':
+			table = "Prescription";
+			break;
+		case 'e':
+			table = "LabExam";
+			break;
+		case 'r':
+			table = "LabExamResult";
+			break;
+		default:
+			table = "";		
+		}
+		
 		
 		if (account instanceof StaffAccount) {
-			getRecords = c.prepareStatement("SELECT recordID FROM ConfidentialRecords");
+			getRecords = c.prepareStatement("SELECT recordID FROM ?");
+			getRecords.setString(1, table);
 			
 		} else if (account instanceof PatientAccount) {
-			getRecords = c.prepareStatement("SELECT recordID FROM ConfidentialRecords WHERE relatedPatient = ?");
-			getRecords.setString(1, account.getEmail());
+			getRecords = c.prepareStatement("SELECT recordID FROM ? WHERE relatedPatient = ?");
+			getRecords.setString(1, table);
+			getRecords.setString(2, account.getEmail());
 			
 		} else if (account instanceof DoctorAccount) {
-			getRecords = c.prepareStatement("SELECT recordID FROM ConfidentialRecords WHERE relatedDoctor = ?");
-			getRecords.setString(1, account.getEmail());
+			getRecords = c.prepareStatement("SELECT recordID FROM ? WHERE relatedDoctor = ?");
+			getRecords.setString(1, table);
+			getRecords.setString(2, account.getEmail());
 			
 		} else {
 			return null;
