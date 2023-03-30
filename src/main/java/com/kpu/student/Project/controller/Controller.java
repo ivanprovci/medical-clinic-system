@@ -296,6 +296,25 @@ public class Controller {
     	return "Error: could not retrieve doctor profile.";
     }
     
+    @RequestMapping("/deleteAccount")
+    public void deleteAccount(@RequestParam(value = "email", required = true) String email, 
+    		@RequestParam(value = "password", required = true) String password,
+    		@RequestParam(value = "emailToDelete", required = true) String emailToDelete) {
+    	try {
+			if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
+					((DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) || 
+					(email.equals(emailToDelete))) {
+				// If the email/password combination is valid AND one of the following is true
+				// - The user requesting account deletion is a staff member
+				// - The user is requesting to delete their own account
+				DatabaseAccessor.deleteAccount(DatabaseAccessor.retrieveAccountInfo(email));
+			}
+    	} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
 	@GetMapping("/viewRecords")
 	public ModelAndView viewRecords (Model model) {
 		List<ConfidentialRecord> recordList = getRecords("World");
