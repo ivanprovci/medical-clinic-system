@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Staff Account</title>  
+        <title>Staff Account</title>
         <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
@@ -10,31 +10,23 @@
                 <h1>B.C Health & Wellness</h1>
             </div>
         </div>
-
-        <div class="menu">
-            <form class="search-bar">
-                <form action="#" method="get">
-                    <input type="text" name="search" placeholder="Search...">
-                    <button type="submit">Go</button>
-                </form>
-        </div>
-
+        
         <div class="nav">
             <a href="homePage.html">HOME</a>
             <a href="accountDetailsPatient.html">ACCOUNT</a>
         </div>
 
         <!-- Using the Same format that was used in the Staff Account Details page for this one -->
-        <div class="Staff-Page-tile"> 
+        <div class="Staff-Page-tile">
             <h1>View records</h1>
-            <ul id="recordList"> 
+            <ul id="recordList">
             </ul>
         </div>
         <script>
             // Retrieve records data from the API
             fetch('http://localhost:8080/getRecords')
             //converting json object to text formating
-            .then(response => response.json()) 
+            .then(response => response.json())
             .then(data => {
                 // Loop through each record and add it to the recordList unordered list
                 const recordList = document.getElementById('recordList');
@@ -43,7 +35,7 @@
                     li.innerHTML = `<b>Record ID:</b> ${record.recordID}<br>
                                     <b>Related Patient:</b> ${record.relatedPatient}<br>
                                     <b>Prescribing Doctor:</b> ${record.prescribingDoctor}<br>`;
-                            
+
                                 if (record.datePrescribed) {
 
                     // Prescription record
