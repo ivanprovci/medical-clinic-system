@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -329,23 +330,91 @@ public class Controller {
 		}
     }
     
-    //@RequestMapping("/createVisitRecord")
+    @RequestMapping("/createVisitRecord")
     //Takes doctor email/password, date, related patient email
+    public void createVisitRecord(@RequestParam(value = "doctorEmail", required = true) String doctorEmail,
+    		@RequestParam(value = "doctorPassword", required = true) String doctorPassword,
+    		@RequestParam(value = "visitDate", defaultValue = "") Date visitDate,
+   			@RequestParam(value = "patientEmail", required = true) String patientEmail) {
+    	
+    	try {
+			if (doctorPassword.equals(DatabaseAccessor.retrievePasswordHash(doctorEmail)) &&
+					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount)) {
+				
+				VisitRecord newVisit = new VisitRecord(-1);
+				newVisit.setVisitDate(visitDate);
+				newVisit.setPrescribingDoctor(doctorEmail);
+				newVisit.setRelatedPatient(patientEmail);
+				DatabaseAccessor.addRecord(newVisit);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	
+    }
     
-    //@RequestMapping("/createPrescription")
+    @RequestMapping("/createPrescription")
     //Takes doctor email/password, id of related visit record, medicine name, quantity, dose, refillable
+    public void createPrescription() {
+    	
+    }
     
-    //@RequestMapping("/createLabExam")
+    @RequestMapping("/createLabExam")
     //Takes doctor email/password, id of related visit record, exam item, date of exam
+    public void createLabExam() {
+    	
+    }
     
-    //@RequestMapping("/createLabExamResult")
+    @RequestMapping("/createLabExamResult")
     //Takes staff email/password, id of related lab exam, result, upper bound, lower bound
+    public void createLabExamResult() {
+    	
+    }
     
-    //@RequestMapping("/updateVisitRecord")
+    @RequestMapping("/updateVisitRecord")
     //Takes staff or doctor email/password, record id, optional - date, related patient email
+    public void updateVisitRecord(@RequestParam(value = "email", required = true) String email,
+    		@RequestParam(value = "password", required = true) String password,
+    		@RequestParam(value = "recordID", required = true) int recordID,
+    		@RequestParam(value = "visitDate", required = false) Date visitDate,
+    		@RequestParam(value = "patientEmail", defaultValue = "") String patientEmail) {
+    	try {
+			if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
+					// If the email/password combo is valid AND one of the following is true
+					((DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) || 
+					// If the email/password combo is for a staff account
+					(DatabaseAccessor.retrieveRecord(recordID).getPrescribingDoctor().equals(email))) {
+					// If the email/password combo is for the doctor who wrote this visit record
+				
+				VisitRecord updateRecord = (VisitRecord) DatabaseAccessor.retrieveRecord(recordID);
+				// Retrieve the current values of the visit record from database
+				
+				if (!(Objects.isNull(visitDate))) {
+					// If visitDate is not null/if we were given a new value for visitDate
+					// Update the value of visitDate
+					updateRecord.setVisitDate(visitDate);
+				}
+				if (!(patientEmail.equals(""))) {
+					// If patientEmail does not equal the default value/if we were given a new value for patientEmail
+					// Update the value of patientEmail
+					updateRecord.setRelatedPatient(patientEmail);
+				}
+				// Add the newly updated values to the database
+				DatabaseAccessor.updateRecord(updateRecord);
+				}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    }
     
     //@RequestMapping("/updatePrescription")
     //Takes staff or doctor email/password, record id, optional - medicine name, quantity, dose, refillable
+    
     
     //@RequestMapping("/updateLabExam")
     //Takes staff or doctor email/password, record id, optional - exam item, date of exam
