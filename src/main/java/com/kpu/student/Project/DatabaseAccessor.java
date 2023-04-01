@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -533,15 +534,81 @@ public class DatabaseAccessor {
 		return patients;
 	}
 	
+	// 1st Report: all visit records for one doctor
+	public static List<VisitRecord> staffReport_VisitsByDoctor(String doctorEmail, boolean isAnnualReport) throws SQLException {
+		Connection c = DatabaseAccessor.connect();
+		PreparedStatement getRecords;
+		List<VisitRecord> records = new LinkedList<VisitRecord>();
+		
+		System.out.println("Getting recent visit records for doctor " + doctorEmail);
+		
+		if (isAnnualReport) {
+			getRecords = c.prepareStatement("SELECT recordID FROM VisitRecord "
+					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 MONTH AND CURDATE() AND "
+					+ "relatedDoctor = ? NATURAL JOIN ConfidentialRecord");
+			getRecords.setString(1, doctorEmail);
+			System.out.println("Getting last month's records");
+		}
+		else {
+			getRecords = c.prepareStatement("SELECT recordID FROM VisitRecord "
+					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() AND "
+					+ "relatedDoctor = ? NATURAL JOIN ConfidentialRecord");
+			getRecords.setString(1, doctorEmail); 
+			System.out.println("Getting last year's records");
+		}
+		ResultSet results = getRecords.executeQuery();
+		while (results.next()) {
+			records.add((VisitRecord) DatabaseAccessor.retrieveRecord(results.getInt("recordID")));
+			System.out.println("Add visit record to return list: " + results.getInt("recordID"));
+		}
+		
+		return records;
+	}
 	
+	// 2nd Report: all doctors seen by one patient and how many times 
+	public static HashMap<String, Integer> staffReport_visitsByPatient(String patientEmail, boolean isAnnualReport) throws SQLException {
+		HashMap<String, Integer> doctorVisits = new HashMap<String, Integer>();
+		Connection c = DatabaseAccessor.connect();
+		PreparedStatement getRecords;
+		
+		System.out.println("Getting recent visit records for patient " + patientEmail);
+		
+		if (isAnnualReport) {
+			getRecords = c.prepareStatement("SELECT relatedDoctor, COUNT(*) FROM VisitRecord "
+					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 MONTH AND CURDATE() AND "
+					+ "relatedPatient = ? GROUP BY relatedDoctor");
+			getRecords.setString(1, patientEmail);
+			System.out.println("Getting last month's records");
+		}
+		else {
+			getRecords = c.prepareStatement("SELECT relatedDoctor, COUNT(*) AS Visits FROM VisitRecord "
+					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() AND "
+					+ "relatedPatient = ? GROUP BY relatedDoctor");
+			getRecords.setString(1, patientEmail); 
+			System.out.println("Getting last year's records");
+		}
+		
+		ResultSet results = getRecords.executeQuery();
+		while (results.next()) {
+			doctorVisits.put(results.getString("relatedDoctor"), results.getInt("Visits"));
+			System.out.println("Add visit record to return list: " + results.getInt("recordID"));
+		}
+		
+		return doctorVisits;
+	}
+	
+	// 3rd Report: 3 most commonly prescribed medications
+	public static HashMap<String, Integer> staffReport_commonMeds(boolean isAnnualReport) throws SQLException {
+		HashMap<String, Integer> medications = new HashMap<String, Integer>();
+		Connection c = DatabaseAccessor.connect();
+		
+		return medications;
+	}
 
 	public static Connection connect() throws SQLException {
 
-		Connection conn = null;
-
 		// Create connection with database - Liam
-		conn = DriverManager.getConnection("jdbc:mysql://localhost/INFO2413DB?" + "user=accessor&password=DB_Accessor");
-
-		return conn;
+		return DriverManager.getConnection("jdbc:mysql://localhost/INFO2413DB?" + 
+											"user=accessor&password=DB_Accessor");
 	}
 }
