@@ -544,14 +544,14 @@ public class DatabaseAccessor {
 		
 		if (isAnnualReport) {
 			getRecords = c.prepareStatement("SELECT recordID FROM VisitRecord "
-					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 MONTH AND CURDATE() AND "
+					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() AND "
 					+ "relatedDoctor = ? NATURAL JOIN ConfidentialRecord");
 			getRecords.setString(1, doctorEmail);
 			System.out.println("Getting last month's records");
 		}
 		else {
 			getRecords = c.prepareStatement("SELECT recordID FROM VisitRecord "
-					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() AND "
+					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 MONTH AND CURDATE() AND "
 					+ "relatedDoctor = ? NATURAL JOIN ConfidentialRecord");
 			getRecords.setString(1, doctorEmail); 
 			System.out.println("Getting last year's records");
@@ -575,15 +575,15 @@ public class DatabaseAccessor {
 		
 		if (isAnnualReport) {
 			getRecords = c.prepareStatement("SELECT relatedDoctor, COUNT(*) FROM VisitRecord "
-					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 MONTH AND CURDATE() AND "
-					+ "relatedPatient = ? GROUP BY relatedDoctor");
+					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() AND "
+					+ "relatedPatient = ? GROUP BY relatedDoctor NATURAL JOIN ConfidentialRecord");
 			getRecords.setString(1, patientEmail);
 			System.out.println("Getting last month's records");
 		}
 		else {
 			getRecords = c.prepareStatement("SELECT relatedDoctor, COUNT(*) AS Visits FROM VisitRecord "
-					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() AND "
-					+ "relatedPatient = ? GROUP BY relatedDoctor");
+					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 MONTH AND CURDATE() AND "
+					+ "relatedPatient = ? GROUP BY relatedDoctor NATURAL JOIN ConfidentialRecord");
 			getRecords.setString(1, patientEmail); 
 			System.out.println("Getting last year's records");
 		}
@@ -601,6 +601,8 @@ public class DatabaseAccessor {
 	public static HashMap<String, Integer> staffReport_commonMeds(boolean isAnnualReport) throws SQLException {
 		HashMap<String, Integer> medications = new HashMap<String, Integer>();
 		Connection c = DatabaseAccessor.connect();
+		
+		
 		
 		return medications;
 	}
