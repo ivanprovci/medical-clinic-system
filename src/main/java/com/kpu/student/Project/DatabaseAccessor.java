@@ -22,7 +22,7 @@ public class DatabaseAccessor {
 		System.out.println("calling retrievePasswordHash(" + email + ")");
 		PreparedStatement getPW = c.prepareStatement("SELECT passwordHash FROM Account WHERE email = ?");
 		getPW.setString(1, email);
-		ResultSet results = getPW.executeQuery();
+		ResultSet results = getPW.executeQuery();		
 		if (results.isBeforeFirst()) {
 			results.next();
 			// System.out.println("retrieved password: " +
@@ -31,6 +31,7 @@ public class DatabaseAccessor {
 		}
 		c.close();
 
+		System.out.println("retrievePasswordHash() executed successfully");
 		return pwHash;
 	}
 
@@ -95,7 +96,7 @@ public class DatabaseAccessor {
 
 		// Get information common to all account types - Liam
 		PreparedStatement generalAccountInfo = c.prepareStatement("SELECT * FROM Account WHERE email = ?");
-		checkIfPatient.setString(1, email);
+		generalAccountInfo.setString(1, email);
 		ResultSet accountResults = generalAccountInfo.executeQuery();
 
 		if (accountResults.isBeforeFirst()) {
@@ -135,7 +136,7 @@ public class DatabaseAccessor {
 		ResultSet examDataResults = checkIfExamData.executeQuery();
 
 		PreparedStatement genericRecordData = c.prepareStatement("SELECT * FROM ConfidentialRecord WHERE recordID = ?");
-		checkIfExamData.setInt(1, recordID);
+		genericRecordData.setInt(1, recordID);
 		ResultSet recordResults = genericRecordData.executeQuery();
 
 		if (recordResults.isBeforeFirst()) {
@@ -450,6 +451,7 @@ public class DatabaseAccessor {
 	}
 	
 	public static List<Integer> getRecordsForAccount(String email, char recordType) throws SQLException {
+		System.out.println("getRecordsForAccount(String): retrieving account info for account " + email);
 		return DatabaseAccessor.getRecordsForAccount(DatabaseAccessor.retrieveAccountInfo(email), recordType);
 	}
 	
@@ -457,6 +459,7 @@ public class DatabaseAccessor {
 		List<Integer> records = new LinkedList<Integer>();
 		Connection c = DatabaseAccessor.connect();
 		PreparedStatement getRecords;
+		ResultSet results;
 		String table = "";
 		
 		switch (recordType) {
@@ -478,28 +481,37 @@ public class DatabaseAccessor {
 		default:
 			table = "";		
 		}
-		
+		System.out.println("Table to search: " + table);
 		
 		if (account instanceof StaffAccount) {
-			getRecords = c.prepareStatement("SELECT recordID FROM ?");
-			getRecords.setString(1, table);
+			getRecords = c.prepareStatement("SELECT recordID FROM " + table);
+			System.out.println("Staff account - get all records");
+			System.out.print("Executing query... ");
+			results = getRecords.executeQuery();
+			System.out.println("Query executed successfully");
 			
 		} else if (account instanceof PatientAccount) {
-			getRecords = c.prepareStatement("SELECT recordID FROM ? WHERE relatedPatient = ?");
-			getRecords.setString(1, table);
-			getRecords.setString(2, account.getEmail());
+			getRecords = c.prepareStatement("SELECT recordID FROM " + table + " WHERE relatedPatient = ?");
+			getRecords.setString(1, account.getEmail());
+			System.out.println("Patient account - get records where relatedPatient = " + account.getEmail());
+			System.out.print("Executing query... ");
+			results = getRecords.executeQuery();
+			System.out.println("Query executed successfully");
 			
 		} else if (account instanceof DoctorAccount) {
-			getRecords = c.prepareStatement("SELECT recordID FROM ? WHERE relatedDoctor = ?");
-			getRecords.setString(1, table);
-			getRecords.setString(2, account.getEmail());
+			getRecords = c.prepareStatement("SELECT recordID FROM " + table + " WHERE relatedDoctor = ?");
+			getRecords.setString(1, account.getEmail());
+			System.out.println("Doctor account - get records where relatedDoctor = " + account.getEmail());
+			System.out.print("Executing query... ");
+			results = getRecords.executeQuery();
+			System.out.println("Query executed successfully");
 			
 		} else {
 			return null;
 		}
-		ResultSet results = getRecords.executeQuery();
 		while (results.next()) {
 			records.add(results.getInt("recordID"));
+			System.out.println("Add recordID to return list: " + results.getInt("recordID"));
 		}
 		
 		return records;
