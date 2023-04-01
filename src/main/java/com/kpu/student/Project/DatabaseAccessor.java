@@ -516,6 +516,24 @@ public class DatabaseAccessor {
 		
 		return records;
 	}
+	
+	public static List<String> getUnverifiedPatients() throws SQLException {
+		List<String> patients = new LinkedList<String>();
+		
+		System.out.println("Getting list of unverified patients");
+		Connection c = DatabaseAccessor.connect();
+		PreparedStatement getPatients = c.prepareStatement("SELECT email FROM PatientAccount WHERE verifyingStaffMember IS NULL");
+		ResultSet results = getPatients.executeQuery();
+		
+		while (results.next()) {
+			patients.add(results.getString("email"));
+			System.out.println("Add unverified patient to return list: " + results.getString("email"));
+		}
+		
+		return patients;
+	}
+	
+	
 
 	public static Connection connect() throws SQLException {
 
