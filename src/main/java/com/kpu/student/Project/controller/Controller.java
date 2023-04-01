@@ -334,19 +334,15 @@ public class Controller {
     //Takes doctor email/password, date, related patient email
     public void createVisitRecord(@RequestParam(value = "doctorEmail", required = true) String doctorEmail,
     		@RequestParam(value = "doctorPassword", required = true) String doctorPassword,
-    		@RequestParam(value = "visitDate", defaultValue = "") Date visitDate,
+    		@RequestParam(value = "visitDate", required = true) Date visitDate,
    			@RequestParam(value = "patientEmail", required = true) String patientEmail) {
     	
     	try {
 			if (doctorPassword.equals(DatabaseAccessor.retrievePasswordHash(doctorEmail)) &&
-					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount)) {
-				
-				VisitRecord newVisit = new VisitRecord(-1);
+					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount)) {				
+				VisitRecord newVisit = new VisitRecord(-1, patientEmail, doctorEmail);
 				newVisit.setVisitDate(visitDate);
-				newVisit.setPrescribingDoctor(doctorEmail);
-				newVisit.setRelatedPatient(patientEmail);
-				DatabaseAccessor.addRecord(newVisit);
-				
+				DatabaseAccessor.addRecord(newVisit);				
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -358,19 +354,91 @@ public class Controller {
     
     @RequestMapping("/createPrescription")
     //Takes doctor email/password, id of related visit record, medicine name, quantity, dose, refillable
-    public void createPrescription() {
+    public void createPrescription(@RequestParam(value = "doctorEmail", required = true) String doctorEmail,
+        		@RequestParam(value = "doctorPassword", required = true) String doctorPassword,
+        		@RequestParam(value = "relatedVisitRecord", required = true) int relatedVisitRecord,
+       			@RequestParam(value = "medName", defaultValue= "") String medName,
+       			@RequestParam(value = "medDose", defaultValue= "") String medDose,
+       			@RequestParam(value = "medQuantity", defaultValue= "") String medQuantity,
+       			@RequestParam(value = "refillable", defaultValue= "false") Boolean refillable) {
+        	
+        	try {
+    			if (doctorPassword.equals(DatabaseAccessor.retrievePasswordHash(doctorEmail)) &&
+    					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount)) {
+    				
+    				VisitRecord relatedVisit = (VisitRecord) DatabaseAccessor.retrieveRecord(relatedVisitRecord);
+    				Prescription newPrescription = new Prescription(-1, relatedVisit);
+    				newPrescription.setPrescribingDoctor(doctorEmail);
+    				newPrescription.setRelatedPatient(relatedVisit.getRelatedPatient());
+    				newPrescription.setDatePrescribed(relatedVisit.getVisitDate());
+    				newPrescription.setMedicineName(medName);
+    				newPrescription.setMedicineDose(medDose);
+    				newPrescription.setMedicineQuantity(medQuantity);
+    				newPrescription.setRefillable(refillable);   				
+    				DatabaseAccessor.addRecord(newPrescription);
+    				DatabaseAccessor.updateRecord(relatedVisit);    				
+    			}
+    		} catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
     	
     }
     
     @RequestMapping("/createLabExam")
     //Takes doctor email/password, id of related visit record, exam item, date of exam
-    public void createLabExam() {
+    public void createLabExam(@RequestParam(value = "doctorEmail", required = true) String doctorEmail,
+    		@RequestParam(value = "doctorPassword", required = true) String doctorPassword,
+    		@RequestParam(value = "relatedVisitRecord", required = true) int relatedVisitRecord,
+   			@RequestParam(value = "examItem", defaultValue= "") String examItem,
+   			@RequestParam(value = "examDate", required = true) Date examDate) {
+    	
+    	try {
+			if (doctorPassword.equals(DatabaseAccessor.retrievePasswordHash(doctorEmail)) &&
+					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount)) {
+				
+				VisitRecord relatedVisit = (VisitRecord) DatabaseAccessor.retrieveRecord(relatedVisitRecord);
+				LabExam newExam = new LabExam(-1, relatedVisit);
+				newExam.setPrescribingDoctor(doctorEmail);
+				newExam.setRelatedPatient(relatedVisit.getRelatedPatient());
+				newExam.setExamItem(examItem);
+				newExam.setExamDate(examDate);
+				DatabaseAccessor.addRecord(newExam);
+				DatabaseAccessor.updateRecord(relatedVisit);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	
     }
     
     @RequestMapping("/createLabExamResult")
     //Takes staff email/password, id of related lab exam, result, upper bound, lower bound
-    public void createLabExamResult() {
+    public void createLabExamResult(@RequestParam(value = "doctorEmail", required = true) String doctorEmail,
+    		@RequestParam(value = "doctorPassword", required = true) String doctorPassword,
+    		@RequestParam(value = "relatedLabExam", required = true) int relatedLabExam,
+   			@RequestParam(value = "result", defaultValue= "") int result,
+   			@RequestParam(value = "upperBound", defaultValue= "") int upperBound,
+   			@RequestParam(value = "lowerBound", defaultValue= "") int lowerBound) {
+    	
+    	try {
+			if (doctorPassword.equals(DatabaseAccessor.retrievePasswordHash(doctorEmail)) &&
+					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount)) {
+				
+				LabExam relatedExam = (LabExam) DatabaseAccessor.retrieveRecord(relatedLabExam);
+				LabExamResult newResult = new LabExamResult(-1, relatedExam);
+				newResult.setResult(result);
+				newResult.setNormalLowerBound(lowerBound);
+				newResult.setNormalUpperBound(upperBound);
+				DatabaseAccessor.addRecord(newResult);
+				DatabaseAccessor.updateRecord(relatedExam);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	
     }
     
