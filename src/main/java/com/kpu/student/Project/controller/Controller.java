@@ -594,6 +594,36 @@ public class Controller {
     
     //@RequestMapping("/updateLabExamResult")
     //Takes staff email/password, record id, optional - result, upper bound, lower bound
+	@RequestMapping("/updateLabExamResult")
+	public Boolean updateLabExamResult(@RequestParam(value = "email", required = true) String email,
+	                                   @RequestParam(value = "password", required = true) String password,
+	                                   @RequestParam(value = "recordID", required = true) int id,
+	                                   @RequestParam(value = "result", defaultValue = "") String result,
+	                                   @RequestParam(value = "upperBound", defaultValue = "") String upperBound,
+	                                   @RequestParam(value = "lowerBound", defaultValue = "") String lowerBound) {
+	    if (checkAccountType(email) == 's' && checkPassword(email, password)) {
+	        try {
+	            ConfidentialRecord r = DatabaseAccessor.retrieveRecord(id);
+	            if (r instanceof LabExamResult) {
+	                LabExamResult labResult = (LabExamResult) r;
+	                if (!result.equals("")) {
+	                    labResult.setResult(result);
+	                }
+	                if (!upperBound.equals("")) {
+	                    labResult.setUpperBound(upperBound);
+	                }
+	                if (!lowerBound.equals("")) {
+	                    labResult.setLowerBound(lowerBound);
+	                }
+	                DatabaseAccessor.saveRecord(labResult);
+	                return true;
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return false;
+	}
     
     //@RequestMapping("/deleteRecord")
     //Takes staff or doctor email/password, record id
