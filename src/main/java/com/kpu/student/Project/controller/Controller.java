@@ -625,8 +625,25 @@ public class Controller {
 	    return false;
 	}
     
-    //@RequestMapping("/deleteRecord")
+    @RequestMapping("/deleteRecord")
     //Takes staff or doctor email/password, record id
+    public void deleteRecord(@RequestParam(value = "email", required = true) String email,
+    		@RequestParam(value = "password", required = true) String password, 
+    		@RequestParam(value = "recordID", required = true) int id) {
+    	try {
+			if (checkPassword(email, password) &&
+					// If email/password combo is valid AND one of the following
+					((checkAccountType(email) == 's') ||
+					// If the email is for a staff account
+					(checkAccountType(email) == 'd' && DatabaseAccessor.retrieveRecord(id).getPrescribingDoctor().equals(email)))) {
+					// If the email is for the same doctor account that created this record
+				DatabaseAccessor.deleteRecord(DatabaseAccessor.retrieveRecord(id));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
     
     @RequestMapping("/getUnverifiedPatients")
     //Takes staff email/password
