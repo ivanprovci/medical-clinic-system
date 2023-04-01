@@ -598,24 +598,24 @@ public class Controller {
 	public Boolean updateLabExamResult(@RequestParam(value = "email", required = true) String email,
 	                                   @RequestParam(value = "password", required = true) String password,
 	                                   @RequestParam(value = "recordID", required = true) int id,
-	                                   @RequestParam(value = "result", defaultValue = "") String result,
-	                                   @RequestParam(value = "upperBound", defaultValue = "") String upperBound,
-	                                   @RequestParam(value = "lowerBound", defaultValue = "") String lowerBound) {
+	                                   @RequestParam(value = "result", required = false) Integer result,
+	                                   @RequestParam(value = "upperBound", required = false) Integer upperBound,
+	                                   @RequestParam(value = "lowerBound", required = false) Integer lowerBound) {
 	    if (checkAccountType(email) == 's' && checkPassword(email, password)) {
 	        try {
 	            ConfidentialRecord r = DatabaseAccessor.retrieveRecord(id);
 	            if (r instanceof LabExamResult) {
 	                LabExamResult labResult = (LabExamResult) r;
-	                if (!result.equals("")) {
+	                if (!result.equals(null)) {
 	                    labResult.setResult(result);
 	                }
-	                if (!upperBound.equals("")) {
-	                    labResult.setUpperBound(upperBound);
+	                if (!upperBound.equals(null)) {
+	                    labResult.setNormalUpperBound(upperBound);
 	                }
-	                if (!lowerBound.equals("")) {
-	                    labResult.setLowerBound(lowerBound);
+	                if (!lowerBound.equals(null)) {
+	                    labResult.setNormalLowerBound(lowerBound);
 	                }
-	                DatabaseAccessor.saveRecord(labResult);
+	                DatabaseAccessor.updateRecord(labResult);
 	                return true;
 	            }
 	        } catch (SQLException e) {
