@@ -49,10 +49,13 @@ public class Controller {
     	} else if (recordType.toLowerCase().equals("labexamresult")) {
     		type = 'r';
     	}
-    	
+    	System.out.println("Getting records for email " + requestingEmail + " of type " + type);
 		try {
+			System.out.println("test1");
 			List<Integer> idList = DatabaseAccessor.getRecordsForAccount(requestingEmail, type);
+			System.out.println("test2");
 			for (Integer i : idList) {
+				System.out.println("Adding record to return list with id = " + i);
 	    		recordList.add(DatabaseAccessor.retrieveRecord(i));
 	    	}
 		} catch (SQLException e) {
