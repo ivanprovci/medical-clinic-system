@@ -69,8 +69,8 @@ public class Controller {
 	 
 
     @RequestMapping("/checkPassword")
-    public Boolean checkPassword(@RequestParam(value = "email", defaultValue = "") String email,
-    		@RequestParam(value = "password", defaultValue = "") String password) {
+    public Boolean checkPassword(@RequestParam(value = "email", required = true) String email,
+    		@RequestParam(value = "password", required = true) String password) {
         //Sends an email/hashed password combo to be checked
         //Returns true if the combination is valid, false otherwise - Liam
     	String s;
@@ -166,7 +166,8 @@ public class Controller {
     		@RequestParam(value = "staffPassword", required = true) String staffPassword) {
     	
     	try {
-			if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail))) {
+			if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail)) &&
+					(DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) {
 				DoctorAccount d = new DoctorAccount(email, password);
 				d.setFirstName(fName);
 				d.setLastName(lName);
@@ -188,7 +189,8 @@ public class Controller {
     		@RequestParam(value = "staffPassword", required = true) String staffPassword) {
     	
     	try {
-			if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail))) {
+			if ((staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail))) && 
+					(DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) {
 				StaffAccount s = new StaffAccount(email, password);
 				s.setFirstName(fName);
 				s.setLastName(lName);
@@ -199,6 +201,18 @@ public class Controller {
 			e.printStackTrace();
 		}
     }
+    
+    @RequestMapping("/addTestStaffAccount")
+    public void addTestStaffAccount() {
+    	StaffAccount s = new StaffAccount("staff@test.com", "TestStaffPassword");
+		try {
+			DatabaseAccessor.addAccount(s);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
     
     @RequestMapping("/updatePatient")
     public void updatePatient(@RequestParam(value = "email", required = true) String email, 
@@ -485,8 +499,7 @@ public class Controller {
     
     //@RequestMapping("/updatePrescription")
     //Takes staff or doctor email/password, record id, optional - medicine name, quantity, dose, refillable
-    
-    
+        
     //@RequestMapping("/updateLabExam")
     //Takes staff or doctor email/password, record id, optional - exam item, date of exam
     
