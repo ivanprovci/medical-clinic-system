@@ -3,6 +3,8 @@ package com.kpu.student.Project.controller;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,12 +35,13 @@ public class Controller {
     
 
     @RequestMapping("/getRecords")
-    public List<ConfidentialRecord> getRecords(@RequestParam(value = "email", required = true) String requestingEmail,
+    public List<ConfidentialRecord> getRecords(@RequestParam(value = "email", required = true) String email,
+    		@RequestParam(value = "password", required = true) String password,
     		@RequestParam(value = "recordType", defaultValue = "all") String recordType) {
     	// Gets all the records that this account is allowed to see
     	List<ConfidentialRecord> recordList = new ArrayList<ConfidentialRecord>();
     	char type = ' ';
-    	
+
     	if (recordType.toLowerCase().equals("all")) {
     		type = 'a';
     	} else if (recordType.toLowerCase().equals("visit")) {
@@ -50,15 +53,17 @@ public class Controller {
     	} else if (recordType.toLowerCase().equals("labexamresult")) {
     		type = 'r';
     	}
-    	System.out.println("Getting records for email " + requestingEmail + " of type " + type);
 		try {
-			System.out.println("test1");
-			List<Integer> idList = DatabaseAccessor.getRecordsForAccount(requestingEmail, type);
-			System.out.println("test2");
-			for (Integer i : idList) {
-				System.out.println("Adding record to return list with id = " + i);
-	    		recordList.add(DatabaseAccessor.retrieveRecord(i));
-	    	}
+			if (password.equals(DatabaseAccessor.retrievePasswordHash(email))) {
+				System.out.println("Account verified successfully");
+				List<Integer> idList = DatabaseAccessor.getRecordsForAccount(email, type);
+				System.out.println("Getting records for email " + email + " of type " + type);
+				for (Integer i : idList) {
+					System.out.println("Adding record to return list with id = " + i);
+		    		recordList.add(DatabaseAccessor.retrieveRecord(i));
+		    	}
+			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -148,6 +153,7 @@ public class Controller {
     	p.setLastName(lName);
     	p.setAddress(address);
     	p.setHealthNo(healthNo);
+    	p.setVerified(false);
     	try {
 			DatabaseAccessor.addAccount(p);
 		} catch (SQLException e) {
@@ -356,7 +362,8 @@ public class Controller {
     	
     	try {
 			if (doctorPassword.equals(DatabaseAccessor.retrievePasswordHash(doctorEmail)) &&
-					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount)) {				
+					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount) &&
+					((DatabaseAccessor.retrieveAccountInfo(patientEmail)) instanceof PatientAccount)) {				
 				VisitRecord newVisit = new VisitRecord(-1, patientEmail, doctorEmail);
 				newVisit.setVisitDate(visitDate);
 				DatabaseAccessor.addRecord(newVisit);				
@@ -381,7 +388,8 @@ public class Controller {
         	
         	try {
     			if (doctorPassword.equals(DatabaseAccessor.retrievePasswordHash(doctorEmail)) &&
-    					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount)) {
+    					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount) &&
+    					((DatabaseAccessor.retrieveRecord(relatedVisitRecord)) instanceof VisitRecord)) {
     				
     				VisitRecord relatedVisit = (VisitRecord) DatabaseAccessor.retrieveRecord(relatedVisitRecord);
     				Prescription newPrescription = new Prescription(-1, relatedVisit);
@@ -432,16 +440,16 @@ public class Controller {
     
     @RequestMapping("/createLabExamResult")
     //Takes staff email/password, id of related lab exam, result, upper bound, lower bound
-    public void createLabExamResult(@RequestParam(value = "doctorEmail", required = true) String doctorEmail,
-    		@RequestParam(value = "doctorPassword", required = true) String doctorPassword,
+    public void createLabExamResult(@RequestParam(value = "doctorEmail", required = true) String staffEmail,
+    		@RequestParam(value = "doctorPassword", required = true) String staffPassword,
     		@RequestParam(value = "relatedLabExam", required = true) int relatedLabExam,
    			@RequestParam(value = "result", defaultValue= "") int result,
    			@RequestParam(value = "upperBound", defaultValue= "") int upperBound,
    			@RequestParam(value = "lowerBound", defaultValue= "") int lowerBound) {
     	
     	try {
-			if (doctorPassword.equals(DatabaseAccessor.retrievePasswordHash(doctorEmail)) &&
-					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount)) {
+			if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail)) &&
+					(DatabaseAccessor.retrieveAccountInfo(staffEmail) instanceof StaffAccount)) {
 				
 				LabExam relatedExam = (LabExam) DatabaseAccessor.retrieveRecord(relatedLabExam);
 				LabExamResult newResult = new LabExamResult(-1, relatedExam);
@@ -509,18 +517,123 @@ public class Controller {
     //@RequestMapping("/deleteRecord")
     //Takes staff or doctor email/password, record id
     
-    //@RequestMapping("/getUnverifiedPatients")
+    @RequestMapping("/getUnverifiedPatients")
     //Takes staff email/password
+    public List<String> getUnverifiedPatients(@RequestParam(value = "staffEmail", required = true) String staffEmail,
+    		@RequestParam(value = "staffPassword", required = true) String staffPassword) {
+    	
+    	List<String> patients = new LinkedList<String>();
+    	
+    	try {
+			if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail)) &&
+					// If the email/password combo is valid AND it's linked to a staff account
+					((DatabaseAccessor.retrieveAccountInfo(staffEmail)) instanceof StaffAccount)) {
+				patients = DatabaseAccessor.getUnverifiedPatients();
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return patients;
+    }
     
-    //@RequestMapping("/verifyPatient")
+    @RequestMapping("/verifyPatient")
     //Takes staff email/password, email of patient to be verified
+    public void verifyPatient(@RequestParam(value = "staffEmail", required = true) String staffEmail,
+    		@RequestParam(value = "staffPassword", required = true) String staffPassword,
+    		@RequestParam(value = "patientEmail", required = true) String patientEmail) {
+    	try {
+			if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail)) &&
+					// If the email/password combo is valid AND it's linked to a staff account
+					((DatabaseAccessor.retrieveAccountInfo(staffEmail)) instanceof StaffAccount) &&
+					// AND the patient's email is linked to a patient account
+					((DatabaseAccessor.retrieveAccountInfo(patientEmail)) instanceof PatientAccount)) {
+				PatientAccount p = (PatientAccount) DatabaseAccessor.retrieveAccountInfo(patientEmail);
+				StaffAccount s = (StaffAccount) DatabaseAccessor.retrieveAccountInfo(staffEmail);
+				s.verifyPatient(p);
+				DatabaseAccessor.updateAccount(p);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
     
-    //@RequestMapping("/generateReport")
-    //Takes staff email/password, date, boolean annualReport (true = annual, false = yearly)
+    @RequestMapping("/generateDoctorReport")
+    //Takes staff email/password, date, boolean annualReport (true = annual, false = yearly), doctor email
+    public List<VisitRecord> generateDoctorReport(@RequestParam(value = "staffEmail", required = true) String staffEmail,
+    		@RequestParam(value = "staffPassword", required = true) String staffPassword,
+    		@RequestParam(value = "isAnnualReport", required = true) boolean isAnnualReport,
+    		@RequestParam(value = "doctorEmail", required = true) String doctorEmail) {
+    	
+    	List<VisitRecord> visits = new LinkedList<VisitRecord>();
+    	
+    	try {
+    		if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail)) &&
+					// If the email/password combo is valid AND it's linked to a staff account
+					((DatabaseAccessor.retrieveAccountInfo(staffEmail)) instanceof StaffAccount) &&
+					((DatabaseAccessor.retrieveAccountInfo(doctorEmail)) instanceof DoctorAccount)) {
+    			visits = DatabaseAccessor.staffReport_visitsByDoctor(doctorEmail, isAnnualReport);
+    		}			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return visits;
+    	
+    }
+    
+    @RequestMapping("/generatePatientReport")
+    //Takes staff email/password, date, boolean annualReport (true = annual, false = yearly), doctor email
+    public HashMap<String, Integer> generatePatientReport(@RequestParam(value = "staffEmail", required = true) String staffEmail,
+    		@RequestParam(value = "staffPassword", required = true) String staffPassword,
+    		@RequestParam(value = "isAnnualReport", required = true) boolean isAnnualReport,
+    		@RequestParam(value = "patientEmail", required = true) String patientEmail) {
+    	
+    	HashMap<String, Integer> visits = new HashMap<String, Integer>();
+    	
+    	try {
+    		if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail)) &&
+					// If the email/password combo is valid AND it's linked to a staff account
+					((DatabaseAccessor.retrieveAccountInfo(staffEmail)) instanceof StaffAccount) &&
+					((DatabaseAccessor.retrieveAccountInfo(patientEmail)) instanceof PatientAccount)) {
+    			visits = DatabaseAccessor.staffReport_visitsByPatient(patientEmail, isAnnualReport);
+    		}			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return visits;
+    	
+    }
+    
+    @RequestMapping("/generatePrescriptionReport")
+    //Takes staff email/password, date, boolean annualReport (true = annual, false = yearly), doctor email
+    public HashMap<String, Integer> generatePrescriptionReport(@RequestParam(value = "staffEmail", required = true) String staffEmail,
+    		@RequestParam(value = "staffPassword", required = true) String staffPassword,
+    		@RequestParam(value = "isAnnualReport", required = true) boolean isAnnualReport) {
+    	
+    	HashMap<String, Integer> prescriptions = new HashMap<String, Integer>();
+    	
+    	try {
+    		if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail)) &&
+					// If the email/password combo is valid AND it's linked to a staff account
+					((DatabaseAccessor.retrieveAccountInfo(staffEmail)) instanceof StaffAccount)) {
+    			prescriptions = DatabaseAccessor.staffReport_commonMeds(isAnnualReport);
+    		}			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return prescriptions;
+    	
+    }
     
 	@GetMapping("/viewRecords")
 	public ModelAndView viewRecords (Model model) {
-		List<ConfidentialRecord> recordList = getRecords("World", "all");
+		List<ConfidentialRecord> recordList = getRecords("staff@test.com", "TestStaffPassword", "all");
 		model.addAttribute("records", recordList);
 		return new ModelAndView("New");
 	}

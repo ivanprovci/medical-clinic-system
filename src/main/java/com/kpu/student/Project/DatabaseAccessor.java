@@ -535,7 +535,7 @@ public class DatabaseAccessor {
 	}
 	
 	// 1st Report: all visit records for one doctor
-	public static List<VisitRecord> staffReport_VisitsByDoctor(String doctorEmail, boolean isAnnualReport) throws SQLException {
+	public static List<VisitRecord> staffReport_visitsByDoctor(String doctorEmail, boolean isAnnualReport) throws SQLException {
 		Connection c = DatabaseAccessor.connect();
 		PreparedStatement getRecords;
 		List<VisitRecord> records = new LinkedList<VisitRecord>();
