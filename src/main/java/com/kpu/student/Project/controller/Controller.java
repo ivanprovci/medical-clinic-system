@@ -505,11 +505,92 @@ public class Controller {
     	
     }
     
-    //@RequestMapping("/updatePrescription")
+   //@RequestMapping("/updatePrescription")
     //Takes staff or doctor email/password, record id, optional - medicine name, quantity, dose, refillable
+	@RequestMapping("/updatePrescription")
+	public void updatePrescription(@RequestParam(value = "email", required = true) String email,
+                @RequestParam(value = "password", required = true) String password,
+                @RequestParam(value = "recordID", required = true) int recordID,
+                @RequestParam(value = "medicineName", required = false) String medicineName,
+                @RequestParam(value = "quantity", required = false) String quantity,
+                @RequestParam(value = "dose", required = false) String dose,
+                @RequestParam(value = "refillable", required = false) Boolean refillable) {
+    try {
+        if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
+                // If the email/password combo is valid AND one of the following is true
+                ((DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) || 
+                // If the email/password combo is for a staff account
+                (DatabaseAccessor.retrieveRecord(recordID).getPrescribingDoctor().equals(email))) {
+                // If the email/password combo is for the doctor who wrote this prescription record
+            
+            Prescription updateRecord = (Prescription) DatabaseAccessor.retrieveRecord(recordID);
+            // Retrieve the current values of the prescription record from database
+            
+            if (!(Objects.isNull(medicineName))) {
+                // If medicineName is not null/if we were given a new value for medicineName
+                // Update the value of medicineName
+                updateRecord.setMedicineName(medicineName);
+            }
+            if (!(Objects.isNull(quantity))) {
+                // If quantity is not null/if we were given a new value for quantity
+                // Update the value of quantity
+                updateRecord.setMedicineQuantity(quantity);
+            }
+            if (!(Objects.isNull(dose))) {
+                // If dose is not null/if we were given a new value for dose
+                // Update the value of dose
+                updateRecord.setMedicineDose(dose);
+            }
+            if (!(Objects.isNull(refillable))) {
+                // If refillable is not null/if we were given a new value for refillable
+                // Update the value of refillable
+                updateRecord.setRefillable(refillable);
+            }
+            
+            // Add the newly updated values to the database
+            DatabaseAccessor.updateRecord(updateRecord);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
         
     //@RequestMapping("/updateLabExam")
     //Takes staff or doctor email/password, record id, optional - exam item, date of exam
+	@RequestMapping("/updateLabExam")
+	public void updateLabExam(@RequestParam(value = "email", required = true) String email,
+        		@RequestParam(value = "password", required = true) String password,
+        		@RequestParam(value = "recordID", required = true) int recordID,
+        		@RequestParam(value = "examItem", required = false) String examItem,
+        		@RequestParam(value = "examDate", required = false) Date examDate) {
+
+    try {
+        // Check if the email and password are valid and authorized to update the lab exam record
+        if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
+            ((DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) || 
+            (DatabaseAccessor.retrieveRecord(recordID).getPrescribingDoctor().equals(email))) {
+            
+            // Retrieve the current lab exam record from the database
+            LabExam updateRecord = (LabExam) DatabaseAccessor.retrieveRecord(recordID);
+            
+            // Update the exam item if a new value was provided
+            if (examItem != null) {
+                updateRecord.setExamItem(examItem);
+            }
+            
+            // Update the exam date if a new value was provided
+            if (examDate != null) {
+                updateRecord.setExamDate(examDate);
+            }
+            
+            // Update the lab exam record in the database
+            DatabaseAccessor.updateRecord(updateRecord);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
     
     //@RequestMapping("/updateLabExamResult")
     //Takes staff email/password, record id, optional - result, upper bound, lower bound
