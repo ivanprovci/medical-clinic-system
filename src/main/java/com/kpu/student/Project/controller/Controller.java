@@ -441,8 +441,8 @@ public class Controller {
     
     @RequestMapping("/createLabExamResult")
     //Takes staff email/password, id of related lab exam, result, upper bound, lower bound
-    public void createLabExamResult(@RequestParam(value = "doctorEmail", required = true) String staffEmail,
-    		@RequestParam(value = "doctorPassword", required = true) String staffPassword,
+    public void createLabExamResult(@RequestParam(value = "staffEmail", required = true) String staffEmail,
+    		@RequestParam(value = "staffPassword", required = true) String staffPassword,
     		@RequestParam(value = "relatedLabExam", required = true) int relatedLabExam,
    			@RequestParam(value = "result", defaultValue= "") int result,
    			@RequestParam(value = "upperBound", defaultValue= "") int upperBound,
