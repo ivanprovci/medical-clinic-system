@@ -146,7 +146,8 @@ public class Controller {
     		@RequestParam(value = "firstName", defaultValue = "") String fName,
     		@RequestParam(value = "lastName", defaultValue = "") String lName,
     		@RequestParam(value = "address", defaultValue = "") String address,
-    		@RequestParam(value = "healthNo", defaultValue = "") String healthNo) {
+    		@RequestParam(value = "healthNo", defaultValue = "") String healthNo,
+    		@RequestParam(value = "phoneNo", defaultValue = "") String phoneNo) {
     	// Adds a new patient account to the database
     	PatientAccount p = new PatientAccount(email, password);
     	p.setFirstName(fName);
@@ -154,6 +155,7 @@ public class Controller {
     	p.setAddress(address);
     	p.setHealthNo(healthNo);
     	p.setVerified(false);
+    	p.setPhoneNo(phoneNo);
     	try {
 			DatabaseAccessor.addAccount(p);
 		} catch (SQLException e) {
@@ -169,7 +171,8 @@ public class Controller {
     		@RequestParam(value = "lastName", defaultValue = "") String lName,
     		@RequestParam(value = "profile", defaultValue = "") String profile,
     		@RequestParam(value = "staffEmail", required = true) String staffEmail,
-    		@RequestParam(value = "staffPassword", required = true) String staffPassword) {
+    		@RequestParam(value = "staffPassword", required = true) String staffPassword,
+    		@RequestParam(value = "phoneNo", defaultValue = "") String phoneNo) {
     	
     	try {
 			if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail)) &&
@@ -178,6 +181,7 @@ public class Controller {
 				d.setFirstName(fName);
 				d.setLastName(lName);
 				d.setProfile(profile);
+				d.setPhoneNo(phoneNo);
 				System.out.println("Trying to add new account " + d);
 				DatabaseAccessor.addAccount(d);
 			}
@@ -193,7 +197,8 @@ public class Controller {
     		@RequestParam(value = "firstName", defaultValue = "") String fName,
     		@RequestParam(value = "lastName", defaultValue = "") String lName,
     		@RequestParam(value = "staffEmail", required = true) String staffEmail,
-    		@RequestParam(value = "staffPassword", required = true) String staffPassword) {
+    		@RequestParam(value = "staffPassword", required = true) String staffPassword,
+    		@RequestParam(value = "phoneNo", defaultValue = "") String phoneNo) {
     	
     	try {
 			if ((staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail))) && 
@@ -201,6 +206,7 @@ public class Controller {
 				StaffAccount s = new StaffAccount(email, password);
 				s.setFirstName(fName);
 				s.setLastName(lName);
+				s.setPhoneNo(phoneNo);
 				DatabaseAccessor.addAccount(s);
 			}
 		} catch (SQLException e) {
@@ -227,7 +233,8 @@ public class Controller {
     		@RequestParam(value = "firstName", defaultValue = "") String fName,
     		@RequestParam(value = "lastName", defaultValue = "") String lName,
     		@RequestParam(value = "address", defaultValue = "") String address,
-    		@RequestParam(value = "healthNo", defaultValue = "") String healthNo) {
+    		@RequestParam(value = "healthNo", defaultValue = "") String healthNo,
+    		@RequestParam(value = "phoneNo", defaultValue = "") String phoneNo) {
     	// Updates an existing patient account's information
     	
     	try {
@@ -246,6 +253,9 @@ public class Controller {
 		    	if (!(healthNo.equals(""))) {
 		    		p.setHealthNo(healthNo);
 		    	}
+		    	if (!(phoneNo.equals(""))) {
+					p.setPhoneNo(phoneNo);
+		    	}
 		    	DatabaseAccessor.updateAccount(p);
 			}
 		} catch (SQLException e1) {
@@ -259,7 +269,8 @@ public class Controller {
     		@RequestParam(value = "password", required = true) String password,
     		@RequestParam(value = "firstName", defaultValue = "") String fName,
     		@RequestParam(value = "lastName", defaultValue = "") String lName,
-    		@RequestParam(value = "profile", defaultValue = "") String profile) {
+    		@RequestParam(value = "profile", defaultValue = "") String profile,
+    		@RequestParam(value = "phoneNo", defaultValue = "") String phoneNo) {
     	// Updates an existing patient account's information
     	
     	try {
@@ -275,6 +286,9 @@ public class Controller {
 		    	if (!(profile.equals(""))) {
 			    	d.setProfile(profile);
 		    	}
+		    	if (!(phoneNo.equals(""))) {
+					d.setPhoneNo(phoneNo);
+		    	}
 		    	DatabaseAccessor.updateAccount(d);
 			}
 		} catch (SQLException e1) {
@@ -287,7 +301,8 @@ public class Controller {
     public void updateStaff(@RequestParam(value = "email", required = true) String email, 
     		@RequestParam(value = "password", required = true) String password,
     		@RequestParam(value = "firstName", defaultValue = "") String fName,
-    		@RequestParam(value = "lastName", defaultValue = "") String lName) {
+    		@RequestParam(value = "lastName", defaultValue = "") String lName,
+    		@RequestParam(value = "phoneNo", defaultValue = "") String phoneNo) {
     	// Updates an existing patient account's information
     	
     	try {
@@ -299,6 +314,9 @@ public class Controller {
 		    	}
 		    	if (!(lName.equals(""))) {
 					s.setLastName(lName);
+		    	}
+		    	if (!(phoneNo.equals(""))) {
+					s.setPhoneNo(phoneNo);
 		    	}
 		    	DatabaseAccessor.updateAccount(s);
 			}
