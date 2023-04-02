@@ -457,6 +457,7 @@ public class Controller {
 				newResult.setResult(result);
 				newResult.setNormalLowerBound(lowerBound);
 				newResult.setNormalUpperBound(upperBound);
+				newResult.checkIfNormal();
 				DatabaseAccessor.addRecord(newResult);
 				DatabaseAccessor.updateRecord(relatedExam);
 				
@@ -618,6 +619,7 @@ public class Controller {
 	                if (!lowerBound.equals(null)) {
 	                    labResult.setNormalLowerBound(lowerBound);
 	                }
+	                labResult.checkIfNormal();
 	                DatabaseAccessor.updateRecord(labResult);
 	                return true;
 	            }
