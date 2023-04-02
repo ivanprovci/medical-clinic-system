@@ -3,7 +3,9 @@ package com.kpu.student.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Account {
 
 	private String email;
@@ -19,6 +21,10 @@ public class Account {
 	public Account(String email, String password) {
 		this.setEmail(email);
 		this.setPassword(password);
+	}
+	
+	public Account() {
+		
 	}
 	
 	public Account(String email, String password, String firstname, String lastName, String phoneNumber) {

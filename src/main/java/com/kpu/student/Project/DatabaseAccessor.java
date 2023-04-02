@@ -620,6 +620,7 @@ public class DatabaseAccessor {
 		HashMap<String, Integer> medications = new HashMap<String, Integer>();
 		Connection c = DatabaseAccessor.connect();
 		PreparedStatement getMeds;
+		System.out.println("Getting med list");
 		
 		if (isAnnualReport) {
 			getMeds = c.prepareStatement("SELECT medName, COUNT(*) AS numPrescribed FROM Prescription "
@@ -640,9 +641,8 @@ public class DatabaseAccessor {
 		ResultSet results = getMeds.executeQuery();
 		while (results.next()) {
 			medications.put(results.getString("medName"), results.getInt("numPrescribed"));
-			System.out.println("Add prescription to return list: " + results.getInt("medName"));
+			System.out.println("Add prescription to return list: " + results.getInt("medName") + " num = " + results.getInt("numPrescribed"));
 		}
-		
 		return medications;
 	}
 
