@@ -517,8 +517,10 @@ public class Controller {
                 @RequestParam(value = "dose", required = false) String dose,
                 @RequestParam(value = "refillable", required = false) Boolean refillable) {
     try {
-        if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
-                // If the email/password combo is valid AND one of the following is true
+        if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) && 
+        		(DatabaseAccessor.retrieveRecord(recordID) instanceof Prescription) &&
+                // If the email/password combo is valid AND recordID is associated with a prescription
+        		// AND one of the following is true
                 ((DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) || 
                 // If the email/password combo is for a staff account
                 (DatabaseAccessor.retrieveRecord(recordID).getPrescribingDoctor().equals(email))) {
