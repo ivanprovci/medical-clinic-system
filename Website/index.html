@@ -50,6 +50,10 @@
                 display: flex;
                 justify-content: center;
             }
+            #incorrectLogin {
+                color: red;
+                display: none;
+            }
             p {
                 text-align: center;
                 font-size: 12px;
@@ -70,10 +74,29 @@
                 sessionStorage.setItem("email", email)
                 var plaintextPassword = document.getElementById("loginPassword").value
                 var hashedPassword = await sha512(plaintextPassword)
-                
-                window.location.assign("accountDetailsPatient.html")
-            }
 
+                //verify email+pw hash combo
+                let url = "http://localhost:8080/checkPassword?email=" + email + "&password=" + hashedPassword
+                let correctLogin = await fetch(url)
+                    .then(res => res.text())
+                if(correctLogin == "true"){
+                    let url = "http://localhost:8080/checkAccountType?email=" + email
+                    let accountType = await fetch(url)
+                        .then(res => res.text())
+
+                    if (accountType == '"p"'){
+                        window.location.assign("accountDetailsPatient.html")
+                    } else if (accountType == '"s"') {
+                        window.location.assign("accountDetailsStaff.html")
+                    } else if (accountType == '"d"') {
+                        window.location.assign("accountDetailsDoctor.html")
+                    } else {
+                        alert("You do not have an account! Please register first")
+                    }
+                } else {
+                    document.getElementById("incorrectLogin").style.display = "inline"
+                }
+            }
         </script>
     </head>
     <body>
@@ -86,6 +109,7 @@
                 <form action="" method="post">
                     <input type="text" id="loginEmail" placeholder="Email" size="25" required> <br>
                     <input type="password" id="loginPassword" placeholder="Password" size="25" required> <br>
+                    <span id="incorrectLogin">Incorrect credentials!</span>
                     <input type="button" value="Login" onclick="handleData()">
                 </form>
                 <p>	&mdash;&mdash; or &mdash;&mdash;<br><br><a href="register.html">Register new account</a></p>
