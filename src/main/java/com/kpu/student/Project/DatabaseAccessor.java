@@ -164,8 +164,8 @@ public class DatabaseAccessor {
 				retrievedRecord = new LabExam(recordID);
 				examResults.next();
 
-				((LabExam) retrievedRecord).setExamItem(prescriptionResults.getString("examItem"));
-				((LabExam) retrievedRecord).setExamDate(prescriptionResults.getDate("date"));
+				((LabExam) retrievedRecord).setExamItem(examResults.getString("examItem"));
+				((LabExam) retrievedRecord).setExamDate(examResults.getDate("date"));
 
 			} else if (examDataResults.isBeforeFirst()) {
 				retrievedRecord = new LabExamResult(recordID);
