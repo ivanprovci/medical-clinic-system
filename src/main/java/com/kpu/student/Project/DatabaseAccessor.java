@@ -624,17 +624,17 @@ public class DatabaseAccessor {
 		
 		if (isAnnualReport) {
 			getMeds = c.prepareStatement("SELECT medName, COUNT(*) AS numPrescribed FROM Prescription "
-					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE()"
-					+ "GROUP BY medName NATURAL JOIN ConfidentialRecord"
-					+ "INNER JOIN VisitRecord ON VisitRecord.recordID=Prescription.relatedVisitRecord"
+					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() "
+					+ "GROUP BY medName NATURAL JOIN ConfidentialRecord "
+					+ "INNER JOIN VisitRecord ON VisitRecord.recordID=Prescription.relatedVisitRecord "
 					+ "ORDER BY numPrescribed LIMIT 3");
 			System.out.println("Getting last month's records");
 		}
 		else {
 			getMeds = c.prepareStatement("SELECT medName, COUNT(*) FROM Prescription "
-					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 MONTH AND CURDATE()"
-					+ "GROUP BY medName NATURAL JOIN ConfidentialRecord"
-					+ "INNER JOIN VisitRecord ON VisitRecord.recordID=Prescription.relatedVisitRecord"
+					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 MONTH AND CURDATE() "
+					+ "GROUP BY medName NATURAL JOIN ConfidentialRecord "
+					+ "INNER JOIN VisitRecord ON VisitRecord.recordID=Prescription.relatedVisitRecord "
 					+ "ORDER BY numPrescribed LIMIT 3");
 			System.out.println("Getting last year's records");
 		}
