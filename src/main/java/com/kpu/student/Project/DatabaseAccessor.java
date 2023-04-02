@@ -333,6 +333,8 @@ public class DatabaseAccessor {
 
 		Connection c = DatabaseAccessor.connect();
 
+		System.out.println("Updating account: " + account.getEmail());
+		
 		// Update row in Account table
 		PreparedStatement updateAccount, updatePatient, updateDoctor;
 		updateAccount = c.prepareStatement(
@@ -378,6 +380,8 @@ public class DatabaseAccessor {
 	}
 	
 	public static void updateRecord(ConfidentialRecord record) throws SQLException {
+		
+		System.out.println("Updating record: " + record.getRecordID());
 
 		Connection c = DatabaseAccessor.connect();
 		PreparedStatement updateRecord, updateVisit, updatePrescription, updateExam, updateExamResult;
@@ -401,7 +405,7 @@ public class DatabaseAccessor {
 		} else if (record instanceof Prescription) {
 
 			updatePrescription = c.prepareStatement(
-					"UPDATE Prescription SET relatedVisitRecord = ?, medName = ?, medQuantity = ?, medDose = ?, refillable = ?) WHERE recordID = ?");
+					"UPDATE Prescription SET relatedVisitRecord = ?, medName = ?, medQuantity = ?, medDose = ?, refillable = ? WHERE recordID = ?");
 			
 			updatePrescription.setInt(1, ((Prescription) record).getPrescribedDuring());
 			updatePrescription.setString(2, ((Prescription) record).getMedicineName());
