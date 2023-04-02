@@ -78,11 +78,28 @@
 
                 //verify email+pw hash combo
                 let url = "http://localhost:8080/checkPassword?email=" + email + "&password=" + hashedPassword
-                let correctLogin = await fetch(url)
+                let correctLogin = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email
+                    })
+                })
                     .then(res => res.text())
                 if(correctLogin == "true"){
                     let url = "http://localhost:8080/checkAccountType?email=" + email
-                    let accountType = await fetch(url)
+                    let accountType = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: hashedPassword
+                        })
+                    })
                         .then(res => res.text())
 
                     if (accountType == '"p"'){

@@ -165,7 +165,16 @@
     <script>
       async function getAccountData(){
         let url = "http://localhost:8080/retrieveAccount?email=" + sessionStorage.getItem("email") + "&password=" + sessionStorage.getItem("password")
-        let info = await fetch(url)
+        let info = await fetch(url, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: sessionStorage.getItem("email"),
+            password: sessionStorage.getItem("password")
+          })
+        })
           .then(res => res.json())
           .then(data => {
             document.getElementById("liName").innerHTML = "Name: " + data.firstName + " " + data.lastName
