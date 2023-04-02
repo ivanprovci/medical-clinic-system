@@ -217,7 +217,7 @@ public class Controller {
     
     @RequestMapping("/addTestStaffAccount")
     public void addTestStaffAccount() {
-    	StaffAccount s = new StaffAccount("staff@test.com", "TestStaffPassword");
+    	StaffAccount s = new StaffAccount("staff@test.com", "3c54d3b083795d588154e4e15339c6c20fc469c971ac94d825d31fa6a2744488921aa183f85a2f6fa304c610b97cf9155c3f16795505ba70b6151bf4325c2957");
 		try {
 			DatabaseAccessor.addAccount(s);
 		} catch (SQLException e) {
