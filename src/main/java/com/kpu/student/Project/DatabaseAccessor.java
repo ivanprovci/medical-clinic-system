@@ -165,7 +165,7 @@ public class DatabaseAccessor {
 				retrievedRecord = new LabExam(recordID);
 				examResults.next();
 
-				((LabExam) retrievedRecord).setPrescribedDuring(prescriptionResults.getInt("RelatedVisitRecord"));
+				((LabExam) retrievedRecord).setPrescribedDuring(examResults.getInt("RelatedVisitRecord"));
 				((LabExam) retrievedRecord).setExamItem(examResults.getString("examItem"));
 				((LabExam) retrievedRecord).setExamDate(examResults.getDate("date"));
 

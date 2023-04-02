@@ -572,6 +572,7 @@ public class Controller {
     try {
         // Check if the email and password are valid and authorized to update the lab exam record
         if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
+        		(DatabaseAccessor.retrieveRecord(recordID) instanceof LabExam) &&
             ((DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) || 
             (DatabaseAccessor.retrieveRecord(recordID).getPrescribingDoctor().equals(email))) {
             
