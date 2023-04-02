@@ -173,11 +173,12 @@ public class Controller {
     	
     	try {
 			if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail)) &&
-					(DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) {
+					(DatabaseAccessor.retrieveAccountInfo(staffEmail)) instanceof StaffAccount) {
 				DoctorAccount d = new DoctorAccount(email, password);
 				d.setFirstName(fName);
 				d.setLastName(lName);
 				d.setProfile(profile);
+				System.out.println("Trying to add new account " + d);
 				DatabaseAccessor.addAccount(d);
 			}
 		} catch (SQLException e) {
@@ -196,7 +197,7 @@ public class Controller {
     	
     	try {
 			if ((staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail))) && 
-					(DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) {
+					(DatabaseAccessor.retrieveAccountInfo(staffEmail)) instanceof StaffAccount) {
 				StaffAccount s = new StaffAccount(email, password);
 				s.setFirstName(fName);
 				s.setLastName(lName);
