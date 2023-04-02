@@ -457,6 +457,7 @@ public class Controller {
 				newResult.setResult(result);
 				newResult.setNormalLowerBound(lowerBound);
 				newResult.setNormalUpperBound(upperBound);
+				newResult.checkIfNormal();
 				DatabaseAccessor.addRecord(newResult);
 				DatabaseAccessor.updateRecord(relatedExam);
 				
@@ -517,8 +518,10 @@ public class Controller {
                 @RequestParam(value = "dose", required = false) String dose,
                 @RequestParam(value = "refillable", required = false) Boolean refillable) {
     try {
-        if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
-                // If the email/password combo is valid AND one of the following is true
+        if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) && 
+        		(DatabaseAccessor.retrieveRecord(recordID) instanceof Prescription) &&
+                // If the email/password combo is valid AND recordID is associated with a prescription
+        		// AND one of the following is true
                 ((DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) || 
                 // If the email/password combo is for a staff account
                 (DatabaseAccessor.retrieveRecord(recordID).getPrescribingDoctor().equals(email))) {
@@ -569,6 +572,7 @@ public class Controller {
     try {
         // Check if the email and password are valid and authorized to update the lab exam record
         if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
+        		(DatabaseAccessor.retrieveRecord(recordID) instanceof LabExam) &&
             ((DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) || 
             (DatabaseAccessor.retrieveRecord(recordID).getPrescribingDoctor().equals(email))) {
             
@@ -616,6 +620,7 @@ public class Controller {
 	                if (!lowerBound.equals(null)) {
 	                    labResult.setNormalLowerBound(lowerBound);
 	                }
+	                labResult.checkIfNormal();
 	                DatabaseAccessor.updateRecord(labResult);
 	                return true;
 	            }

@@ -40,6 +40,8 @@ public class DatabaseAccessor {
 		// Returns an Account object with all associated info
 		// If the requested account is a patient account, it is returned as a PatientAccount
 		// Likewise for doctor and staff accounts - Liam
+		
+		System.out.println("Calling retrieveAccountInfo on email " + email);
 		Account retrievedAccount = new Account("", "");
 		Connection c = DatabaseAccessor.connect();
 
@@ -119,6 +121,7 @@ public class DatabaseAccessor {
 	public static ConfidentialRecord retrieveRecord(int recordID) throws SQLException {
 		ConfidentialRecord retrievedRecord = new ConfidentialRecord(0, "", "");
 		Connection c = DatabaseAccessor.connect();
+		System.out.println("Calling retrieveRecord on id " + recordID);
 
 		PreparedStatement checkIfVisit = c.prepareStatement("SELECT * FROM VisitRecord WHERE recordID = ?");
 		checkIfVisit.setInt(1, recordID);
@@ -155,6 +158,7 @@ public class DatabaseAccessor {
 				((Prescription) retrievedRecord).setDatePrescribed(
 						((VisitRecord) DatabaseAccessor.retrieveRecord(relatedVisit)).getVisitDate());
 
+				((Prescription) retrievedRecord).setPrescribedDuring(prescriptionResults.getInt("RelatedVisitRecord"));
 				((Prescription) retrievedRecord).setMedicineDose(prescriptionResults.getString("medDose"));
 				((Prescription) retrievedRecord).setMedicineName(prescriptionResults.getString("medName"));
 				((Prescription) retrievedRecord).setMedicineQuantity(prescriptionResults.getString("medQuantity"));
@@ -164,6 +168,7 @@ public class DatabaseAccessor {
 				retrievedRecord = new LabExam(recordID);
 				examResults.next();
 
+				((LabExam) retrievedRecord).setPrescribedDuring(examResults.getInt("RelatedVisitRecord"));
 				((LabExam) retrievedRecord).setExamItem(examResults.getString("examItem"));
 				((LabExam) retrievedRecord).setExamDate(examResults.getDate("date"));
 
@@ -333,6 +338,8 @@ public class DatabaseAccessor {
 
 		Connection c = DatabaseAccessor.connect();
 
+		System.out.println("Updating account: " + account.getEmail());
+		
 		// Update row in Account table
 		PreparedStatement updateAccount, updatePatient, updateDoctor;
 		updateAccount = c.prepareStatement(
@@ -378,6 +385,8 @@ public class DatabaseAccessor {
 	}
 	
 	public static void updateRecord(ConfidentialRecord record) throws SQLException {
+		
+		System.out.println("Updating record: " + record.getRecordID());
 
 		Connection c = DatabaseAccessor.connect();
 		PreparedStatement updateRecord, updateVisit, updatePrescription, updateExam, updateExamResult;
@@ -401,9 +410,10 @@ public class DatabaseAccessor {
 		} else if (record instanceof Prescription) {
 
 			updatePrescription = c.prepareStatement(
-					"UPDATE Prescription SET relatedVisitRecord = ?, medName = ?, medQuantity = ?, medDose = ?, refillable = ?) WHERE recordID = ?");
+					"UPDATE Prescription SET relatedVisitRecord = ?, medName = ?, medQuantity = ?, medDose = ?, refillable = ? WHERE recordID = ?");
 			
 			updatePrescription.setInt(1, ((Prescription) record).getPrescribedDuring());
+			System.out.println(((Prescription) record).getPrescribedDuring());
 			updatePrescription.setString(2, ((Prescription) record).getMedicineName());
 			updatePrescription.setString(3, ((Prescription) record).getMedicineQuantity());
 			updatePrescription.setString(4, ((Prescription) record).getMedicineDose());
@@ -610,6 +620,7 @@ public class DatabaseAccessor {
 		HashMap<String, Integer> medications = new HashMap<String, Integer>();
 		Connection c = DatabaseAccessor.connect();
 		PreparedStatement getMeds;
+		System.out.println("Getting med list");
 		
 		if (isAnnualReport) {
 			getMeds = c.prepareStatement("SELECT medName, COUNT(*) AS numPrescribed FROM Prescription "
@@ -630,9 +641,8 @@ public class DatabaseAccessor {
 		ResultSet results = getMeds.executeQuery();
 		while (results.next()) {
 			medications.put(results.getString("medName"), results.getInt("numPrescribed"));
-			System.out.println("Add prescription to return list: " + results.getInt("medName"));
+			System.out.println("Add prescription to return list: " + results.getInt("medName") + " num = " + results.getInt("numPrescribed"));
 		}
-		
 		return medications;
 	}
 
