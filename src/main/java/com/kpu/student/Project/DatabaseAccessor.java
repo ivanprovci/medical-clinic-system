@@ -197,6 +197,7 @@ public class DatabaseAccessor {
 
 	public static void addAccount(Account newAccount) throws SQLException {
 
+		System.out.println("Running addAccount() for " + newAccount);
 		Connection c = DatabaseAccessor.connect();
 
 		// Add row in Account table
@@ -240,6 +241,7 @@ public class DatabaseAccessor {
 
 		}
 
+		System.out.println("Done, closing connection");
 		// Close connection
 		c.close();
 
@@ -328,7 +330,7 @@ public class DatabaseAccessor {
 		// Update row in Account table
 		PreparedStatement updateAccount, updatePatient, updateDoctor;
 		updateAccount = c.prepareStatement(
-				"UPDATE Account SET password = ?, firstName = ?, lastName = ?, phoneNo = ? WHERE email = ?");
+				"UPDATE Account SET passwordHash = ?, firstName = ?, lastName = ?, phoneNo = ? WHERE email = ?");
 		updateAccount.setString(1, account.getPassword());
 		updateAccount.setString(2, account.getFirstName());
 		updateAccount.setString(3, account.getLastName());

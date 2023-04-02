@@ -364,7 +364,7 @@ public class Controller {
     	try {
 			if (doctorPassword.equals(DatabaseAccessor.retrievePasswordHash(doctorEmail)) &&
 					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount) &&
-					((DatabaseAccessor.retrieveAccountInfo(patientEmail)) instanceof PatientAccount)) {				
+					(DatabaseAccessor.retrieveAccountInfo(patientEmail) instanceof PatientAccount)) {				
 				VisitRecord newVisit = new VisitRecord(-1, patientEmail, doctorEmail);
 				newVisit.setVisitDate(visitDate);
 				DatabaseAccessor.addRecord(newVisit);				
