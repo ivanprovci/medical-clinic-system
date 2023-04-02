@@ -341,7 +341,7 @@ public class DatabaseAccessor {
 		if (account instanceof PatientAccount) {
 			// If patient, update row in PatientAccount table
 			updatePatient = c
-					.prepareStatement("UPDATE PatientAccount SET verifyingStaffMember = ?, address = ?, healthNo = ? WHERE email = ?)");
+					.prepareStatement("UPDATE PatientAccount SET verifyingStaffMember = ?, address = ?, healthNo = ? WHERE email = ?");
 			
 			if (((PatientAccount) account).isVerified()) {
 				updatePatient.setString(1, ((PatientAccount) account).getVerifiedBy());
