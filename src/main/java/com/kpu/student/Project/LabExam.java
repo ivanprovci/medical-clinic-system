@@ -8,7 +8,6 @@ public class LabExam extends ConfidentialRecord{
 		super(ID, visit.getRelatedPatient(), visit.getPrescribingDoctor());
 		//TODO: retrieve patient's health number from database dynamically
 		//this.setPatientHealthNo(visit.getRelatedPatient().getHealthNo());
-		visit.addExam(this);
 		this.setPrescribedDuring(visit.getRecordID());
 	}
 	

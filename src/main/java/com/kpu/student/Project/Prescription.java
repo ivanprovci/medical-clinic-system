@@ -5,7 +5,6 @@ public class Prescription extends ConfidentialRecord {
 	
 public Prescription(int ID, VisitRecord visit) {
 	super(ID, visit.getRelatedPatient(), visit.getPrescribingDoctor());
-	visit.addPrescription(this);
 	this.setPrescribedDuring(visit.getRecordID());
 		// TODO Auto-generated constructor stub
 	}
