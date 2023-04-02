@@ -74,6 +74,7 @@
                 sessionStorage.setItem("email", email)
                 var plaintextPassword = document.getElementById("loginPassword").value
                 var hashedPassword = await sha512(plaintextPassword)
+                sessionStorage.setItem("password", hashedPassword)
 
                 //verify email+pw hash combo
                 let url = "http://localhost:8080/checkPassword?email=" + email + "&password=" + hashedPassword
