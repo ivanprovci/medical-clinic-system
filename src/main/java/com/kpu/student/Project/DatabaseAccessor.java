@@ -561,16 +561,16 @@ public class DatabaseAccessor {
 		System.out.println("Getting recent visit records for doctor " + doctorEmail);
 		
 		if (isAnnualReport) {
-			getRecords = c.prepareStatement("SELECT recordID FROM VisitRecord "
+			getRecords = c.prepareStatement("SELECT recordID FROM VisitRecord NATURAL JOIN ConfidentialRecord "
 					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() AND "
-					+ "relatedDoctor = ? NATURAL JOIN ConfidentialRecord");
+					+ "relatedDoctor = ?");
 			getRecords.setString(1, doctorEmail);
 			System.out.println("Getting last month's records");
 		}
 		else {
-			getRecords = c.prepareStatement("SELECT recordID FROM VisitRecord "
+			getRecords = c.prepareStatement("SELECT recordID FROM VisitRecord NATURAL JOIN ConfidentialRecord "
 					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 MONTH AND CURDATE() AND "
-					+ "relatedDoctor = ? NATURAL JOIN ConfidentialRecord");
+					+ "relatedDoctor = ?");
 			getRecords.setString(1, doctorEmail); 
 			System.out.println("Getting last year's records");
 		}
@@ -592,16 +592,16 @@ public class DatabaseAccessor {
 		System.out.println("Getting recent visit records for patient " + patientEmail);
 		
 		if (isAnnualReport) {
-			getRecords = c.prepareStatement("SELECT relatedDoctor, COUNT(*) FROM VisitRecord "
+			getRecords = c.prepareStatement("SELECT relatedDoctor, COUNT(*) FROM VisitRecord NATURAL JOIN ConfidentialRecord "
 					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() AND "
-					+ "relatedPatient = ? GROUP BY relatedDoctor NATURAL JOIN ConfidentialRecord");
+					+ "relatedPatient = ? GROUP BY relatedDoctor");
 			getRecords.setString(1, patientEmail);
 			System.out.println("Getting last month's records");
 		}
 		else {
-			getRecords = c.prepareStatement("SELECT relatedDoctor, COUNT(*) AS Visits FROM VisitRecord "
+			getRecords = c.prepareStatement("SELECT relatedDoctor, COUNT(*) AS Visits FROM VisitRecord NATURAL JOIN ConfidentialRecord "
 					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 MONTH AND CURDATE() AND "
-					+ "relatedPatient = ? GROUP BY relatedDoctor NATURAL JOIN ConfidentialRecord");
+					+ "relatedPatient = ? GROUP BY relatedDoctor");
 			getRecords.setString(1, patientEmail); 
 			System.out.println("Getting last year's records");
 		}
@@ -623,18 +623,20 @@ public class DatabaseAccessor {
 		System.out.println("Getting med list");
 		
 		if (isAnnualReport) {
-			getMeds = c.prepareStatement("SELECT medName, COUNT(*) AS numPrescribed FROM Prescription "
-					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() "
-					+ "GROUP BY medName NATURAL JOIN ConfidentialRecord "
+			getMeds = c.prepareStatement("SELECT medName, COUNT(*) AS numPrescribed "
+					+ "FROM Prescription NATURAL JOIN ConfidentialRecord "
 					+ "INNER JOIN VisitRecord ON VisitRecord.recordID=Prescription.relatedVisitRecord "
+					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() "
+					+ "GROUP BY medName"
 					+ "ORDER BY numPrescribed LIMIT 3");
 			System.out.println("Getting last month's records");
 		}
 		else {
-			getMeds = c.prepareStatement("SELECT medName, COUNT(*) FROM Prescription "
-					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 MONTH AND CURDATE() "
-					+ "GROUP BY medName NATURAL JOIN ConfidentialRecord "
+			getMeds = c.prepareStatement("SELECT medName, COUNT(*) "
+					+ "FROM Prescription NATURAL JOIN ConfidentialRecord "
 					+ "INNER JOIN VisitRecord ON VisitRecord.recordID=Prescription.relatedVisitRecord "
+					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 MONTH AND CURDATE() "
+					+ "GROUP BY medName "
 					+ "ORDER BY numPrescribed LIMIT 3");
 			System.out.println("Getting last year's records");
 		}
