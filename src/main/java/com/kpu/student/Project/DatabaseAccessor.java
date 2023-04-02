@@ -305,7 +305,7 @@ public class DatabaseAccessor {
 		} else if (newRecord instanceof LabExam) {
 			addToExam = c.prepareStatement(
 					"INSERT INTO LabExam (recordID, relatedVisitRecord, date, examItem) "
-							+ "VALUES (?, ?, ?, ?, ?, ?)");
+							+ "VALUES (?, ?, ?, ?)");
 			addToExam.setInt(1, id);
 			addToExam.setInt(2, ((LabExam) newRecord).getPrescribedDuring());
 			addToExam.setDate(3, (Date) ((LabExam) newRecord).getExamDate());
