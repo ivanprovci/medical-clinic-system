@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `INFO2413DB`.`PatientAccount` (
   `address` VARCHAR(100) NULL,
   `healthNo` CHAR(10) NULL,
   PRIMARY KEY (`email`),
-  UNIQUE INDEX `healthNo_UNIQUE` (`healthNo` ASC) VISIBLE,
+  INDEX `healthNo_UNIQUE` (`healthNo` ASC) VISIBLE,
   INDEX `verifiedBy_idx` (`verifyingStaffMember` ASC) VISIBLE,
   CONSTRAINT `patientEmail`
     FOREIGN KEY (`email`)
