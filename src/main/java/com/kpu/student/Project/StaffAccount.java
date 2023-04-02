@@ -13,6 +13,7 @@ public class StaffAccount extends Account {
 		public void verifyPatient(PatientAccount patient) {
 			patient.setVerified(true);
 			patient.setVerifiedBy(this.getEmail());
+			patient.notifyUser("Your account has been verified!");
 			
 		}
 		//Method Create account 

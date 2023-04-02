@@ -1,4 +1,7 @@
 package com.kpu.student.Project;
+
+import java.sql.SQLException;
+
 public class LabExamResult extends ConfidentialRecord {
 
 	public LabExamResult(int ID, LabExam exam) {
@@ -54,5 +57,24 @@ public class LabExamResult extends ConfidentialRecord {
 
 	public void setRelatedExam(int relatedExam) {
 		this.relatedExam = relatedExam;
+	}
+	
+	public void checkIfNormal() {
+		if (this.getNormalLowerBound() <= this.getResult() && this.getResult() <= this.getNormalUpperBound()) {
+			this.setNormalResult(true);
+		}
+		else {
+			this.setNormalResult(false);
+			try {
+				DoctorAccount d = (DoctorAccount) DatabaseAccessor.retrieveAccountInfo(this.getPrescribingDoctor());
+				PatientAccount p = (PatientAccount) DatabaseAccessor.retrieveAccountInfo(this.getRelatedPatient());
+				LabExam e = (LabExam) DatabaseAccessor.retrieveRecord(this.getRelatedExam());
+				d.notifyUser("Abnormal lab result detected for patient " + p.getFirstName() + " " +
+				p.getLastName() + "!/nLab exam item: " + e.getExamItem() + ", result was " + this.getResult());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }
