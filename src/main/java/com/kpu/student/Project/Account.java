@@ -1,8 +1,11 @@
 package com.kpu.student.Project;
 
+import java.util.Properties;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,8 +17,8 @@ public class Account {
 	private String lastName;
 	private String phoneNo;
 	
-	@Autowired
-	private JavaMailSender javaMailSender;
+	//@Autowired
+	private JavaMailSenderImpl javaMailSender;
 	
 	//create constructor "Account" to pass "Account" object containing email to "retrieveAccountInfo" method (DatabaseAccessor class)
 	public Account(String email, String password) {
@@ -102,8 +105,26 @@ public class Account {
 		
 		public void notifyUser(String message) {
 			//Send an email to this.getEmail() with 'message' as the contents
+			
+			
+			javaMailSender = new JavaMailSenderImpl();
+			javaMailSender.setHost("sandbox.smtp.mailtrap.io");
+			javaMailSender.setUsername("6e574e2dbf8f66");
+			javaMailSender.setPassword("f7e683bc046f48");
+			javaMailSender.setPort(587);
+			javaMailSender.setProtocol("smtp");
+			javaMailSender.setDefaultEncoding("UTF-8");
+			
+			Properties p = new Properties();
+			p.setProperty("mail.smtp.auth", "true");
+			p.setProperty("mail.smtp.starttls.enable", "true");
+			
+			javaMailSender.setJavaMailProperties(p);
+			
+			
 			 SimpleMailMessage mail = new SimpleMailMessage();
 			    mail.setTo(this.getEmail());
+			    mail.setFrom("health@email.com");
 			    mail.setSubject("Notification");
 			    mail.setText(message);
 			    javaMailSender.send(mail);
