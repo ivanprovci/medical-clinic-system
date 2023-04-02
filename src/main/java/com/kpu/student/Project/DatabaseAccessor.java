@@ -155,6 +155,7 @@ public class DatabaseAccessor {
 				((Prescription) retrievedRecord).setDatePrescribed(
 						((VisitRecord) DatabaseAccessor.retrieveRecord(relatedVisit)).getVisitDate());
 
+				((Prescription) retrievedRecord).setPrescribedDuring(prescriptionResults.getInt("RelatedVisitRecord"));
 				((Prescription) retrievedRecord).setMedicineDose(prescriptionResults.getString("medDose"));
 				((Prescription) retrievedRecord).setMedicineName(prescriptionResults.getString("medName"));
 				((Prescription) retrievedRecord).setMedicineQuantity(prescriptionResults.getString("medQuantity"));
@@ -164,6 +165,7 @@ public class DatabaseAccessor {
 				retrievedRecord = new LabExam(recordID);
 				examResults.next();
 
+				((LabExam) retrievedRecord).setPrescribedDuring(prescriptionResults.getInt("RelatedVisitRecord"));
 				((LabExam) retrievedRecord).setExamItem(examResults.getString("examItem"));
 				((LabExam) retrievedRecord).setExamDate(examResults.getDate("date"));
 
@@ -408,6 +410,7 @@ public class DatabaseAccessor {
 					"UPDATE Prescription SET relatedVisitRecord = ?, medName = ?, medQuantity = ?, medDose = ?, refillable = ? WHERE recordID = ?");
 			
 			updatePrescription.setInt(1, ((Prescription) record).getPrescribedDuring());
+			System.out.println(((Prescription) record).getPrescribedDuring());
 			updatePrescription.setString(2, ((Prescription) record).getMedicineName());
 			updatePrescription.setString(3, ((Prescription) record).getMedicineQuantity());
 			updatePrescription.setString(4, ((Prescription) record).getMedicineDose());
