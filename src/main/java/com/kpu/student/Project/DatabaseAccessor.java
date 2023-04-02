@@ -40,6 +40,8 @@ public class DatabaseAccessor {
 		// Returns an Account object with all associated info
 		// If the requested account is a patient account, it is returned as a PatientAccount
 		// Likewise for doctor and staff accounts - Liam
+		
+		System.out.println("Calling retrieveAccountInfo on email " + email);
 		Account retrievedAccount = new Account("", "");
 		Connection c = DatabaseAccessor.connect();
 
@@ -119,6 +121,7 @@ public class DatabaseAccessor {
 	public static ConfidentialRecord retrieveRecord(int recordID) throws SQLException {
 		ConfidentialRecord retrievedRecord = new ConfidentialRecord(0, "", "");
 		Connection c = DatabaseAccessor.connect();
+		System.out.println("Calling retrieveRecord on id " + recordID);
 
 		PreparedStatement checkIfVisit = c.prepareStatement("SELECT * FROM VisitRecord WHERE recordID = ?");
 		checkIfVisit.setInt(1, recordID);
