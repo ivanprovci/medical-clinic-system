@@ -162,9 +162,31 @@
         border-radius:25px;
         }
     </style>
-
+    <script>
+      async function getAccountData(){
+        let url = "http://localhost:8080/retrieveAccount?email=" + sessionStorage.getItem("email") + "&password=" + sessionStorage.getItem("password")
+        let info = await fetch(url, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: sessionStorage.getItem("email"),
+            password: sessionStorage.getItem("password")
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            document.getElementById("liName").innerHTML = "Name: " + data.firstName + " " + data.lastName
+            document.getElementById("liEmail").innerHTML = "Email: " + sessionStorage.getItem("email")
+            document.getElementById("liPhone").innerHTML = "Phone: " + data.phoneNo
+            document.getElementById("liAddress").innerHTML = "Address: " + data.address
+            document.getElementById("liHealthCard").innerHTML = "Health Card Number: " + data.healthNo
+          })
+      }
+    </script>
   </head>
-  <body>
+  <body onload="getAccountData()">
     <div class="header">
     <div class="logo">
      <h1> B.C Health & Wellness</h1>
@@ -182,18 +204,13 @@
 
           <h2>Account Details</h2>
           <ul>
-            <li>Name:</li><br>
-            <li>Date Of Birth:</li><br>
+            <li id="liName">Name:</li><br>
             <li id="liEmail">Email:</li><br>
-            <li>Phone Number:</li><br>
-            <li>Home Address:</li><br>
-            <li>Health Card Number:</li><br>
-            <li>Close contact</li><br>
+            <li id="liPhone">Phone Number:</li><br>
+            <li id="liAddress">Home Address:</li><br>
+            <li id="liHealthCard">Health Card Number:</li><br>
           </ul>
-          <script>
-            //get email from session storage
-            document.getElementById("liEmail").innerText = "Email: " + sessionStorage.getItem("email")
-        </script>
+          
       </div>
       <div class="column3">
         <nav class="column3-1">
