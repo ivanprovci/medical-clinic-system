@@ -205,10 +205,6 @@
   
         
 <script>
-
-  //test log in
-  sessionStorage.setItem("email", "itsAstaff@test.com");
-  sessionStorage.setItem("password", "passwordSteve");
   // Retrieve data from server
    fetch('http://localhost:8080/getRecords?email=' + sessionStorage.getItem("email") + '&password=' + sessionStorage.getItem("password") + '&recordType=labExam') 
     .then(response => response.json())

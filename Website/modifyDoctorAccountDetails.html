@@ -158,6 +158,13 @@
 
     </style>
     <script>
+      //web crypto api
+      function sha512(str) {
+        return crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(str)).then(buf => {
+            return Array.prototype.map.call(new Uint8Array(buf), x=>(('00'+x.toString(16)).slice(-2))).join('');
+        });
+      }
+      
       function redirect(){
         let accountType = sessionStorage.getItem("accountType");
 
@@ -172,6 +179,46 @@
           alert("Not logged in!")
         }
       }
+
+      async function updateAccountInfo(){
+        //get all form inputs
+        var email = document.getElementById("email").value
+        var password = await sha512(document.getElementById("password").value)
+        var fName = document.getElementById("fname").value
+        var lName = document.getElementById("lname").value
+        var phoneNo = document.getElementById("phone").value
+        var profile = document.getElementById("profile").value
+
+        let url = `http://localhost:8080/updateDoctor?email=${email}&password=${password}&firstName=${fName}&lastName=${lName}&phoneNo=${phoneNo}&profile=${profile}`
+        fetch(url, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            firstName: fName,
+            lastName: lName,
+            phoneNo: phoneNo,
+            profile: profile
+          })
+        })
+        .then(response => {
+          if (response.ok) {
+            console.log('Data sent successfully')
+          } else {
+            console.log('Error sending data')
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error)
+        })
+
+        document.querySelector("form").reset()
+      }
+
+      
     </script>
   </head>
   <body>
@@ -190,17 +237,29 @@
     </div>
       <div class="column2">
         <div class="column2-1">
-          <p>
-          <h2>Modify Doctor Account Details</h2>
-          <ul>
-         <label for="NAME"><li>Name: Dr<form class="Input-form"></form></label> <input type="text" placeholder=" Enter Name"> </li><br>
-         <label for="EMAIL"><li>Email:<form class="Input-form"></form></label> <input type="text" placeholder=" Enter Email"></li><br>
-         <label for="PHONE"><li>Phone Number:<form class="Input-form"></form></label> <input type="text" placeholder=" Enter Phone #"></li><br>
-         <label for="HOME"><li>Home Address:<form class="Input-form"></form></label> <input type="text" placeholder=" Enter Address"></li><br>
-         <label for="HEALTH"><li>Health Card Number:<form class="Input-form"></form></label> <input type="text" placeholder=" Enter HealthCard #"></li><br>
-         <input type="submit">
-          </ul>
-          </p>
+          <h2>Modify Doctor Account Details</h2><br>
+          <p>Enter a doctor's email(required) and enter an input for the fields you want to change. Leave blank to keep field the same.</p><br>
+          <form class="Input-form" style="margin-left:15px">
+            <label for="email">Dr Email:</label>
+            <input type="text" id="email" name="email" required><br>
+
+            <label for="password">Dr Password:</label>
+            <input type="password" id="password" name="password" style="border: none;margin-top: 10px;padding: 4px;border-bottom: solid black 1px;" required><br>
+
+            <label for="fname">Dr First Name:</label>
+            <input type="text" id="fname" name="fname" ><br>
+
+            <label for="lname">Dr Last Name:</label>
+            <input type="text" id="lname" name="lname" ><br>
+
+            <label for="phone">Dr Phone Number:</label>
+            <input type="text" id="phone" name="phone" ><br>
+
+            <label for="profile">Dr Profile:</label>
+            <input type="text" id="profile" name="profile" ><br><br><br>
+
+            <input type="button" onclick="updateAccountInfo()" value="Update"> <br><br>
+          </form>
         </div>
       </div>
 

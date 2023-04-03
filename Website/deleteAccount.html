@@ -21,38 +21,36 @@
     <div class="Staff-Page-tile">
       <h1>Delete Account</h1>
       <form id="delete-account-form">
-        <label for="email">Email:</label>
+        <label for="email">Your Staff Email:</label>
         <input type="email" id="email" name="email" required>
 
-        <label for="password">Password:</label>
+        <label for="password">Your Password:</label>
         <input type="password" id="password" name="password" required>
 
-        <label for="emailToDelete">Email to delete:</label>
+        <label for="emailToDelete">Account to delete: (Enter email)</label>
         <input type="email" id="emailToDelete" name="emailToDelete" required>
 
-        <button type="submit">Delete Account</button>
+        <button type="button" onclick="deleteAccount()">Delete Account</button>
       </form>
       <p id="delete-message"></p>
     </div>
 
     <script>
-     //web crypto api
-            function sha512(str) {
-                return crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(str)).then(buf => {
-                    return Array.prototype.map.call(new Uint8Array(buf), x=>(('00'+x.toString(16)).slice(-2))).join('');
-                });
-            }
-    
-      const form = document.getElementById("delete-account-form");
-      const message = document.getElementById("delete-message");
-
-      form.addEventListener("submit", (event) => {
-        event.preventDefault();
+      //web crypto api
+      function sha512(str) {
+          return crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(str)).then(buf => {
+              return Array.prototype.map.call(new Uint8Array(buf), x=>(('00'+x.toString(16)).slice(-2))).join('');
+          });
+      }
+      
+      async function deleteAccount(){
+        const form = document.getElementById("delete-account-form")
+        const message = document.getElementById("delete-message")
         const email = form.email.value;
         const password = form.password.value;
         var hashedPassword = await sha512(password)
         const emailToDelete = form.emailToDelete.value;
-
+        
         fetch(`http://localhost:8080/deleteAccount?email=${email}&password=${hashedPassword}&emailToDelete=${emailToDelete}`)
           .then(response => {
             if (response.ok) {
@@ -65,7 +63,10 @@
             message.innerText = "Error deleting account";
             console.error("Error:", error);
           });
-      });
+      }
+      
+
+      
       function redirect(){
           let accountType = sessionStorage.getItem("accountType");
 
