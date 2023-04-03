@@ -3,77 +3,232 @@
     <head>
       <title>Create Account</title>  
       <link rel="stylesheet" type="text/css" href="css/style.css">
+      <style>
+        #patientView{
+          display: none;
+        }
+        #doctorView{
+          display: none;
+        }
+      </style>
+      <script>
+        function displayFieldsBasedOnAccountType(){
+          var accountType = document.getElementById("Account-type").value
+          
+          if(accountType == "patient"){
+            document.getElementById("patientView").style.display = "inline"
+            document.getElementById("doctorView").style.display = "none"
+          } 
+          else if(accountType == "doctor"){
+            document.getElementById("doctorView").style.display = "inline"
+            document.getElementById("patientView").style.display = "none"
+          }
+          else { //last case is staff account
+            document.getElementById("patientView").style.display = "none"
+            document.getElementById("doctorView").style.display = "none"
+          }
+        }
+        //web crypto api
+        function sha512(str) {
+            return crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(str)).then(buf => {
+                return Array.prototype.map.call(new Uint8Array(buf), x=>(('00'+x.toString(16)).slice(-2))).join('');
+            });
+        }
+
+        async function createAccount(){
+          //all values in fields
+          let accountType = document.getElementById("Account-type").value
+          let newEmail = document.getElementById("email").value
+          let newPassword = await sha512(document.getElementById("password").value)
+          let fName = document.getElementById("fname").value
+          let lName = document.getElementById("lname").value
+          let phone = document.getElementById("phone").value
+          let address = document.getElementById("address").value
+          let healthCard = document.getElementById("healthCard").value
+          let profile = document.getElementById("profile").value
+          let staffEmail = sessionStorage.getItem("email")
+          let staffPassword = sessionStorage.getItem("password")
+
+
+          if(accountType == "patient"){
+            //create new patient account
+            let url = `http://localhost:8080/registerNewPatient?newPatientEmail=${newEmail}&newPatientPassword=${newPassword}&firstName=${fName}&lastName=${lName}&address=${address}&healthNo=${healthCard}&phoneNo=${phone}`
+            fetch(url, {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                newPatientEmail: newEmail,
+                newPatientPassword: newPassword,
+                firstName: fName,
+                lastName: lName,
+                address: address,
+                healthNo: healthCard,
+                phoneNo: phone
+              })
+            })
+            .then(response => {
+              if (response.ok) {
+                console.log('Data sent successfully')
+              } else {
+                console.log('Error sending data')
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error)
+            })
+
+            //immediately verify new patient account since it was created by staff
+            let verifyURL = `http://localhost:8080/verifyPatient?staffEmail=${staffEmail}&staffPassword=${staffPassword}&patientEmail=${newEmail}`
+            fetch(verifyURL, {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                staffEmail: staffEmail,
+                staffPassword: staffPassword,
+                patientEmail: newEmail
+              })
+            })
+            .then(response => {
+              if (response.ok) {
+                console.log('Verification successful')
+              } else {
+                console.log('Verification error')
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error)
+            })
+          } 
+          else if(accountType == "doctor"){
+            //create doctor account
+            let url = `http://localhost:8080/registerNewDoctor?newDoctorEmail=${newEmail}&newDoctorPassword=${newPassword}&firstName=${fName}&lastName=${lName}&profile=${profile}&phoneNo=${phone}&staffEmail=${staffEmail}&staffPassword=${staffPassword}`
+            fetch(url, {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                newDoctorEmail: newEmail,
+                newDoctorPassword: newPassword,
+                firstName: fName,
+                lastName: lName,
+                profile: profile,
+                phoneNo: phone,
+                staffEmail: staffEmail,
+                staffPassword: staffPassword,
+              })
+            })
+            .then(response => {
+              if (response.ok) {
+                console.log('Data sent successfully')
+              } else {
+                console.log('Error sending data')
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error)
+            })
+          }
+          else { //last case is staff account
+            //create staff account
+            let url = `http://localhost:8080/registerNewStaff?newStaffEmail=${newEmail}&newStaffPassword=${newPassword}&firstName=${fName}&lastName=${lName}&phoneNo=${phone}&staffEmail=${staffEmail}&staffPassword=${staffPassword}`
+            fetch(url, {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                newDoctorEmail: newEmail,
+                newDoctorPassword: newPassword,
+                firstName: fName,
+                lastName: lName,
+                phoneNo: phone,
+                staffEmail: staffEmail,
+                staffPassword: staffPassword,
+              })
+            })
+            .then(response => {
+              if (response.ok) {
+                console.log('Data sent successfully')
+              } else {
+                console.log('Error sending data')
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error)
+            })
+          }
+
+          //reset form to blank inputs after submitting
+          document.querySelector("form").reset()
+        }
+      </script>
     </head>
-    <body>
+    <body onload="displayFieldsBasedOnAccountType()">
       <div class="header">
-    <div class="logo">
-       <h1> B.C Health & Wellness</h1>
+        <div class="logo">
+          <h1> B.C Health & Wellness</h1>
+        </div>
       </div>
-    </div>
  
-  
       <div class="nav">
         <a href="homePage.html">HOME</a>
         <a href="accountDetailsPatient.html">ACCOUNT</a>
       </div>
 
-        <div class="Create-Patient-Account-Info">
-		<nav class="side-nav1">
-            <ul>
-			    <li><a href="CreateAccount.html">Create New Account</a>
-                <li><a href="modifyPatientAccountDetails.html">Modify User Account</a>
-                <li><a href="deleteUserAccount.html">Delete User Account</a>
-                <li><a href="viewRecords.html">View records</a>
-            </ul>
-        </nav>
-
-        </div>
-
-        <div class="Pending-info">
-            <p>NOTE: if after you create an account, your status will remain pending until further aproved by staff <br> please check for an email notification</p>
-        </div>
-
-        
-        <div class="Registeration-title">
-            <p>You must be approved to view the infomation of the Clinic </p>
-			
-        </div>
-
-        <div class="Registeration-Status">
-          <h2> Status: </h2>
+      <div class="Create-Patient-Account-Info">
+        <p>Account creation works by selecting the appropriate account type, and filling out the form which gets submitted to the database!</p>
       </div>
-      
 
-        <div class="Staff-Page-tile">
-          <h1>Create Account</h1>
-          <form class="Input-form"></form>
-          <label for="NAME">NAME:</label> <input type="text" style="text-align: left;" placeholder="FirstName,LastNAme...">
-          <form class="Input-form"></form>
-          <label for="EMAIL">EMAIL:</label> <input type="text" placeholder="EMAIL...">
-          <form class="Input-form"></form>
-          <label for="phone">Phone:</label> <input type="tel" placeholder="XXX-XXX-XXXX">
-          <form class="Input-form"></form>
-          <label for="Address">ADDRESS:</label> <input type="text" placeholder="ADDRESS...">
-          <form class="Input-form"></form>
-          <label for="Health-Card">HEALTH CARD #:</label> <input type="text" placeholder="Health-Card"><br>
-		  <label for="Account-type">ACCOUNT TYPE:</label>
-          <select id="Account-type" name="Account Type">
-          <option value="staff">Staff</option>
-          <option value="patient">Patient</option>
-          <option value="doctor">Doctor</option>
-          </select>
-		   <form class="Input-form"></form>
-          <input type="submit">
-        </div>
-
-        
-
-         </main>
-
-
-         
-    </body>
-  
-</main>
+      <div class="Pending-info">
+          <p>NOTE: Accounts created by staff are automatically approved to use the system. <br><br>Users that create accounts on their own will require approval by a staff member.</p>
+      </div>
     
+      <div class="Staff-Page-tile">
+        <h1>Create Account</h1>
+        <form class="Input-form" style="display:inline; width:0; position:static">
+          <label for="Account-type">Account type:&nbsp;</label>
+          <select id="Account-type" onchange="displayFieldsBasedOnAccountType()">
+            <option value="staff">Staff</option>
+            <option value="patient">Patient</option>
+            <option value="doctor">Doctor</option>
+          </select> <br>
+
+          <label for="email">Email:</label>
+          <input type="text" id="email"><br>
+
+          <label for="password">Password:</label>
+          <input type="text" id="password"><br>
+
+          <label for="fname">First Name:</label>
+          <input type="text" id="fname"><br>
+          
+          <label for="lname">Last Name:</label>
+          <input type="text" id="lname"><br>
+          
+          <label for="phone">Phone:</label>
+          <input type="text" id="phone"><br>
+          
+          <span id="patientView">
+            <label for="address">Address:</label>
+            <input type="text" id="address"><br>
+            
+            <label for="healthCard">Health Card #:</label>
+            <input type="text" id="healthCard"><br>
+          </span>
+          <span id="doctorView">
+            <label for="profile">Profile:</label>
+            <input type="text" id="profile"><br>
+          </span>
+
+          
+          <br>
+          <input type="button" value="Create Account" onclick="createAccount()">
+        </form>
+      </div>
+    </body>
 </html>
