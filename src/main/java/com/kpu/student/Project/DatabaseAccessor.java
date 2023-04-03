@@ -272,27 +272,13 @@ public class DatabaseAccessor {
 		addToRecord.setString(1, newRecord.getRelatedPatient());
 		addToRecord.setTimestamp(3, t);
 		addToRecord.executeUpdate();
-		
-		long temp;
+
 		System.out.println("Added to ConfidentialRecord");
-		System.out.println("Timestamp in ms: " + t.getTime());
-		temp = t.getTime()/1000;
-		System.out.println("Divide:          " + temp);
-		System.out.println("Remainder:       " + t.getTime()%1000);
-		System.out.println("Round up? " + (t.getTime()%1000 >= 500));
-		if ((t.getTime()%1000 >= 500)) {
-			temp++;
-		}
-		temp = temp*1000;
-		System.out.println("After rounding:  " + (long)(1000*(t.getTime()/1000)));
-		System.out.println("Temp is          " + temp);
-		t.setTime(temp);
-		System.out.println("Timestamp: " + t);
 
 		// Get the automatically generated ID
 		PreparedStatement getGenID = c
-				.prepareStatement("SELECT recordID FROM ConfidentialRecord WHERE createdTimeStamp = ?");
-		getGenID.setTimestamp(1, t);
+				.prepareStatement("SELECT recordID FROM ConfidentialRecord"
+						+ " ORDER BY recordID DESC LIMIT 1");
 		ResultSet genIDResults = getGenID.executeQuery();
 		if (genIDResults.isBeforeFirst()) {
 			genIDResults.next();
