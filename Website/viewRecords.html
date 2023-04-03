@@ -23,6 +23,9 @@
             </ul>
         </div>
         <script>
+        
+        	let email = sessionStorage.getItem("email")
+        	let password = sessionStorage.getItem("password")
             // Retrieve records data from the API
             fetch('http://localhost:8080/getRecords')
             //converting json object to text formating
