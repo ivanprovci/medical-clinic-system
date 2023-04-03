@@ -68,8 +68,17 @@
                 }
             }
             function submitForm(){
-                // return to login page once form is submitted
+               var formData = new FormData(document.querySelector('form'));
+               fetch('', {
+                    method: 'POST',
+                    body: formData
+                          })
+               .then(response => {
+                console.log(response);
+                  // return to login page once form is submitted
                 window.location.assign('index.html')
+		          })
+                .catch(error => console.error(error));
             }
         </script>
     </head>
