@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Patient Presribed Meds</title>
+    <title>Patient Prescribed Meds</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <style>
      @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap');
@@ -115,6 +115,35 @@
 
     </style>
     <script>
+       async function getAccountData(){
+        let url = "http://localhost:8080/retrieveAccount?email=" + sessionStorage.getItem("email") + "&password=" + sessionStorage.getItem("password")
+        let info = await fetch(url, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: sessionStorage.getItem("email"),
+            password: sessionStorage.getItem("password")
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            document.getElementById("liName").innerHTML = "Full Name:" + data.firstName + " " + data.lastName
+            document.getElementById("liHealthCard").innerHTML = "Health Card Number:" + data.healthNo
+            document.getElementById("liDocName").innerHTML = "Doctor's Name :" + data.profile
+            document.getElementById("liPhone").innerHTML = "Phone:" + data.phoneNo
+            document.getElementById("liAddress").innerHTML = "Address:" + data.address
+
+            document.getElementById("liName").innerHTML = "Patient's Name:" + data.firstName + " " + data.lastName
+            document.getElementById("liDocName").innerHTML = "Doctor's Name :" + data.profile
+            document.getElementById("liDoses").innerHTML = "Medicine Dose(s):" + data.medincineDose
+            document.getElementById("liTreatment").innerHTML = "Treatment:" + data.medicineName + " " + data.medicineQuantity
+            document.getElementById("liPrescribedDate").innerHTML = "Prescribed Date: " + data.datePrescribed
+
+
+          })
+      }
       function redirect(){
           let accountType = sessionStorage.getItem("accountType");
 
@@ -129,9 +158,10 @@
             alert("Not logged in!")
           }
         }
+
     </script>
   </head>
-  <body>
+  <body onload="getAccountData()">
     <div class="header">
     <div class="logo">
      <h1> B.C Health & Wellness</h1>
@@ -146,12 +176,11 @@
     <div class="column1">
     <h2>Patient's Information</h2> <br>
         <ul>
-          <li>Full Name:</li><br>
-          <li>Health Card Number:</li><br>
-          <li>Doctor's Name :</li><br>
-          <li>Gender:</li><br>
-          <li>Phone Number:</li><br>
-          <li>Address:</li><br><br>
+          <li id = "liName"> Full Name:</li><br>
+          <li id = "liHealthCard"> Health Card Number:</li><br>
+          <li id = "liDocName">Doctor's Name :</li><br>
+          <li id = "liPhone">Phone Number:</li><br>
+          <li id = "liAddress">Address:</li><br><br>
           </ul>
     </p>
     </div>
@@ -159,13 +188,14 @@
   <h2>Prescriptions</h2>
  <p>
           <ul>
-          <li>Patient's Name:</li><br>
-          <li>Doctor's Name:</li><br>
-          <li>Diagnosis:</li><br>
-          <li>Treatment:</li><br>
-          <li>Prescribed Date: </li><br>
+          <li id = "liName">Patient's Name:</li><br>
+          <li id = "liDocName">Doctor's Name:</li><br>
+          <li id = "liDoses">Medicine Dose(s):</li><br>
+          <li id = "liTreatment">Treatment:</li><br>
+          <li id = "liPrescribedDate">Prescribed Date: </li><br>
           </ul>
           </p>
          </div>
+
   </body>
 </html>
