@@ -13,7 +13,7 @@
 /* Setting background image for the body*/
 body
 {
-    background-image: url('../images/Clinic.png');
+    background-image: url('../images/Clinic.jpg');
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -362,8 +362,9 @@ label
 /*Input text for the staff Account page */
 .Input-form input[type="text"] {
     border: none;
-    border-radius: 10px;
-    margin-right: 5px;
+    margin-top: 10px;
+    padding: 4px;
+    border-bottom: solid black 1px;
   }
 
 /* Create Patient Account Page Info Box style */
@@ -486,7 +487,7 @@ label
        
    }
        body {
-           background-image: url('../images/Clinic.png');
+           background-image: url('../images/Clinic.jpg');
        background-repeat: no-repeat;
            background-size: cover;
          }
@@ -548,6 +549,7 @@ label
        }
        .nav a:hover {
          background-color: gray;
+         cursor: pointer;
        }
 .dropdown {
   position: relative;

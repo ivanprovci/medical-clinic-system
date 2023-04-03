@@ -105,6 +105,22 @@
 		
       
     </style>
+    <script>
+      function redirect(){
+          let accountType = sessionStorage.getItem("accountType");
+
+          if (accountType == "p"){
+            window.location.assign("accountDetailsPatient.html");
+          } else if (accountType == "s") {
+            window.location.assign("accountDetailsStaff.html");
+          } else if (accountType == "d"){
+            window.location.assign("accountDetailsDoctor.html");
+          }
+          else {
+            alert("Not logged in!")
+          }
+        }
+    </script>
   </head>
   <body>
     <div class="header">
@@ -113,17 +129,10 @@
     </div>
 	</div>
 
-<div class="menu">
-    <form class="search-bar">
-	<form action="#" method="get">
-    <input type="text" name="search" placeholder="Search...">
-    <button type="submit">Go</button>
-    </form>
-</div>
 
     <div class="nav">
       <a href="homePage.html">HOME</a>
-      <a href="accountDetailsPatient.html">ACCOUNT</a>
+      <a onclick="redirect()">ACCOUNT</a>
     </div>
     <div class="container">
 	<div class="column1">

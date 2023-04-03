@@ -180,6 +180,20 @@
             document.getElementById("liPhone").innerHTML = "Phone: " + data.phoneNo
           })
       }
+      function redirect(){
+        let accountType = sessionStorage.getItem("accountType");
+
+        if (accountType == "p"){
+          window.location.assign("accountDetailsPatient.html");
+        } else if (accountType == "s") {
+          window.location.assign("accountDetailsStaff.html");
+        } else if (accountType == "d"){
+          window.location.assign("accountDetailsDoctor.html");
+        }
+        else {
+          alert("Not logged in!")
+        }
+      }
     </script>
   </head>
   <body onload="getAccountData()">
@@ -191,7 +205,7 @@
  
     <div class="nav">
       <a href="homePage.html">HOME</a>
-      <a href="accountDetailsPatient.html">ACCOUNT</a>
+      <a onclick="redirect()">ACCOUNT</a>
     </div>
     <div class="container">
     <div class="column1">
@@ -213,7 +227,7 @@
                 <li><a href="modifyAccountDetail-Universal.html">Modify My Account</a><br><br>
                 <li><a href="modifyPatientAccountDetails.html">Edit Patient Account</a><br><br>
                 <li><a href="modifyDoctorAccountDetails.html">Edit Doctor Account</a><br><br>
-                <li><a href="deleteUserAccount.html">Delete User Account</a><br><br>
+                <li><a href="deleteAccount.html">Delete User Account</a><br><br>
                 <li><a href="viewRecords.html">View records</a><br><br>
             </ul>
         </nav>

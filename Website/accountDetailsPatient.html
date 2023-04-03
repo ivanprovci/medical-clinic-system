@@ -184,6 +184,20 @@
             document.getElementById("liHealthCard").innerHTML = "Health Card Number: " + data.healthNo
           })
       }
+      function redirect(){
+        let accountType = sessionStorage.getItem("accountType");
+
+        if (accountType == "p"){
+          window.location.assign("accountDetailsPatient.html");
+        } else if (accountType == "s") {
+          window.location.assign("accountDetailsStaff.html");
+        } else if (accountType == "d"){
+          window.location.assign("accountDetailsDoctor.html");
+        }
+        else {
+          alert("Not logged in!")
+        }
+      }
     </script>
   </head>
   <body onload="getAccountData()">
@@ -195,7 +209,7 @@
   
     <div class="nav">
       <a href="homePage.html">HOME</a>
-      <a href="accountDetailsPatient.html">ACCOUNT</a>
+      <a onclick="redirect()">ACCOUNT</a>
     </div>
     <div class="container">
     <div class="column1">
@@ -215,14 +229,13 @@
       <div class="column3">
         <nav class="column3-1">
             <ul>
-        		<li><a href="modifyAccountDetail-Universal.html">Modify Account Detail</a><br><br>
-                <li><a href="patientVisitHistory.html">Visit History</a><br><br>
-                <li><a href="patientPrescribedLab.html">Patient Prescribed Lab Exams<br></a><br>
-                <li><a href="patientPrescribedMeds.html">Patient Prescribed Medicines</a><br><br>
-                <li><a href="displayDoctorDetails.html">View My Doctor Profile</a></li><br>
+              <li><a href="modifyAccountDetail-Universal.html">Modify Account Detail</a><br><br>
+              <li><a href="patientVisitHistory.html">Visit History</a><br><br>
+              <li><a href="patientPrescribedLab.html">Patient Prescribed Lab Exams<br></a><br>
+              <li><a href="patientPrescribedMeds.html">Patient Prescribed Medicines</a><br><br>
             </ul>
         </nav>
-         <div class="column3-2">
+      <div class="column3-2">
       <br>
       <p><strong>Status</strong></p><br>
       <p>(Pending or Approved)</p>
