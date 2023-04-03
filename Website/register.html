@@ -49,6 +49,13 @@
             }
         </style>
         <script>
+            //web crypto api
+            function sha512(str) {
+                return crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(str)).then(buf => {
+                    return Array.prototype.map.call(new Uint8Array(buf), x=>(('00'+x.toString(16)).slice(-2))).join('');
+                });
+            }
+
             // highlights the Confirm Password text border in red to indicate the passwords don't match
             function validatePassword(){
                 var password = document.getElementById("password");
@@ -68,10 +75,10 @@
                 }
             }
 
-            function registerNewPatient() {
+            async function registerNewPatient() {
                 const form = document.getElementById("register-form");
                 const email = form.email.value;
-                const password = form.password.value;
+                const password = await sha512(form.password.value);
                 const firstName = form.firstName.value;
                 const lastName = form.lastName.value;
                 const address = form.address.value;
@@ -81,9 +88,9 @@
                 fetch(`http://localhost:8080/registerNewPatient?newPatientEmail=${email}&newPatientPassword=${password}&firstName=${firstName}&lastName=${lastName}&address=${address}&healthNo=${healthNo}&phoneNo=${phoneNo}`)
                 .then(response => {
                    if (response.ok) {
-                     alert("New patient account has been created.");
-                     // redirect to account details page
-                    redirect();
+                        alert("New patient account has been created.");
+                        // redirect to account details page
+                        window.location.assign("index.html")
                     } else {
                         alert("Failed to create new patient account.");
                     }
@@ -103,7 +110,7 @@
                 <input type="text" id="firstName" placeholder="First Name" size="15" required> 
                 <input type="text" id="lastName" placeholder="Last Name" size="16" > <br>
                 <input type="text" id="address" placeholder="Address" size="40"> <br>
-                <input type="text" id="healthNo" placeholder="Healt NO" size="40"> <br>
+                <input type="text" id="healthNo" placeholder="Health #" size="40"> <br>
                 <input type="text" id="phoneNo" placeholder="Phone Number" size="40"> <br>
                 <input type="button" value="Create Account" onclick="event.preventDefault(); registerNewPatient();">
 
