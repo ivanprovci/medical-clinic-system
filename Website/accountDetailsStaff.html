@@ -160,8 +160,29 @@
         }
 
     </style>
+    <script>
+      async function getAccountData(){
+        let url = "http://localhost:8080/retrieveAccount?email=" + sessionStorage.getItem("email") + "&password=" + sessionStorage.getItem("password")
+        let info = await fetch(url, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: sessionStorage.getItem("email"),
+            password: sessionStorage.getItem("password")
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            document.getElementById("liName").innerHTML = "Name: " + data.firstName + " " + data.lastName
+            document.getElementById("liEmail").innerHTML = "Email: " + sessionStorage.getItem("email")
+            document.getElementById("liPhone").innerHTML = "Phone: " + data.phoneNo
+          })
+      }
+    </script>
   </head>
-  <body>
+  <body onload="getAccountData()">
     <div class="header">
     <div class="logo">
      <h1> B.C Health & Wellness</h1>
@@ -179,16 +200,9 @@
           <p>
           <h2>Staff Account Details</h2>
           <ul>
-            <li>Name: </li><br>
-            <li>Date of Birth:</li><br>
+            <li id="liName">Name:</li><br>
             <li id="liEmail">Email:</li><br>
-            <li>Phone Number:</li><br>
-            <li>Home Address:</li><br>
-            <li>Close Contact</li><br>
-            <script>
-                //get email from session storage
-                document.getElementById("liEmail").innerText = "Email: " + sessionStorage.getItem("email")
-            </script>
+            <li id="liPhone">Phone Number:</li><br>
           </ul>
           </p>
       </div>
@@ -196,7 +210,9 @@
         <nav class="column3-1">
             <ul>
                 <li><a href="CreateAccount.html">Create New Account</a><br><br>
-                <li><a href="modifyPatientAccountDetails.html">Modify User Account</a><br><br>
+                <li><a href="modifyAccountDetail-Universal.html">Modify My Account</a><br><br>
+                <li><a href="modifyPatientAccountDetails.html">Edit Patient Account</a><br><br>
+                <li><a href="modifyDoctorAccountDetails.html">Edit Doctor Account</a><br><br>
                 <li><a href="deleteUserAccount.html">Delete User Account</a><br><br>
                 <li><a href="viewRecords.html">View records</a><br><br>
             </ul>
