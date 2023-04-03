@@ -1,45 +1,89 @@
 <!DOCTYPE html>
 <html>
-    <head>
-      <title>DELETE ACCOUNT</title>  
-      <link rel="stylesheet" type="text/css" href="css/style.css">
-    </head>
-    <body>
-      <div class="header">
-    <div class="logo">
-       <h1> B.C Health & Wellness</h1>
+  <head>
+    <title>DELETE ACCOUNT</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+        <style>
+    
+
+      button {
+        padding: 10px 20px;
+        background-color: #7AD7F0;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #7AD7F0;
+      }
+
+      #delete-message {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <h1> B.C Health & Wellness</h1>
       </div>
     </div>
-  
-  <div class="menu">
+
+    <div class="menu">
       <form class="search-bar">
-    <form action="#" method="get">
-      <input type="text" name="search" placeholder="Search...">
-      <button type="submit">Go</button>
+        <form action="#" method="get">
+          <input type="text" name="search" placeholder="Search...">
+          <button type="submit">Go</button>
+        </form>
+    </div>
+
+    <div class="nav">
+      <a href="homePage.html">HOME</a>
+      <a href="accountDetailsPatient.html">ACCOUNT</a>
+    </div>
+
+    <div class="Staff-Page-tile">
+      <h1>Delete Account</h1>
+      <form id="delete-account-form">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="emailToDelete">Email to delete:</label>
+        <input type="email" id="emailToDelete" name="emailToDelete" required>
+
+        <button type="submit">Delete Account</button>
       </form>
-  </div>
-  
-      <div class="nav">
-        <a href="homePage.html">HOME</a>
-        <a href="accountDetailsPatient.html">ACCOUNT</a>
-      </div>
-  
+      <p id="delete-message"></p>
+    </div>
 
-        
-        <div class="Staff-Page-tile"> 
-		<br><br><br>
-          <h1>Account has been deleted</h1>
-		  
-        </div>
+    <script>
+      const form = document.getElementById("delete-account-form");
+      const message = document.getElementById("delete-message");
 
-        
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const email = form.email.value;
+        const password = form.password.value;
+        const emailToDelete = form.emailToDelete.value;
 
-         </main>
-
-
-         
-    </body>
-  
-</main>
-    
+        fetch(`http://localhost:8080/deleteAccount?email=${email}&password=${password}&emailToDelete=${emailToDelete}`)
+          .then(response => {
+            if (response.ok) {
+              message.innerText = "Account has been deleted";
+            } else {
+              message.innerText = "Failed to delete account";
+            }
+          })
+          .catch(error => {
+            message.innerText = "Error deleting account";
+            console.error("Error:", error);
+          });
+      });
+    </script>
+  </body>
 </html>

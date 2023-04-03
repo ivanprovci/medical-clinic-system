@@ -27,8 +27,21 @@
 
         
         <div class="Staff-Page-tile"> 
-		<br><br><br>
-          <h1>Record has been deleted</h1>
+          <h1>Delete Record</h1>
+          <form id="delete-record-form">
+            <label for="email">Email:</label>
+            <input type="text" name="email" id="email">
+          
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password">
+          
+            <label for="recordId">Record ID:</label>
+            <input type="number" name="recordId" id="recordId">
+          
+            <button type="submit">Delete Record</button>
+          </form>
+          
+          <div id="delete-message"></div>
 		  
         </div>
 
@@ -36,6 +49,30 @@
 
          </main>
 
+         <script>
+          const form = document.getElementById("delete-record-form");
+          const message = document.getElementById("delete-message");
+        
+          form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const email = form.email.value;
+            const password = form.password.value;
+            const recordId = form.recordId.value;
+        
+            fetch(`http://localhost:8080/deleteRecord?email=${email}&password=${password}&recordID=${recordId}`)
+              .then(response => {
+                if (response.ok) {
+                  message.innerText = "Record has been deleted";
+                } else {
+                  message.innerText = "Failed to delete record";
+                }
+              })
+              .catch(error => {
+                message.innerText = "Error deleting record";
+                console.error("Error:", error);
+              });
+          });
+        </script>
 
          
     </body>
