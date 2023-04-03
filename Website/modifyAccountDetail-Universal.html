@@ -80,7 +80,7 @@
             background-color: gray;
         }
 
-      label {
+      label, span label {
             font-weight: bold;
 }
       .container {
@@ -100,17 +100,226 @@
             height:620px;
             border-radius: 25px;
         }
-
-
+        #patientFields {
+          display: none;
+        }
+        #doctorFields {
+          display: none;
+        }
     </style>
+    <script>
+        let email = sessionStorage.getItem("email")
+        let password = sessionStorage.getItem("password")
+
+        async function updateAccountInfo(){
+          //get all form inputs
+          var fName = document.getElementById("fname").value
+          var lName = document.getElementById("lname").value
+          var address = document.getElementById("address").value
+          var healthNo = document.getElementById("healthcard").value
+          var phoneNo = document.getElementById("phone").value
+          var profile = document.getElementById("profile").value
+
+
+          //get account type request
+          let accountURL = "http://localhost:8080/checkAccountType?email=" + email
+          let accountType = await fetch(accountURL, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  email: email,
+                  password: password
+              })
+          })
+              .then(res => res.text())
+
+          if (accountType == '"p"'){
+            // update patient table
+            let url = `http://localhost:8080/updatePatient?email=${email}&password=${password}&firstName=${fName}&lastName=${lName}&phoneNo=${phoneNo}&address=${address}&healthNo=${healthNo}`
+            fetch(url, {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                email: email,
+                password: password,
+                firstName: fname,
+                lastName: lName,
+                phoneNo: phoneNo,
+                address: address,
+                healthNo: healthNo
+              })
+            })
+            .then(response => {
+              if (response.ok) {
+                console.log('Data sent successfully')
+              } else {
+                console.log('Error sending data')
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error)
+            })
+          } else if (accountType == '"s"') {
+            let url = `http://localhost:8080/updateStaff?email=${email}&password=${password}&firstName=${fName}&lastName=${lName}&phoneNo=${phoneNo}`
+            fetch(url, {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                email: email,
+                password: password,
+                firstName: fname,
+                lastName: lName,
+                phoneNo: phoneNo
+              })
+            })
+            .then(response => {
+              if (response.ok) {
+                console.log('Data sent successfully')
+              } else {
+                console.log('Error sending data')
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error)
+            })
+          } else if (accountType == '"d"') {
+            let url = `http://localhost:8080/updateDoctor?email=${email}&password=${password}&firstName=${fName}&lastName=${lName}&phoneNo=${phoneNo}&profile=${profile}`
+            fetch(url, {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                email: email,
+                password: password,
+                firstName: fname,
+                lastName: lName,
+                phoneNo: phoneNo,
+                profile: profile
+              })
+            })
+            .then(response => {
+              if (response.ok) {
+                console.log('Data sent successfully')
+              } else {
+                console.log('Error sending data')
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error)
+            })
+          } else {
+              alert("You do not have an account! Please register first")
+          }
+        }
+        
+
+
+        //write to all fields with the current data from db
+        //field:[       ]  --> getAccountInfo() --> field:[ accountData ]
+        async function getAccountInfo(){
+          //get account type request
+          let accountURL = "http://localhost:8080/checkAccountType?email=" + email
+          let accountType = await fetch(accountURL, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  email: email,
+                  password: password
+              })
+          })
+              .then(res => res.text())
+
+          if (accountType == '"p"'){
+            //show extra patient fields (address + health #)
+            document.getElementById("patientFields").style.display = 'inline'
+
+            //POST request to Account - get fields with current values in the db
+            let url = `http://localhost:8080/retrieveAccount?email=${email}&password=${password}`
+            let info = await fetch(url, {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email: email,
+              password: password
+            })
+            })
+            .then(res => res.json())
+            .then(data => {
+              document.getElementById("fname").value = data.firstName
+              document.getElementById("lname").value = data.lastName
+              document.getElementById("address").value = data.address
+              document.getElementById("phone").value = data.phoneNo
+              document.getElementById("address").value = data.address
+              document.getElementById("healthcard").value = data.healthNo
+            })
+          } else if (accountType == '"s"') {
+            //POST request to Account - get fields with current values in the db
+            let url = `http://localhost:8080/retrieveAccount?email=${email}&password=${password}`
+            let info = await fetch(url, {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email: email,
+              password: password
+            })
+            })
+            .then(res => res.json())
+            .then(data => {
+              document.getElementById("fname").value = data.firstName
+              document.getElementById("lname").value = data.lastName
+              document.getElementById("address").value = data.address
+              document.getElementById("phone").value = data.phoneNo
+            })
+          } else if (accountType == '"d"') {
+            //show extra doctor fields (dr profile)
+            document.getElementById("doctorFields").style.display = 'inline'
+
+            //POST request to Account - get fields with current values in the db
+            let url = `http://localhost:8080/retrieveAccount?email=${email}&password=${password}`
+            let info = await fetch(url, {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email: email,
+              password: password
+            })
+            })
+            .then(res => res.json())
+            .then(data => {
+              document.getElementById("fname").value = data.firstName
+              document.getElementById("lname").value = data.lastName
+              document.getElementById("address").value = data.address
+              document.getElementById("phone").value = data.phoneNo
+              document.getElementById("profile").value = data.profile
+            })
+          } else {
+              alert("You do not have an account! Please register first")
+          }
+        }
+
+    </script>
   </head>
-  <body>
+  <body onload="getAccountInfo()">
     <div class="header">
     <div class="logo">
      <h1> B.C Health & Wellness</h1>
     </div>
     </div>
-
     <div class="nav">
       <a href="homePage.html">HOME</a>
       <a href="accountDetailsPatient.html">ACCOUNT</a>
@@ -118,43 +327,32 @@
     <div class="container">
     <div class="column1">
     </div>
-
       <div class="column2">
-      <h2> Modify Account Details</h2>
-<label for="name">Patient's Name:</label>
-<input type="text" id="name" name="name"><br>
+        <h2> Modify Account Details</h2>
+        <label for="name">First Name:</label>
+        <input type="text" id="fname" name="fname" required><br>
 
-<label for="birthdate">Birthdate:</label>
-<input type="date" id="birthdate" name="birthdate"><br>
+        <label for="name">Last Name:</label>
+        <input type="text" id="lname" name="lname" required><br>
 
-<label for="gender">Gender:</label>
-<select id="gender" name="gender">
-  <option value="male">Male</option>
-  <option value="female">Female</option>
-  <option value="other">Other</option>
-</select>
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" name="phone" required><br>
 
-<label for="healthcard">Health Card Number:</label>
-<input type="text" id="healthcard" name="healthcard"><br>
+        <span id="patientFields">
+          <label for="address">Address:</label><br>
+          <input type="text" id="address" name="address" style="width:100%" required><br><br>
 
-<label for="phone">Phone Number:</label>
-<input type="text" id="phone" name="phone"><br>
-
-
-<label for="address">Address:</label>
-<input type="text" id="address" name="address"><br>
-
-<label for="email">Email:</label>
-<input type="email" id="email" name="email"><br>
-
-<label for="contact">Close Contact:</label>
-<input type="text" id="contact" name="contact"><br>
-
- <button type="submit">Submit</button>
+          <label for="healthcard">Health Card Number:</label><br>
+          <input type="text" id="healthcard" name="healthcard" style="width:100%" required><br>
+        </span>
+        <span id="doctorFields">
+          <label for="profile">Profile:</label><br>
+          <input type="text" id="profile" name="profile" style="width:100%" required><br>
+        </span>
+        
+        <br>
+        <button type="submit" onclick="updateAccountInfo()">Submit</button>
       </div>
-
-
-
     </div>
   </body>
 </html>
