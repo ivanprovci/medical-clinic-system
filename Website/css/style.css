@@ -13,7 +13,7 @@
 /* Setting background image for the body*/
 body
 {
-    background-image: url('../images/Clinic.png');
+    background-image: url('../images/Clinic.jpg');
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -487,7 +487,7 @@ label
        
    }
        body {
-           background-image: url('../images/Clinic.png');
+           background-image: url('../images/Clinic.jpg');
        background-repeat: no-repeat;
            background-size: cover;
          }
