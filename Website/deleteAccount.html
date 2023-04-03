@@ -36,6 +36,13 @@
     </div>
 
     <script>
+     //web crypto api
+            function sha512(str) {
+                return crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(str)).then(buf => {
+                    return Array.prototype.map.call(new Uint8Array(buf), x=>(('00'+x.toString(16)).slice(-2))).join('');
+                });
+            }
+    
       const form = document.getElementById("delete-account-form");
       const message = document.getElementById("delete-message");
 
@@ -43,9 +50,10 @@
         event.preventDefault();
         const email = form.email.value;
         const password = form.password.value;
+        var hashedPassword = await sha512(password)
         const emailToDelete = form.emailToDelete.value;
 
-        fetch(`http://localhost:8080/deleteAccount?email=${email}&password=${password}&emailToDelete=${emailToDelete}`)
+        fetch(`http://localhost:8080/deleteAccount?email=${email}&password=${hashedPassword}&emailToDelete=${emailToDelete}`)
           .then(response => {
             if (response.ok) {
               message.innerText = "Account has been deleted";
