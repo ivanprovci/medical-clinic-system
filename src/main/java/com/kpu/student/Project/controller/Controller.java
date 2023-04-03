@@ -364,7 +364,7 @@ public class Controller {
 				// If the email/password combination is valid AND one of the following is true
 				// - The user requesting account deletion is a staff member
 				// - The user is requesting to delete their own account
-				DatabaseAccessor.deleteAccount(DatabaseAccessor.retrieveAccountInfo(email));
+				DatabaseAccessor.deleteAccount(DatabaseAccessor.retrieveAccountInfo(emailToDelete));
 			}
     	} catch (SQLException e) {
 			// TODO Auto-generated catch block
