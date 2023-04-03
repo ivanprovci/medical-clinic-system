@@ -218,6 +218,7 @@ public class DatabaseAccessor {
 
 		if (newAccount instanceof PatientAccount) {
 			// If patient, add row in PatientAccount table
+			System.out.println("new patient");
 			addToPatient = c
 					.prepareStatement("INSERT INTO PatientAccount (email, verifyingStaffMember, address, healthNo) "
 							+ "VALUES (?, ?, ?, ?)");
@@ -232,7 +233,8 @@ public class DatabaseAccessor {
 			addToPatient.executeUpdate();
 
 		} else if (newAccount instanceof DoctorAccount) {
-
+			
+			System.out.println("new doctor");
 			addToDoctor = c.prepareStatement("INSERT INTO DoctorAccount (email, profile) " + "VALUES (?, ?)");
 			addToDoctor.setString(1, ((DoctorAccount) newAccount).getEmail());
 			addToDoctor.setString(2, ((DoctorAccount) newAccount).getProfile());
@@ -240,6 +242,7 @@ public class DatabaseAccessor {
 
 		} else if (newAccount instanceof StaffAccount) {
 
+			System.out.println("new staff");
 			addToStaff = c.prepareStatement("INSERT INTO StaffAccount (email) " + "VALUES (?)");
 			addToStaff.setString(1, newAccount.getEmail());
 			addToStaff.executeUpdate();
@@ -269,8 +272,21 @@ public class DatabaseAccessor {
 		addToRecord.setString(1, newRecord.getRelatedPatient());
 		addToRecord.setTimestamp(3, t);
 		addToRecord.executeUpdate();
+		
+		long temp;
 		System.out.println("Added to ConfidentialRecord");
-		t.setTime(1000*(long)Math.floor(t.getTime()/ 1000));
+		System.out.println("Timestamp in ms: " + t.getTime());
+		temp = t.getTime()/1000;
+		System.out.println("Divide:          " + temp);
+		System.out.println("Remainder:       " + t.getTime()%1000);
+		System.out.println("Round up? " + (t.getTime()%1000 >= 500));
+		if ((t.getTime()%1000 >= 500)) {
+			temp++;
+		}
+		temp = temp*1000;
+		System.out.println("After rounding:  " + (long)(1000*(t.getTime()/1000)));
+		System.out.println("Temp is          " + temp);
+		t.setTime(temp);
 		System.out.println("Timestamp: " + t);
 
 		// Get the automatically generated ID
