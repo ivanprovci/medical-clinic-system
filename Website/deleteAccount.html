@@ -20,7 +20,7 @@
 
     <div class="Staff-Page-tile">
       <h1>Delete Account</h1>
-      <form id="delete-account-form">
+      <form id="delete-account-form" style="width:initial">
         <label for="email">Your Staff Email:</label>
         <input type="email" id="email" name="email" required>
 
@@ -28,7 +28,7 @@
         <input type="password" id="password" name="password" required>
 
         <label for="emailToDelete">Account to delete: (Enter email)</label>
-        <input type="email" id="emailToDelete" name="emailToDelete" required>
+        <input type="email" id="emailToDelete" name="emailToDelete" required> <br> 
 
         <button type="button" onclick="deleteAccount()">Delete Account</button>
       </form>
