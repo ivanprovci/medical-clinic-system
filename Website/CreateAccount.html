@@ -166,6 +166,20 @@
           //reset form to blank inputs after submitting
           document.querySelector("form").reset()
         }
+        function redirect(){
+          let accountType = sessionStorage.getItem("accountType");
+
+          if (accountType == "p"){
+            window.location.assign("accountDetailsPatient.html");
+          } else if (accountType == "s") {
+            window.location.assign("accountDetailsStaff.html");
+          } else if (accountType == "d"){
+            window.location.assign("accountDetailsDoctor.html");
+          }
+          else {
+            alert("Not logged in!")
+          }
+        }
       </script>
     </head>
     <body onload="displayFieldsBasedOnAccountType()">
@@ -177,7 +191,7 @@
  
       <div class="nav">
         <a href="homePage.html">HOME</a>
-        <a href="accountDetailsPatient.html">ACCOUNT</a>
+        <a onclick="redirect()">ACCOUNT</a>
       </div>
 
       <div class="Create-Patient-Account-Info">

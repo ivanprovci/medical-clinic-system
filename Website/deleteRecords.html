@@ -1,75 +1,73 @@
 <!DOCTYPE html>
 <html>
-    <head>
-      <title>Delete Records</title>  
-      <link rel="stylesheet" type="text/css" href="css/style.css">
-    </head>
-    <body>
-      <div class="header">
-    <div class="logo">
-       <h1> B.C Health & Wellness</h1>
+  <head>
+    <title>Delete Records</title>  
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <h1> B.C Health & Wellness</h1>
       </div>
     </div>
-  
-  
-      <div class="nav">
-        <a href="homePage.html">HOME</a>
-        <a href="accountDetailsPatient.html">ACCOUNT</a>
-      </div>
-  
-
-        
-        <div class="Staff-Page-tile"> 
-          <h1>Delete Record</h1>
-          <form id="delete-record-form">
-            <label for="email">Email:</label>
-            <input type="text" name="email" id="email">
-          
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password">
-          
-            <label for="recordId">Record ID:</label>
-            <input type="number" name="recordId" id="recordId">
-          
-            <button type="submit">Delete Record</button>
-          </form>
-          
-          <div id="delete-message"></div>
-		  
-        </div>
-
-        
-
-         </main>
-
-         <script>
-          const form = document.getElementById("delete-record-form");
-          const message = document.getElementById("delete-message");
-        
-          form.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const email = form.email.value;
-            const password = form.password.value;
-            const recordId = form.recordId.value;
-        
-            fetch(`http://localhost:8080/deleteRecord?email=${email}&password=${password}&recordID=${recordId}`)
-              .then(response => {
-                if (response.ok) {
-                  message.innerText = "Record has been deleted";
-                } else {
-                  message.innerText = "Failed to delete record";
-                }
-              })
-              .catch(error => {
-                message.innerText = "Error deleting record";
-                console.error("Error:", error);
-              });
-          });
-        </script>
-
-         
-    </body>
-  
-</main>
+    <div class="nav">
+      <a href="homePage.html">HOME</a>
+      <a onclick="redirect()">ACCOUNT</a>
+    </div>
+    <div class="Staff-Page-tile"> 
+      <h1>Delete Record</h1>
+      <form id="delete-record-form">
+        <label for="email">Email:</label>
+        <input type="text" name="email" id="email">
+      
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password">
+      
+        <label for="recordId">Record ID:</label>
+        <input type="number" name="recordId" id="recordId">
+      
+        <button type="submit">Delete Record</button>
+      </form>
+      <div id="delete-message"></div>
+    </div>
+    <script>
+      const form = document.getElementById("delete-record-form");
+      const message = document.getElementById("delete-message");
     
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const email = form.email.value;
+        const password = form.password.value;
+        const recordId = form.recordId.value;
+    
+        fetch(`http://localhost:8080/deleteRecord?email=${email}&password=${password}&recordID=${recordId}`)
+          .then(response => {
+            if (response.ok) {
+              message.innerText = "Record has been deleted";
+            } else {
+              message.innerText = "Failed to delete record";
+            }
+          })
+          .catch(error => {
+            message.innerText = "Error deleting record";
+            console.error("Error:", error);
+          });
+      });
+
+      function redirect(){
+      let accountType = sessionStorage.getItem("accountType");
+
+      if (accountType == "p"){
+        window.location.assign("accountDetailsPatient.html");
+      } else if (accountType == "s") {
+        window.location.assign("accountDetailsStaff.html");
+      } else if (accountType == "d"){
+        window.location.assign("accountDetailsDoctor.html");
+      }
+      else {
+        alert("Not logged in!")
+      }
+    }
+    </script>
+  </body>
 </html>

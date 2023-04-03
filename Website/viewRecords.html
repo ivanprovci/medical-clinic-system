@@ -13,7 +13,7 @@
         
         <div class="nav">
             <a href="homePage.html">HOME</a>
-            <a href="accountDetailsPatient.html">ACCOUNT</a>
+            <a onclick="redirect()">ACCOUNT</a>
         </div>
 
         <!-- Using the Same format that was used in the Staff Account Details page for this one -->
@@ -62,6 +62,20 @@
                     recordList.appendChild(li);
                 });
             });
+            function redirect(){
+                let accountType = sessionStorage.getItem("accountType");
+
+                if (accountType == "p"){
+                    window.location.assign("accountDetailsPatient.html");
+                } else if (accountType == "s") {
+                    window.location.assign("accountDetailsStaff.html");
+                } else if (accountType == "d"){
+                    window.location.assign("accountDetailsDoctor.html");
+                }
+                else {
+                    alert("Not logged in!")
+                }
+            }
         </script>
     </body>
 </html>

@@ -103,14 +103,16 @@
                         .then(res => res.text())
 
                     if (accountType == '"p"'){
-                        window.location.assign("accountDetailsPatient.html")
+                        sessionStorage.setItem("accountType", "p")
                     } else if (accountType == '"s"') {
-                        window.location.assign("accountDetailsStaff.html")
+                        sessionStorage.setItem("accountType", "s")
                     } else if (accountType == '"d"') {
-                        window.location.assign("accountDetailsDoctor.html")
+                        sessionStorage.setItem("accountType", "d")
                     } else {
                         alert("You do not have an account! Please register first")
                     }
+                    //send user to home page
+                    window.location.assign("homePage.html")
                 } else {
                     document.getElementById("incorrectLogin").style.display = "inline"
                 }

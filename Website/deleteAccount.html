@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>DELETE ACCOUNT</title>
+    <title>Delete Account</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
         <style>
     </style>
@@ -15,7 +15,7 @@
 
     <div class="nav">
       <a href="homePage.html">HOME</a>
-      <a href="accountDetailsPatient.html">ACCOUNT</a>
+      <a onclick="redirect()">ACCOUNT</a>
     </div>
 
     <div class="Staff-Page-tile">
@@ -58,6 +58,20 @@
             console.error("Error:", error);
           });
       });
+      function redirect(){
+          let accountType = sessionStorage.getItem("accountType");
+
+          if (accountType == "p"){
+            window.location.assign("accountDetailsPatient.html");
+          } else if (accountType == "s") {
+            window.location.assign("accountDetailsStaff.html");
+          } else if (accountType == "d"){
+            window.location.assign("accountDetailsDoctor.html");
+          }
+          else {
+            alert("Not logged in!")
+          }
+        }
     </script>
   </body>
 </html>

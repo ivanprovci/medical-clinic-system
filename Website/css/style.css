@@ -549,6 +549,7 @@ label
        }
        .nav a:hover {
          background-color: gray;
+         cursor: pointer;
        }
 .dropdown {
   position: relative;
