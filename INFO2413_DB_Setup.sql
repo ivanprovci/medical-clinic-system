@@ -97,13 +97,13 @@ CREATE TABLE IF NOT EXISTS `INFO2413DB`.`ConfidentialRecord` (
   CONSTRAINT `relatedToPatient`
     FOREIGN KEY (`relatedPatient`)
     REFERENCES `INFO2413DB`.`PatientAccount` (`email`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `relatedToDoctor`
     FOREIGN KEY (`relatedDoctor`)
     REFERENCES `INFO2413DB`.`DoctorAccount` (`email`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
