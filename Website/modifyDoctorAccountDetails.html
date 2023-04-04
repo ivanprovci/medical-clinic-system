@@ -4,158 +4,9 @@
     <title>Modify Doctor Account</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <style>
-     @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap');
-*
-{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-    list-style: none;
-    text-decoration: none;
-    box-sizing: border-box;
-}
-.logo
-{
-    margin-left: 20px;
-    font-weight: 700;
-    font-family: Arial;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-
-}
-      h1{
-      color:white;}
-      h2{
-      text-align:center;
+      #updateSent{
+        display: none
       }
-      .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-}
-
-.search-bar {
-  padding-bottom: 15px;
-  display: flex;
-  align-items: center;
-}
-
-.search-bar input[type="text"] {
-  padding: 5px 10px;
-  margin-right: 5px;
-  border:none;
-  border-radius: 20px;
-}
-
-.search-bar button[type="submit"] {
-  background-color: #fff;
-  color: #7AD7F0;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  padding: 5px 12px;
-}
-      .nav {
-        width: 100%;
-        border: 1px outset black;
-        text-align: center;
-        padding: 10px;
-        background-color: #7AD7F0;
-        overflow: hidden;
-        margin-top: 10px;
-      }
-      .nav a {
-            float: center;
-            color: white;
-            font-weight:normal;
-            font-size: 20px;
-            font-family:arial;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-        .nav a:hover {
-            background-color: gray;
-        }
-    .column2-1 a {
-            color: #3342FF;
-            text-align:center;
-             text-decoration: none;
-        }
-        .column2-2 a {
-            color: #3342FF;
-            text-align:center;
-             text-decoration: none;
-        }
-        .column3-1 a {
-            color: #3342FF;
-            text-align:center;
-             text-decoration: none;
-        }
-        .column3-2 a {
-            color: #3342FF;
-            text-align:center;
-             text-decoration: none;
-        }
-        a:hover{
-        background-color: #7AD7F0;
-        }
-      .container {
-        display: flex;
-        flex-direction: row;
-      }
-      .column1{
-       flex-basis: 20%;
-        border-radius: 25px;
-        padding: 10px;
-      }
-      .column2 {
-            display: flex;
-            flex-direction: column;
-            flex-basis: 35%;
-            flex-grow: 1;
-            margin-right: 20px;
-            margin-top:20px;
-        }
-        .column2-1 {
-            flex-basis: 35%;
-            flex-grow: 2;
-            padding: 10px;
-            height:200px;
-            margin-bottom:20px;
-        background-color: white;
-        border-radius:25px;
-        }
-        .column3 {
-            display: flex;
-            flex-direction: column;
-            flex-basis: 25%;
-            flex-grow: 1;
-            margin-right: 20px;
-            margin-top:20px;
-
-        }
-        .column3-1 {
-            flex-basis: 15%;
-            flex-grow: 1;
-            margin-bottom:20px;
-            padding: 10px;
-            height:200px;
-        background-color: white;
-        border-radius:25px;
-        }
-        .column3-2 {
-            flex-basis: 10%;
-            flex-grow: 2;
-             padding: 10px;
-             height:100px;
-        background-color: white;
-        border-radius:25px;
-        }
-
     </style>
     <script>
       //web crypto api
@@ -215,10 +66,9 @@
           console.error('Error:', error)
         })
 
+        document.getElementById("updateSent").style.display = "inline"
         document.querySelector("form").reset()
       }
-
-      
     </script>
   </head>
   <body>
@@ -233,34 +83,34 @@
       <a onclick="redirect()">ACCOUNT</a>
     </div>
     <div class="container">
-    <div class="column1">
-    </div>
-      <div class="column2">
-        <div class="column2-1">
-          <h2>Modify Doctor Account Details</h2><br>
-          <p>Enter a doctor's email(required) and enter an input for the fields you want to change. Leave blank to keep field the same.</p><br>
-          <form class="Input-form" style="margin-left:15px">
-            <label for="email">Dr Email:</label>
-            <input type="text" id="email" name="email" required><br>
+    <div class="column1" style="flex-basis:20%"></div>
+    <div class="column2">
+      <div class="column2-1">
+        <h2>Modify Doctor Account Details</h2><br>
+        <span id="updateSent"><p>Account info updated!</p></span><br>
+        <p>Enter a doctor's email and password(required) and enter an input for the fields you want to change. Leave blank to keep field the same.</p><br>
+        <form class="Input-form" style="margin-left:15px">
+          <label for="email">Dr Email:</label>
+          <input type="text" id="email" name="email" required><br>
 
-            <label for="password">Dr Password:</label>
-            <input type="password" id="password" name="password" style="border: none;margin-top: 10px;padding: 4px;border-bottom: solid black 1px;" required><br>
+          <label for="password">Dr Password:</label>
+          <input type="password" id="password" name="password" style="border: none;margin-top: 10px;padding: 4px;border-bottom: solid black 1px;" required><br>
 
-            <label for="fname">Dr First Name:</label>
-            <input type="text" id="fname" name="fname" ><br>
+          <label for="fname">Dr First Name:</label>
+          <input type="text" id="fname" name="fname" ><br>
 
-            <label for="lname">Dr Last Name:</label>
-            <input type="text" id="lname" name="lname" ><br>
+          <label for="lname">Dr Last Name:</label>
+          <input type="text" id="lname" name="lname" ><br>
 
-            <label for="phone">Dr Phone Number:</label>
-            <input type="text" id="phone" name="phone" ><br>
+          <label for="phone">Dr Phone Number:</label>
+          <input type="text" id="phone" name="phone" ><br>
 
-            <label for="profile">Dr Profile:</label>
-            <input type="text" id="profile" name="profile" ><br><br><br>
+          <label for="profile">Dr Profile:</label>
+          <input type="text" id="profile" name="profile" ><br><br><br>
 
-            <input type="button" onclick="updateAccountInfo()" value="Update"> <br><br>
-          </form>
-        </div>
+          <input type="button" onclick="updateAccountInfo()" value="Update"> <br><br>
+        </form>
+      </div>
       </div>
 
     </div>
