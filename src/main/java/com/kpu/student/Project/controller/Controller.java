@@ -439,7 +439,8 @@ public class Controller {
     	
     	try {
 			if (doctorPassword.equals(DatabaseAccessor.retrievePasswordHash(doctorEmail)) &&
-					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount)) {
+					(DatabaseAccessor.retrieveAccountInfo(doctorEmail) instanceof DoctorAccount) &&
+					(DatabaseAccessor.retrieveRecord(relatedVisitRecord)) instanceof VisitRecord) {
 				
 				VisitRecord relatedVisit = (VisitRecord) DatabaseAccessor.retrieveRecord(relatedVisitRecord);
 				LabExam newExam = new LabExam(-1, relatedVisit);
@@ -468,7 +469,8 @@ public class Controller {
     	
     	try {
 			if (staffPassword.equals(DatabaseAccessor.retrievePasswordHash(staffEmail)) &&
-					(DatabaseAccessor.retrieveAccountInfo(staffEmail) instanceof StaffAccount)) {
+					(DatabaseAccessor.retrieveAccountInfo(staffEmail) instanceof StaffAccount) &&
+					(DatabaseAccessor.retrieveRecord(relatedLabExam)) instanceof LabExam) {
 				
 				LabExam relatedExam = (LabExam) DatabaseAccessor.retrieveRecord(relatedLabExam);
 				LabExamResult newResult = new LabExamResult(-1, relatedExam);
@@ -495,7 +497,8 @@ public class Controller {
     		@RequestParam(value = "visitDate", required = false) Date visitDate,
     		@RequestParam(value = "patientEmail", defaultValue = "") String patientEmail) {
     	try {
-			if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
+			if ((password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
+					(DatabaseAccessor.retrieveRecord(recordID)) instanceof VisitRecord) &&
 					// If the email/password combo is valid AND one of the following is true
 					((DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) || 
 					// If the email/password combo is for a staff account
@@ -536,8 +539,8 @@ public class Controller {
                 @RequestParam(value = "dose", required = false) String dose,
                 @RequestParam(value = "refillable", required = false) Boolean refillable) {
     try {
-        if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) && 
-        		(DatabaseAccessor.retrieveRecord(recordID) instanceof Prescription) &&
+        if ((password.equals(DatabaseAccessor.retrievePasswordHash(email)) && 
+        		(DatabaseAccessor.retrieveRecord(recordID) instanceof Prescription)) &&
                 // If the email/password combo is valid AND recordID is associated with a prescription
         		// AND one of the following is true
                 ((DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) || 
@@ -589,8 +592,8 @@ public class Controller {
 
     try {
         // Check if the email and password are valid and authorized to update the lab exam record
-        if (password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
-        		(DatabaseAccessor.retrieveRecord(recordID) instanceof LabExam) &&
+        if ((password.equals(DatabaseAccessor.retrievePasswordHash(email)) &&
+        		(DatabaseAccessor.retrieveRecord(recordID) instanceof LabExam)) &&
             ((DatabaseAccessor.retrieveAccountInfo(email)) instanceof StaffAccount) || 
             (DatabaseAccessor.retrieveRecord(recordID).getPrescribingDoctor().equals(email))) {
             
@@ -624,8 +627,9 @@ public class Controller {
 	                                   @RequestParam(value = "result", required = false) Integer result,
 	                                   @RequestParam(value = "upperBound", required = false) Integer upperBound,
 	                                   @RequestParam(value = "lowerBound", required = false) Integer lowerBound) {
-	    if (checkAccountType(email) == 's' && checkPassword(email, password)) {
-	        try {
+		try {
+		if (checkAccountType(email) == 's' && checkPassword(email, password) &&
+				(DatabaseAccessor.retrieveRecord(id)) instanceof LabExamResult) {
 	            ConfidentialRecord r = DatabaseAccessor.retrieveRecord(id);
 	            if (r instanceof LabExamResult) {
 	                LabExamResult labResult = (LabExamResult) r;
@@ -642,10 +646,11 @@ public class Controller {
 	                DatabaseAccessor.updateRecord(labResult);
 	                return true;
 	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
+			}
+	    } catch (SQLException e) {
+	        e.printStackTrace();
 	    }
+	    
 	    return false;
 	}
     
