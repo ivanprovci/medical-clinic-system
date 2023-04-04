@@ -40,19 +40,23 @@ public class Controller {
     		@RequestParam(value = "recordType", defaultValue = "all") String recordType) {
     	// Gets all the records that this account is allowed to see
     	List<ConfidentialRecord> recordList = new ArrayList<ConfidentialRecord>();
-    	char type = ' ';
+    	Character type = ' ';
 
     	if (recordType.toLowerCase().equals("all")) {
     		type = 'a';
-    	} else if (recordType.toLowerCase().equals("visit")) {
+    	} else if (recordType.toLowerCase().equals("visit") ||
+    			recordType.toLowerCase().equals("visitrecord")) {
     		type = 'v';
     	} else if (recordType.toLowerCase().equals("prescription")) {
     		type = 'p';
-    	} else if (recordType.toLowerCase().equals("labexam")) {
+    	} else if (recordType.toLowerCase().equals("labexam") ||
+    			recordType.toLowerCase().equals("exam")) {
     		type = 'e';
     	} else if (recordType.toLowerCase().equals("labexamresult")) {
     		type = 'r';
     	}
+    	System.out.println("Record type is " + recordType);
+    	System.out.println("Type is (" + type + ")");
 		try {
 			if (password.equals(DatabaseAccessor.retrievePasswordHash(email))) {
 				System.out.println("Account verified successfully");
