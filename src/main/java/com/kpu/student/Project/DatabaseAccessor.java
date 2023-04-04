@@ -594,7 +594,7 @@ public class DatabaseAccessor {
 		System.out.println("Getting recent visit records for patient " + patientEmail);
 		
 		if (!isAnnualReport) {
-			getRecords = c.prepareStatement("SELECT relatedDoctor, COUNT(*) FROM VisitRecord NATURAL JOIN ConfidentialRecord "
+			getRecords = c.prepareStatement("SELECT relatedDoctor, COUNT(*) AS Visits FROM VisitRecord NATURAL JOIN ConfidentialRecord "
 					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() AND "
 					+ "relatedPatient = ? GROUP BY relatedDoctor");
 			getRecords.setString(1, patientEmail);
@@ -607,11 +607,11 @@ public class DatabaseAccessor {
 			getRecords.setString(1, patientEmail); 
 			System.out.println("Getting last year's records");
 		}
-		
+		System.out.println("ToString is " + getRecords.toString());
 		ResultSet results = getRecords.executeQuery();
 		while (results.next()) {
 			doctorVisits.put(results.getString("relatedDoctor"), results.getInt("Visits"));
-			System.out.println("Add visit record to return list: " + results.getInt("recordID"));
+			System.out.println("Add doctor to return list: " + results.getString("relatedDoctor") + " visits = " + results.getInt("Visits"));
 		}
 		
 		return doctorVisits;
