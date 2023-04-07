@@ -587,6 +587,7 @@ label
          color: #3342FF;
          text-align:center;
           text-decoration: none;
+          padding:5px;
        }
        .column3-2 a {
          color: #3342FF;
@@ -648,7 +649,7 @@ label
 			flex-grow: 1;
 			margin-bottom:20px;
 			padding: 10px;
-			height:100px;
+			height:fit-content;
 		background-color: white;
 		border-radius:25px;
 		}
