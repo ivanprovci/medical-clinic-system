@@ -205,9 +205,8 @@
   
         
 <script>
-
-sessionStorage.setItem("email", "example@example.com");
-sessionStorage.setItem("password", "12345");
+// Testing sessionStorage.setItem("email", "put the email");
+// Testing sessionStorage.setItem("password", "put the password");
   // Retrieve data from server
    fetch('http://localhost:8080/getRecords?email=' + sessionStorage.getItem("email") + '&password=' + sessionStorage.getItem("password") + '&recordType=labExam') 
     .then(response => response.json())
@@ -241,9 +240,7 @@ sessionStorage.setItem("password", "12345");
   .catch(error => {
     console.error('Error:', error);
   });
-
-
-  </script>
+</script>
      
   </body>
 </html>

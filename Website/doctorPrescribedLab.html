@@ -114,6 +114,7 @@
             border-radius: 25px;
 		}
 		
+    
     </style>
     <script>
       function redirect(){
@@ -203,8 +204,91 @@
     </tbody>
   </table>
   
-        
+<button id="edit-button">Edit Page</button>
 <script>
+async function updateLabExam() {
+  // get all form inputs
+  var email = document.getElementById("email").value
+  var password = await sha512(document.getElementById("password").value)
+  var recordID = document.getElementById("recordID").value
+  var examItem = document.getElementById("examItem").value
+  var examDate = document.getElementById("examDate").value
+
+  let url = `http://localhost:8080/updateLabExam?email=${email}&password=${password}&recordID=${recordID}&examItem=${examItem}&examDate=${examDate}`
+  fetch(url, {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password,
+      recordID: recordID,
+      examItem: examItem,
+      examDate: examDate
+    })
+  })
+  .then(response => {
+    if (response.ok) {
+      console.log('Data sent successfully')
+    } else {
+      console.log('Error sending data')
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error)
+  })
+
+  document.getElementById("updateSent").style.display = "inline"
+  document.querySelector("form").reset()
+}
+
+async function updateLabExamResult() {
+  // get form inputs
+  var patientEmail = document.getElementById("patient-email").value
+  var labTest = document.getElementById("lab-test").value
+  var dueDate = document.getElementById("due-date").value
+  var upperBound = document.getElementById("upper-bound").value
+  var lowerBound = document.getElementById("lower-bound").value
+  var resultID = document.getElementById("result-id").value
+
+  // retrieve the existing lab exam result record
+  var url = `http://localhost:8080/getRecord?id=${resultID}&email=${localStorage.getItem("email")}`
+  var response = await fetch(url)
+  var existingLabExamResult = await response.json()
+
+  // update the lab exam result record
+  existingLabExamResult.labTest = labTest
+  existingLabExamResult.dueDate = dueDate
+  existingLabExamResult.normalUpperBound = upperBound
+  existingLabExamResult.normalLowerBound = lowerBound
+
+  // send the updated lab exam result to the server
+  fetch('http://localhost:8080/updateLabExamResult', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(existingLabExamResult)
+  })
+  .then(response => {
+    if (response.ok) {
+      console.log('Lab exam result updated successfully')
+    } else {
+      console.log('Error updating lab exam result')
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error)
+  })
+
+  // reset the form and show success message
+  document.querySelector("form").reset()
+  document.getElementById("labExamUpdated").style.display = "inline"
+}
+
+    
+
 // Testing sessionStorage.setItem("email", "put the email");
 // Testing sessionStorage.setItem("password", "put the password");
   // Retrieve data from server
@@ -240,7 +324,9 @@
   .catch(error => {
     console.error('Error:', error);
   });
-</script>
+
+
+  </script>
      
   </body>
 </html>

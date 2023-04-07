@@ -115,6 +115,26 @@
 
     </style>
     <script>
+    async function getAccountData(){
+        let url = "http://localhost:8080/retrieveAccount?email=" + sessionStorage.getItem("email") + "&password=" + sessionStorage.getItem("password")
+        let info = await fetch(url, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: sessionStorage.getItem("email"),
+            password: sessionStorage.getItem("password")
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            document.getElementById("liDocName").innerHTML = "Doctor's Name :" + data.profile
+            document.getElementById("liDoses").innerHTML = "Medicine Dose(s):" + data.medicineDose
+
+            document.getElementById("liTreatment").innerHTML = "Treatment:" + data.medicineName
+          })
+      }
       function redirect(){
           let accountType = sessionStorage.getItem("accountType");
 
@@ -137,7 +157,7 @@
      <h1> B.C Health & Wellness</h1>
     </div>
     </div>
-  
+
     <div class="nav">
       <a href="homePage.html">HOME</a>
       <a onclick="redirect()">ACCOUNT</a>
@@ -162,11 +182,10 @@
           <p>
           <h2>Appointment Name</h2>
           <ul>
-          <li>Doctor Name:</li><br>
-          <li>Diagnosis:</li><br>
+          <li id = "liDocName">Doctor Name:</li><br>
           <li><a href="patientPrescribedLab.html">Lab Result:</a></li><br>
-          <li>Treatment:</li><br>
-          <li>Status:</li><br><br>
+          <li id = "liTreatment">Treatment:</li><br>
+          <li id = "liDoses">Doses:</li><br>
           </ul>
           </p>
         </div>
