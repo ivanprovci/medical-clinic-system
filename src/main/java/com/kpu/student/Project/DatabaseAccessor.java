@@ -562,7 +562,7 @@ public class DatabaseAccessor {
 		
 		System.out.println("Getting recent visit records for doctor " + doctorEmail);
 		
-		if (!isAnnualReport) {
+		if (isAnnualReport) {
 			getRecords = c.prepareStatement("SELECT recordID FROM VisitRecord NATURAL JOIN ConfidentialRecord "
 					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() AND "
 					+ "relatedDoctor = ?");
@@ -593,7 +593,7 @@ public class DatabaseAccessor {
 		
 		System.out.println("Getting recent visit records for patient " + patientEmail);
 		
-		if (!isAnnualReport) {
+		if (isAnnualReport) {
 			getRecords = c.prepareStatement("SELECT relatedDoctor, COUNT(*) AS Visits FROM VisitRecord NATURAL JOIN ConfidentialRecord "
 					+ "WHERE date BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() AND "
 					+ "relatedPatient = ? GROUP BY relatedDoctor");
@@ -624,7 +624,7 @@ public class DatabaseAccessor {
 		PreparedStatement getMeds;
 		System.out.println("Getting med list");
 		
-		if (!isAnnualReport) {
+		if (isAnnualReport) {
 			getMeds = c.prepareStatement("SELECT medName, COUNT(*) AS numPrescribed "
 					+ "FROM Prescription NATURAL JOIN ConfidentialRecord "
 					+ "INNER JOIN VisitRecord ON VisitRecord.recordID=Prescription.relatedVisitRecord "
@@ -645,7 +645,7 @@ public class DatabaseAccessor {
 		ResultSet results = getMeds.executeQuery();
 		while (results.next()) {
 			medications.put(results.getString("medName"), results.getInt("numPrescribed"));
-			System.out.println("Add prescription to return list: " + results.getInt("medName") + " num = " + results.getInt("numPrescribed"));
+			System.out.println("Add prescription to return list: " + results.getString("medName") + " num = " + results.getInt("numPrescribed"));
 		}
 		return medications;
 	}
