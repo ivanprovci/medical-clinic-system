@@ -792,11 +792,4 @@ public class Controller {
     	
     }
     
-	@GetMapping("/viewRecords")
-	public ModelAndView viewRecords (Model model) {
-		List<ConfidentialRecord> recordList = getRecords("staff@test.com", "TestStaffPassword", "all");
-		model.addAttribute("records", recordList);
-		return new ModelAndView("New");
-	}
-
 }
