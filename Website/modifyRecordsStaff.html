@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Update Lab Exam Results</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <style>
+      #updateSent{
+        display: none;
+      }
+ 
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .Input-form {
+        text-align: center;
+      }
+    </style>
+    <script>
+      function redirect(){
+        let accountType = sessionStorage.getItem("accountType");
+
+        if (accountType == "p"){
+          window.location.assign("accountDetailsPatient.html");
+        } else if (accountType == "s") {
+          window.location.assign("accountDetailsStaff.html");
+        } else if (accountType == "d"){
+          window.location.assign("accountDetailsDoctor.html");
+        }
+        else {
+          alert("Not logged in!")
+        }
+      }
+
+      function updateLabExamResults(){
+        //get all form inputs
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        var recordID = document.getElementById("recordID").value;
+        var result = document.getElementById("result").value;
+        var upperBound = document.getElementById("upper-bound").value;
+        var lowerBound = document.getElementById("lower-bound").value;
+
+        let url = `http://localhost:8080/updateLabExamResult?email=${email}&password=${password}&recordID=${recordID}&result=${result}&upperBound=${upperBound}&lowerBound=${lowerBound}`;
+        fetch(url, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            recordID: recordID,
+            result: result,
+            upperBound: upperBound,
+            lowerBound: lowerBound
+          })
+        })
+        .then(response => {
+          if (response.ok) {
+            console.log('Data sent successfully')
+          } else {
+            console.log('Error sending data')
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error)
+        })
+
+        document.getElementById("updateSent").style.display = "inline"
+        document.querySelector("form").reset()
+      }
+    </script>
+  </head>
+  <body>
+    <div class="wrapper">
+    <div class="header">
+      <div class="logo">
+        <h1>B.C Health & Wellness</h1>
+      </div>
+    </div>
+ 
+    <div class="nav">
+      <a href="homePage.html">HOME</a>
+      <a onclick="redirect()">ACCOUNT</a>
+    </div>
+
+    <div class="container">
+      <div class="column1" style="flex-basis:20%"></div>
+      <div class="column2">
+        <div class="column2-1">
+          <h2>Update Lab Exam Results</h2><br>
+          <span id="updateSent"><p>Results updated!</p></span><br>
+          <p>Enter the record ID, Staff email and Staff passsword they are required change that can be made include: (result, upper bound, and lower bound)</p><br>
+          <form class="Input-form" >
+            <input type="text" id="email" name="email" placeholder="staff Email" size="40" required> 
+            <input type="text" id="password" name="password" placeholder="staff Password" size="40" required> <br>
+            <input type="text" id="recordID" name="record-id" placeholder="Record ID" size="40" required> 
+            <input type="text" id="result" name="result" placeholder="Result" size="40" > <br>
+            <input type="text" id="upper-bound" name="upper-bound" placeholder="Upper Bound" size="40" > 
+            <input type="text" id="lower-bound" name="lower-bound" placeholder="Lower Bound" size="40" > <br>
+            <input type="submit" value="Update" onclick="updateLabExamResults(); return false;">
+
+          </form>
+        </div>
+        </div>
+      </div>
+      <div class="column3" style="flex-basis:20%"></div>
+    </div>
+    

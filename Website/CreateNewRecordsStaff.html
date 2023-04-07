@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create New Record</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+    <style>
+     @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap');
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+.logo 
+{
+     margin-left: 20px;
+    font-weight: 700;
+	font-family: Arial;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    
+}
+	  h1{
+	  color:white;}
+	  h2{
+	  text-align:center;
+	  }
+      .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+    padding: 10px;
+}
+
+      .nav {
+        width: 100%;
+        border: 1px outset black;
+        text-align: center;
+        padding:10px;
+		background-color: #7AD7F0;
+		overflow: hidden;
+		margin-top: 10px;
+      }
+	  .nav a {
+			float: center;
+			color: white;
+			font-weight:normal;
+			font-size: 20px;
+			font-family:arial;
+			text-align: center;
+			padding:  14px 16px;
+			text-decoration: none;
+		}
+		.nav a:hover {
+			background-color: gray;
+		}
+		
+      label {
+            font-weight: bold;
+}
+      .container {
+        display: flex;
+        flex-direction: row;
+      }
+	  
+	  .column2 {
+			display: flex;
+			flex-direction: column;
+			flex-basis: 50%;
+			flex-grow: 1;
+			padding: 10px;
+			margin-right: 300px;
+			margin-bottom:20px;
+			background-color: white;
+			height:620px;
+      border-radius: 25px;
+      overflow-y: scroll; 
+            
+		}
+		
+      
+    </style>
+
+<script>
+
+
+  async function createLabExamResult() {
+    const form = document.getElementById("createLabExamResult-form");
+    const staffEmail = form.staffEmail.value;
+    const staffPassword = form.staffPassword.value;
+    const relatedLabExam = form.relatedLabExam.value;
+    const result = form.result.value;
+    const upperBound = form.upperBound.value;
+    const lowerBound = form.lowerBound.value;
+
+    fetch(`http://localhost:8080/createLabExamResult?staffEmail=${staffEmail}&staffPassword=${staffPassword}&relatedLabExam=${relatedLabExam}&result=${result}&upperBound=${upperBound}&lowerBound=${lowerBound}`)
+      .then(response => {
+        if (response.ok) {
+          alert("New lab exam Results has been created.");
+          // redirect to account details page
+          window.location.assign("accountDetailsPatient.html");
+        } else {
+          alert("Failed to create new lab exam Results.");
+        }
+      });
+  }
+
+
+
+
+</script>
+
+
+  </head>
+  <body>
+    <div class="header">
+	<div class="logo">
+     <h1> B.C Health & Wellness</h1>
+    </div>
+	</div>
+
+    <div class="nav">
+      <a href="homePage.html">HOME</a>
+      <a href="accountDetailsPatient.html">ACCOUNT</a>
+    </div>
+    <div class="container">
+	<div class="column1">
+	</div>
+ 
+  <div class="column2">
+    <h2>Create New Record</h2><br><br>
+
+
+    <form id="createLabExamResult-form" method="post">
+      <h3>Create Lab Exam Results </h3>
+      <input type="text" id="staffEmail" name="staffEmail" placeholder="staff Email" size="40" required> 
+      <input type="text" id="staffPassword" name="staffPassword" placeholder="staff Password" size="40" required> <br>
+      <input type="text" id="relatedLabExam" name="relatedLabExam" placeholder="related Lab Exam" size="40"> <br>
+      <input type="text" id="result" name="result" placeholder="result" size="40"> <br>
+      <input type="text" id="upperBound" name="upperBound" placeholder="upperBound" size="40"> <br>
+      <input type="text" id="lowerBound" name="lowerBound" placeholder="lowerBound" size="40"> <br>
+      <input type="button" value="Create Lab Exam" onclick="createLabExamResult();">
+    </form>
+
+
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
