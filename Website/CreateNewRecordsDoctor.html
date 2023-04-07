@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create New Record</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+    <style>
+     @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap');
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+.logo 
+{
+     margin-left: 20px;
+    font-weight: 700;
+	font-family: Arial;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    
+}
+	  h1{
+	  color:white;}
+	  h2{
+	  text-align:center;
+	  }
+      .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+    padding: 10px;
+}
+
+      .nav {
+        width: 100%;
+        border: 1px outset black;
+        text-align: center;
+        padding:10px;
+		background-color: #7AD7F0;
+		overflow: hidden;
+		margin-top: 10px;
+      }
+	  .nav a {
+			float: center;
+			color: white;
+			font-weight:normal;
+			font-size: 20px;
+			font-family:arial;
+			text-align: center;
+			padding:  14px 16px;
+			text-decoration: none;
+		}
+		.nav a:hover {
+			background-color: gray;
+		}
+		
+      label {
+            font-weight: bold;
+}
+      .container {
+        display: flex;
+        flex-direction: row;
+      }
+	  
+	  .column2 {
+			display: flex;
+			flex-direction: column;
+			flex-basis: 50%;
+			flex-grow: 1;
+			padding: 10px;
+			margin-right: 300px;
+			margin-bottom:20px;
+			background-color: white;
+			height:620px;
+      border-radius: 25px;
+      overflow-y: scroll; 
+            
+		}
+		
+      
+    </style>
+
+<script>
+  //creating VisitRecords
+  async function createVisitRecord() {
+    const form = document.getElementById("createVisitRecord-form");
+    const doctorEmail = form.doctorEmail.value;
+    const doctorPassword = form.doctor_password.value;
+    const visitDate = form.visit_date.value;
+    const patientEmail = form.patientEmail.value;
+
+    fetch(`http://localhost:8080/createVisitRecord?doctorEmail=${doctorEmail}&doctorPassword=${doctorPassword}&visitDate=${visitDate}&patientEmail=${patientEmail}`)
+      .then(response => {
+        if (response.ok) {
+          alert("New visit record has been created.");
+          // redirect to account details page
+          window.location.assign("accountDetailsPatient.html");
+        } else {
+          alert("Failed to create new visit record.");
+        }
+      });
+  }
+
+  async function createLabExam() {
+    const form = document.getElementById("createLabExam-form");
+    const doctorEmail = form.doctorEmail.value;
+    const doctorPassword = form.doctor_password.value;
+    const relatedVisitRecord = form.relatedVisitRecord.value;
+    const examItem = form.examItem.value;
+    const examDate = form.examDate.value;
+
+    fetch(`http://localhost:8080/createLabExam?doctorEmail=${doctorEmail}&doctorPassword=${doctorPassword}&relatedVisitRecord=${relatedVisitRecord}&examItem=${examItem}&examDate=${examDate}`)
+      .then(response => {
+        if (response.ok) {
+          alert("New lab exam has been created.");
+          // redirect to account details page
+          window.location.assign("accountDetailsPatient.html");
+        } else {
+          alert("Failed to create new lab exam.");
+        }
+      });
+  }
+
+  async function createPrescription() {
+    const form = document.getElementById("createPrescription-form");
+    const doctorEmail = form.doctorEmail.value;
+    const doctorPassword = form.doctor_password.value;
+    const relatedVisitRecord = form.relatedVisitRecord.value;
+    const medName = form.medName.value;
+    const medDose = form.medDose.value;
+    const medQuantity = form.medQuantity.value;
+    const refillable = form.refillable.value;
+
+
+    fetch(`http://localhost:8080/createPrescription?doctorEmail=${doctorEmail}&doctorPassword=${doctorPassword}&relatedVisitRecord=${relatedVisitRecord}&medName=${medName}&medDose=${medDose}&medQuantity=${medQuantity}&medDose=${refillable}`)
+      .then(response => {
+        if (response.ok) {
+          alert("New Prescription has been created.");
+          // redirect to account details page
+          window.location.assign("accountDetailsPatient.html");
+        } else {
+          alert("Failed to create new Prescription.");
+        }
+      });
+  }
+
+
+</script>
+
+
+  </head>
+  <body>
+    <div class="header">
+	<div class="logo">
+     <h1> B.C Health & Wellness</h1>
+    </div>
+	</div>
+
+    <div class="nav">
+      <a href="homePage.html">HOME</a>
+      <a href="accountDetailsPatient.html">ACCOUNT</a>
+    </div>
+    <div class="container">
+	<div class="column1">
+	</div>
+ 
+  <div class="column2">
+    <h2>Create New Record</h2><br><br>
+
+    <form id="createVisitRecord-form" method="post">
+      <h3>Create Visit Record</h3>
+      <input type="text" id="doctorEmail" name="doctorEmail" placeholder="Doctor Email" size="40" required> 
+      <input type="text" id="doctorpassword" name="doctor_password" placeholder="Doctor password" size="40" required> <br>
+      <input type="text" id="visit_date" name="visit_date" placeholder="Visit Date" size="40"> <br>
+      <input type="text" id="patientEmail" name="patientEmail" placeholder="Patient Email" size="40"> <br>
+      <input type="button" value="Create visit Record" onclick="createVisitRecord();">
+    </form>
+
+    <form id="createLabExam-form" method="post">
+      <h3>Create Lab Exam</h3>
+      <input type="text" id="doctorEmail" name="doctorEmail" placeholder="Doctor Email" size="40" required> 
+      <input type="text" id="doctor_password" name="doctor_password" placeholder="Doctor password" size="40" required> <br>
+      <input type="text" id="relatedVisitRecord" name="relatedVisitRecord" placeholder="relate Visit Record" size="40"> <br>
+      <input type="text" id="examItem" name="examItem" placeholder="exam Item" size="40"> <br>
+      <input type="text" id="examDate" name="examDate" placeholder="exam Date" size="40"> <br>
+      <input type="button" value="Create Lab Exam" onclick="createLabExam();">
+    </form>
+
+    <form id="createPrescription-form" method="post">
+      <h3>Create Prescription</h3>
+      <input type="text" id="doctorEmail" name="doctorEmail" placeholder="Doctor Email" size="40" required> 
+      <input type="text" id="doctor_password" name="doctor_password" placeholder="Doctor password" size="40" required> <br>
+      <input type="text" id="relatedVisitRecord" name="relatedVisitRecord" placeholder="relate Visit Record" size="40"> <br>
+      <input type="text" id="medName" name="medName" placeholder="medName" size="40"> <br>
+      <input type="text" id="medDose" name="medDose" placeholder="medDose" size="40"> <br>
+      <input type="text" id="medQuantity" name="medQuantity" placeholder="medQuantity" size="40"> <br>
+      <input type="text" id="refillable" name="refillable" placeholder="refillable" size="40"> <br>
+      <input type="button" value="Create Prescription" onclick="createPrescription();">
+    </form>
+
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
