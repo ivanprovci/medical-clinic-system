@@ -36,8 +36,8 @@
     
       form.addEventListener("submit", (event) => {
         event.preventDefault();
-        const email = sessionStorage.getItem("email");
-        const password = sessionStorage.getItem("password");
+        const email = form.email.value;
+        const password = form.password.value;
         const recordId = form.recordId.value;
     
         fetch(`http://localhost:8080/deleteRecord?email=${email}&password=${password}&recordID=${recordId}`)

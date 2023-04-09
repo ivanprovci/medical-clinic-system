@@ -91,8 +91,8 @@
 
   async function createLabExamResult() {
     const form = document.getElementById("createLabExamResult-form");
-    const staffEmail = sessionStorage.getItem("email");
-    const staffPassword = sessionStorage.getItem("password");
+    const staffEmail = form.staffEmail.value;
+    const staffPassword = form.staffPassword.value;
     const relatedLabExam = form.relatedLabExam.value;
     const result = form.result.value;
     const upperBound = form.upperBound.value;

@@ -33,8 +33,8 @@
 
       async function updateAccountInfo(){
         //get all form inputs
-        var email =sessionStorage.getItem("email")
-        var password = sessionStorage.getItem("password")
+        var email = document.getElementById("email").value
+        var password = await sha512(document.getElementById("password").value)
         var fName = document.getElementById("fname").value
         var lName = document.getElementById("lname").value
         var phoneNo = document.getElementById("phone").value
