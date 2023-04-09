@@ -203,133 +203,31 @@
       </tr>
     </tbody>
   </table>
-  
-<button id="edit-button">Edit Page</button>
-<script>
-async function updateLabExam() {
-  // get all form inputs
-  var email = document.getElementById("email").value
-  var password = await sha512(document.getElementById("password").value)
-  var recordID = document.getElementById("recordID").value
-  var examItem = document.getElementById("examItem").value
-  var examDate = document.getElementById("examDate").value
+   <script>
+window.onload = async function() {
+    async function populateTable() {
+      const response = await fetch('http://localhost:8080/doctorPrescribedLab')
+      const data = await response.json()
 
-  let url = `http://localhost:8080/updateLabExam?email=${email}&password=${password}&recordID=${recordID}&examItem=${examItem}&examDate=${examDate}`
-  fetch(url, {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      email: email,
-      password: password,
-      recordID: recordID,
-      examItem: examItem,
-      examDate: examDate
-    })
-  })
-  .then(response => {
-    if (response.ok) {
-      console.log('Data sent successfully')
-    } else {
-      console.log('Error sending data')
+      const tableRows = document.querySelectorAll('tbody tr')
+
+      data.forEach((item, index) => {
+        const { processName, referenceRange, result, dateConducted } = item
+        const row = tableRows[index]
+
+        row.querySelector('#process' + (index + 1)).textContent = processName
+        row.querySelector('#range' + (index + 1)).textContent = referenceRange
+        row.querySelector('#result' + (index + 1)).textContent = result
+        row.querySelector('#date' + (index + 1)).textContent = dateConducted
+      })
     }
-  })
-  .catch(error => {
-    console.error('Error:', error)
-  })
-
-  document.getElementById("updateSent").style.display = "inline"
-  document.querySelector("form").reset()
-}
-
-async function updateLabExamResult() {
-  // get form inputs
-  var patientEmail = document.getElementById("patient-email").value
-  var labTest = document.getElementById("lab-test").value
-  var dueDate = document.getElementById("due-date").value
-  var upperBound = document.getElementById("upper-bound").value
-  var lowerBound = document.getElementById("lower-bound").value
-  var resultID = document.getElementById("result-id").value
-
-  // retrieve the existing lab exam result record
-  var url = `http://localhost:8080/getRecord?id=${resultID}&email=${localStorage.getItem("email")}`
-  var response = await fetch(url)
-  var existingLabExamResult = await response.json()
-
-  // update the lab exam result record
-  existingLabExamResult.labTest = labTest
-  existingLabExamResult.dueDate = dueDate
-  existingLabExamResult.normalUpperBound = upperBound
-  existingLabExamResult.normalLowerBound = lowerBound
-
-  // send the updated lab exam result to the server
-  fetch('http://localhost:8080/updateLabExamResult', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(existingLabExamResult)
-  })
-  .then(response => {
-    if (response.ok) {
-      console.log('Lab exam result updated successfully')
-    } else {
-      console.log('Error updating lab exam result')
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error)
-  })
-
-  // reset the form and show success message
-  document.querySelector("form").reset()
-  document.getElementById("labExamUpdated").style.display = "inline"
-}
-
     
+    populateTable();
+  }
+ </script>
 
-// Testing sessionStorage.setItem("email", "put the email");
-// Testing sessionStorage.setItem("password", "put the password");
-  // Retrieve data from server
-   fetch('http://localhost:8080/getRecords?email=' + sessionStorage.getItem("email") + '&password=' + sessionStorage.getItem("password") + '&recordType=labExam') 
-    .then(response => response.json())
-    .then(data => {
-      // Update table cells
-      // Loop through data and update table cells
-      for (let i = 0; i < data.length; i++) {
-      const index = i + 1;
-      document.getElementById(`process${index}`).innerText = data[i].examItem;
-      document.getElementById(`date${index}`).innerText = data[i].examDate;
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-
-    // Retrieve data from another endpoint
-    fetch('http://localhost:8080/getRecords?email=' + sessionStorage.getItem("email") + '&password=' + sessionStorage.getItem("password") + '&recordType=labexamresult') 
-  .then(response => response.json())
-  .then(data => {
-    for (let i = 0; i < data.length; i++) {
-      const range = `${data[i].normalLowerBound} - ${data[i].normalUpperBound}`;
-      const resultId = `result${i + 1}`;
-      const rangeId = `range${i + 1}`;
-
-      // Update table cells
-      document.getElementById(resultId).innerText = data[i].result;
-      document.getElementById(rangeId).innerText = range;
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-
-
-  </script>
      
   </body>
 </html>
 
-  </body>
-</html>
+ 
