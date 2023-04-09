@@ -74,87 +74,87 @@
 			flex-basis: 50%;
 			flex-grow: 1;
 			padding: 10px;
-			margin-right: 300px;
-			margin-bottom:20px;
+      padding-left:25px;
+      padding-bottom:25px;
 			background-color: white;
-			height:620px;
       border-radius: 25px;
-      overflow-y: scroll; 
-            
 		}
-		
-      
+    input[type="button"] {
+      padding: 10px 20px;
+      background-color: #7AD7F0;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    input[type="text"] { 
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+    
     </style>
 
-<script>
-  //creating VisitRecords
-  async function createVisitRecord() {
-    const form = document.getElementById("createVisitRecord-form");
-    const doctorEmail = form.doctorEmail.value;
-    const doctorPassword = form.doctor_password.value;
-    const visitDate = form.visit_date.value;
-    const patientEmail = form.patientEmail.value;
+    <script>
+      //creating VisitRecords
+      async function createVisitRecord() {
+        const form = document.getElementById("createVisitRecord-form");
+        const doctorEmail = sessionStorage.getItem("email");
+        const doctorPassword = sessionStorage.getItem("password");
+        const visitDate = form.visit_date.value;
+        const patientEmail = form.patientEmail.value;
 
-    fetch(`http://localhost:8080/createVisitRecord?doctorEmail=${doctorEmail}&doctorPassword=${doctorPassword}&visitDate=${visitDate}&patientEmail=${patientEmail}`)
-      .then(response => {
-        if (response.ok) {
-          alert("New visit record has been created.");
-          // redirect to account details page
-          window.location.assign("accountDetailsPatient.html");
-        } else {
-          alert("Failed to create new visit record.");
-        }
-      });
-  }
+        fetch(`http://localhost:8080/createVisitRecord?doctorEmail=${doctorEmail}&doctorPassword=${doctorPassword}&visitDate=${visitDate}&patientEmail=${patientEmail}`)
+          .then(response => {
+            if (response.ok) {
+              console.log("New visit record has been created.");
+            } else {
+              console.log("Failed to create new visit record.");
+            }
+          });
+      }
 
-  async function createLabExam() {
-    const form = document.getElementById("createLabExam-form");
-    const doctorEmail = form.doctorEmail.value;
-    const doctorPassword = form.doctor_password.value;
-    const relatedVisitRecord = form.relatedVisitRecord.value;
-    const examItem = form.examItem.value;
-    const examDate = form.examDate.value;
+      async function createLabExam() {
+        const form = document.getElementById("createLabExam-form");
+        const doctorEmail = sessionStorage.getItem("email");
+        const doctorPassword = sessionStorage.getItem("password");
+        const relatedVisitRecord = form.relatedVisitRecord.value;
+        const examItem = form.examItem.value;
+        const examDate = form.examDate.value;
 
-    fetch(`http://localhost:8080/createLabExam?doctorEmail=${doctorEmail}&doctorPassword=${doctorPassword}&relatedVisitRecord=${relatedVisitRecord}&examItem=${examItem}&examDate=${examDate}`)
-      .then(response => {
-        if (response.ok) {
-          alert("New lab exam has been created.");
-          // redirect to account details page
-          window.location.assign("accountDetailsPatient.html");
-        } else {
-          alert("Failed to create new lab exam.");
-        }
-      });
-  }
+        fetch(`http://localhost:8080/createLabExam?doctorEmail=${doctorEmail}&doctorPassword=${doctorPassword}&relatedVisitRecord=${relatedVisitRecord}&examItem=${examItem}&examDate=${examDate}`)
+          .then(response => {
+            if (response.ok) {
+              console.log("New lab exam has been created.");
+            } else {
+              console.log("Failed to create new lab exam.");
+            }
+          });
+      }
 
-  async function createPrescription() {
-    const form = document.getElementById("createPrescription-form");
-    const doctorEmail = form.doctorEmail.value;
-    const doctorPassword = form.doctor_password.value;
-    const relatedVisitRecord = form.relatedVisitRecord.value;
-    const medName = form.medName.value;
-    const medDose = form.medDose.value;
-    const medQuantity = form.medQuantity.value;
-    const refillable = form.refillable.value;
+      async function createPrescription() {
+        const form = document.getElementById("createPrescription-form");
+        const doctorEmail = sessionStorage.getItem("email");
+        const doctorPassword = sessionStorage.getItem("password");
+        const relatedVisitRecord = form.relatedVisitRecord.value;
+        const medName = form.medName.value;
+        const medDose = form.medDose.value;
+        const medQuantity = form.medQuantity.value;
+        const refillable = form.refillable.value;
+        
 
-
-    fetch(`http://localhost:8080/createPrescription?doctorEmail=${doctorEmail}&doctorPassword=${doctorPassword}&relatedVisitRecord=${relatedVisitRecord}&medName=${medName}&medDose=${medDose}&medQuantity=${medQuantity}&refillable=${refillable}`)
-      .then(response => {
-        if (response.ok) {
-          alert("New Prescription has been created.");
-          // redirect to account details page
-          window.location.assign("accountDetailsPatient.html");
-        } else {
-          alert("Failed to create new Prescription.");
-        }
-      });
-  }
-
-
-</script>
-
-
+        fetch(`http://localhost:8080/createPrescription?doctorEmail=${doctorEmail}&doctorPassword=${doctorPassword}&relatedVisitRecord=${relatedVisitRecord}&medName=${medName}&medDose=${medDose}&medQuantity=${medQuantity}&refillable=${refillable}`)
+          .then(response => {
+            if (response.ok) {
+              console.log("New Prescription has been created.");
+            } else {
+              console.log("Failed to create new Prescription.");
+            }
+          });
+      }
+    </script>
   </head>
+
   <body>
     <div class="header">
 	<div class="logo">
@@ -175,32 +175,30 @@
 
     <form id="createVisitRecord-form" method="post">
       <h3>Create Visit Record</h3>
-      <input type="text" id="doctorEmail" name="doctorEmail" placeholder="Doctor Email" size="40" required> 
-      <input type="text" id="doctorpassword" name="doctor_password" placeholder="Doctor password" size="40" required> <br>
-      <input type="text" id="visit_date" name="visit_date" placeholder="Visit Date" size="40"> <br>
-      <input type="text" id="patientEmail" name="patientEmail" placeholder="Patient Email" size="40"> <br>
+      <input type="text" id="visit_date" name="visit_date" placeholder="Visit Date (required) YYYY-MM-DD" size="40" required> <br>
+      <input type="text" id="patientEmail" name="patientEmail" placeholder="Patient Email (required)" size="40" required> <br>
       <input type="button" value="Create visit Record" onclick="createVisitRecord();">
     </form>
-
+    <br><br>
     <form id="createLabExam-form" method="post">
       <h3>Create Lab Exam</h3>
-      <input type="text" id="doctorEmail" name="doctorEmail" placeholder="Doctor Email" size="40" required> 
-      <input type="text" id="doctor_password" name="doctor_password" placeholder="Doctor password" size="40" required> <br>
-      <input type="text" id="relatedVisitRecord" name="relatedVisitRecord" placeholder="relate Visit Record" size="40"> <br>
-      <input type="text" id="examItem" name="examItem" placeholder="exam Item" size="40"> <br>
-      <input type="text" id="examDate" name="examDate" placeholder="exam Date" size="40"> <br>
+      <input type="text" id="relatedVisitRecord" name="relatedVisitRecord" placeholder="Related Visit Record ID (required)" size="40"> <br>
+      <input type="text" id="examDate" name="examDate" placeholder="Exam Date (required) YYYY-MM-DD" size="40" required> <br>
+      <input type="text" id="examItem" name="examItem" placeholder="Exam Item" size="40"> <br>
       <input type="button" value="Create Lab Exam" onclick="createLabExam();">
     </form>
-
+    <br><br>
     <form id="createPrescription-form" method="post">
       <h3>Create Prescription</h3>
-      <input type="text" id="doctorEmail" name="doctorEmail" placeholder="Doctor Email" size="40" required> 
-      <input type="text" id="doctor_password" name="doctor_password" placeholder="Doctor password" size="40" required> <br>
-      <input type="text" id="relatedVisitRecord" name="relatedVisitRecord" placeholder="relate Visit Record" size="40"> <br>
+      <input type="text" id="relatedVisitRecord" name="relatedVisitRecord" placeholder="Related Visit Record ID (required)" size="40"> <br>
       <input type="text" id="medName" name="medName" placeholder="medName" size="40"> <br>
       <input type="text" id="medDose" name="medDose" placeholder="medDose" size="40"> <br>
       <input type="text" id="medQuantity" name="medQuantity" placeholder="medQuantity" size="40"> <br>
-      <input type="text" id="refillable" name="refillable" placeholder="refillable" size="40"> <br>
+      <p>Prescription refillable?</p>
+        <input type="radio" id="yes" name="refillable" value="yes" style="margin-left:10px;">
+        <label for="yes">Yes</label><br>
+        <input type="radio" id="no" name="refillable" value="no" style="margin-left:10px;">
+        <label for="no">No</label><br>
       <input type="button" value="Create Prescription" onclick="createPrescription();">
     </form>
 
