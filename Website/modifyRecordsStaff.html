@@ -36,8 +36,8 @@
 
       function updateLabExamResults(){
         //get all form inputs
-        var email = document.getElementById("email").value;
-        var password = document.getElementById("password").value;
+        var email = sessionStorage.getItem("email")
+        var password = sessionStorage.getItem("password")
         var recordID = document.getElementById("recordID").value;
         var result = document.getElementById("result").value;
         var upperBound = document.getElementById("upper-bound").value;

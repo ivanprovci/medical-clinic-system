@@ -36,8 +36,8 @@
 
       function updateVisitRecord(){
         //get all form inputs
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+        const email = sessionStorage.getItem("email")
+        const password = sessionStorage.getItem("password")
         const recordID = document.getElementById("recordID").value;
         const visitDate = document.getElementById("visitDate").value;
         const patientEmail = document.getElementById("patientEmail").value;

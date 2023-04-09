@@ -90,8 +90,8 @@
   //creating VisitRecords
   async function createVisitRecord() {
     const form = document.getElementById("createVisitRecord-form");
-    const doctorEmail = form.doctorEmail.value;
-    const doctorPassword = form.doctor_password.value;
+    const doctorEmail = sessionStorage.getItem("email");
+    const doctorPassword = sessionStorage.getItem("password");
     const visitDate = form.visit_date.value;
     const patientEmail = form.patientEmail.value;
 
@@ -109,8 +109,8 @@
 
   async function createLabExam() {
     const form = document.getElementById("createLabExam-form");
-    const doctorEmail = form.doctorEmail.value;
-    const doctorPassword = form.doctor_password.value;
+    const doctorEmail = sessionStorage.getItem("email");
+    const doctorPassword = sessionStorage.getItem("password");
     const relatedVisitRecord = form.relatedVisitRecord.value;
     const examItem = form.examItem.value;
     const examDate = form.examDate.value;
@@ -129,8 +129,8 @@
 
   async function createPrescription() {
     const form = document.getElementById("createPrescription-form");
-    const doctorEmail = form.doctorEmail.value;
-    const doctorPassword = form.doctor_password.value;
+    const doctorEmail = sessionStorage.getItem("email");
+    const doctorPassword = sessionStorage.getItem("password");
     const relatedVisitRecord = form.relatedVisitRecord.value;
     const medName = form.medName.value;
     const medDose = form.medDose.value;

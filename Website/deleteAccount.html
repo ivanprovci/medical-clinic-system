@@ -46,12 +46,11 @@
       async function deleteAccount(){
         const form = document.getElementById("delete-account-form")
         const message = document.getElementById("delete-message")
-        const email = form.email.value;
-        const password = form.password.value;
-        var hashedPassword = await sha512(password)
+        const email = sessionStorage.getItem("email");
+        const password = sessionStorage.getItem("password");
         const emailToDelete = form.emailToDelete.value;
         
-        fetch(`http://localhost:8080/deleteAccount?email=${email}&password=${hashedPassword}&emailToDelete=${emailToDelete}`)
+        fetch(`http://localhost:8080/deleteAccount?email=${email}&password=${password}&emailToDelete=${emailToDelete}`)
           .then(response => {
             if (response.ok) {
               message.innerText = "Account has been deleted";

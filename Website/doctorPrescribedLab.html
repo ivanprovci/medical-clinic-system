@@ -208,8 +208,8 @@
 <script>
 async function updateLabExam() {
   // get all form inputs
-  var email = document.getElementById("email").value
-  var password = await sha512(document.getElementById("password").value)
+  var email = sessionStorage.getItem("email")
+  var password = sessionStorage.getItem("password")
   var recordID = document.getElementById("recordID").value
   var examItem = document.getElementById("examItem").value
   var examDate = document.getElementById("examDate").value
