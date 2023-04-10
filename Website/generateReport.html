@@ -149,7 +149,16 @@
                 })
             })
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => {
+                output = document.getElementById("reportOutput")
+
+                //clear div
+                output.innerHTML=`Visits per doctor:<br>`
+
+                data.forEach(element => {
+                    output.innerHTML += (`${element.prescribingDoctor}: ${element.relatedPatient} <br>`)
+                })
+            })
 
         } else if (reportType == "patient") {
             const patientEmail = document.getElementById("Email").value
@@ -167,7 +176,16 @@
                 })
             })
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => {
+                output = document.getElementById("reportOutput")
+
+                //clear div
+                output.innerHTML=`Patient visit summary:<br>`
+
+                for (const [key, value] of Object.entries(data)) {
+                    output.innerHTML += (`${key}: ${value}<br>`)
+                }
+            })
 
         } else if (reportType == "prescription") {
             await fetch(`http://localhost:8080/generatePrescriptionReport?staffEmail=${staffEmail}&staffPassword=${staffPassword}&isAnnualReport=${isAnnualReport}`, {
@@ -182,14 +200,34 @@
                 })
             })
             .then(response => response.json())
-            .then(data => console.log(data))
-        }
+            .then(data => {
+                output = document.getElementById("reportOutput")
 
+                //clear div
+                output.innerHTML=`Top 3 prescriptions:<br>`
+
+                for (const [key, value] of Object.entries(data)) {
+                    output.innerHTML += (`${key}: ${value}<br>`)
+                }
+            })
+        }
       }
+
+    //   function test(){
+    //     data =  [{relatedPatient: "patient", recordID: 60, prescribingDoctor: "dr"},
+    //              {relatedPatient: "patient", recordID: 62, prescribingDoctor: "dr"}
+    //             ]
+    //     output = document.getElementById("reportOutput")
+    //     data.forEach(element => {
+
+    //         output.innerHTML += (`${element.prescribingDoctor}: ${element.relatedPatient} <br>`)
+    //     })
+        
+    //   }
     </script>
   </head>
 
-  <body>
+  <body >
     <div class="header">
 	<div class="logo">
      <h1> B.C Health & Wellness</h1>
@@ -201,34 +239,29 @@
       <a onclick="redirect()">ACCOUNT</a>
     </div>
     <div class="container">
-	<div class="column1">
-	</div>
- 
-  <div class="column2">
-    <h2>Generate Report</h2><br><br>
-    <p><strong>Doctor Report:</strong> Total patient visits for each doctor</p>
-    <p><strong>Patient Report:</strong> Every patient's visit summary (how many times for each doctor)</p>
-    <p><strong>Prescription Report:</strong>  Top 3 medicines prescribed to patients across the clinic</p> <br>
-    <form id="createPrescription-form" method="post">
-        <label for="Report-type">Report type:&nbsp;</label>
-        <select id="Report-type" onchange="displayFieldsBasedOnReportType()">
-          <option value="doctor">Doctor</option>
-          <option value="patient">Patient</option>
-          <option value="prescription">Prescription</option>
-        </select> <br><br>
-        <p>Report timeframe</p>
-          <input type="radio" id="annual" name="reportType" value="true" style="margin-left:10px;">
-          <label for="annual">Annual</label><br>
-          <input type="radio" id="monthly" name="reportType" value="false" style="margin-left:10px;">
-          <label for="monthly">Monthly</label><br><br>
-      <input type="text" id="Email" name="Email" placeholder="Doctor Email (required)" size="40"  required> <br>
-      <input type="button" value="Generate Report" onclick="generateReport();">
-    </form>
-
-
-
-
-      </div>
+	<div class="column1"></div>
+    <div class="column2">
+        <h2>Generate Report</h2><br><br>
+        <p><strong>Doctor Report:</strong> Total patient visits for each doctor</p>
+        <p><strong>Patient Report:</strong> Every patient's visit summary (how many times for each doctor)</p>
+        <p><strong>Prescription Report:</strong>  Top 3 medicines prescribed to patients across the clinic</p> <br>
+        <form id="createPrescription-form" method="post">
+            <label for="Report-type">Report type:&nbsp;</label>
+            <select id="Report-type" onchange="displayFieldsBasedOnReportType()">
+            <option value="doctor">Doctor</option>
+            <option value="patient">Patient</option>
+            <option value="prescription">Prescription</option>
+            </select> <br><br>
+            <p>Report timeframe</p>
+            <input type="radio" id="annual" name="reportType" value="true" style="margin-left:10px;">
+            <label for="annual">Annual</label><br>
+            <input type="radio" id="monthly" name="reportType" value="false" style="margin-left:10px;">
+            <label for="monthly">Monthly</label><br><br>
+        <input type="text" id="Email" name="Email" placeholder="Doctor Email (required)" size="40"  required> <br>
+        <input type="button" value="Generate Report" onclick="generateReport();">
+        </form>
+        <br>
+        <div id="reportOutput"></div>
     </div>
   </body>
 </html>
