@@ -161,6 +161,9 @@
         background-color: white;
         border-radius:25px;
         }
+        ul {
+          margin-top: 15px;
+        }
     </style>
     <script>
       async function getAccountData(){
@@ -198,9 +201,25 @@
           alert("Not logged in!")
         }
       }
+      
+      async function isVerified(){
+        let url = "http://localhost:8080/isVerified?patientEmail=" + sessionStorage.getItem("email")
+        let isPatientVerified = await fetch(url)
+          .then(res => res.text())
+        
+        //if patient isnt verified
+        if(isPatientVerified != ""){
+          document.getElementById("approvalTitle").style.backgroundColor = "initial"
+          document.getElementById("approvalTitle").innerHTML = "<strong>Account Status<strong>"
+          document.getElementById("approvalText").innerHTML = "Approved"
+        }
+        else {
+          document.getElementById("viewRecordsVisible").style.display ="none"
+        }
+      }
     </script>
   </head>
-  <body onload="getAccountData()">
+  <body onload="getAccountData(); isVerified()">
     <div class="header">
     <div class="logo">
      <h1> B.C Health & Wellness</h1>
@@ -217,7 +236,7 @@
       <div class="column2">
 
           <h2>Account Details</h2>
-          <ul>
+          <ul style="margin-left:20px">
             <li id="liName">Name:</li><br>
             <li id="liEmail">Email:</li><br>
             <li id="liPhone">Phone Number:</li><br>
@@ -230,17 +249,14 @@
         <nav class="column3-1" style="height:initial">
             <ul>
               <li><a href="modifyAccountDetail-Universal.html">Modify Account Detail</a><br><br>
-              <li><a href="patientVisitHistory.html">Visit History</a><br><br>
-              <li><a href="patientPrescribedLab.html">Patient Prescribed Lab Exams<br></a><br>
-              <li><a href="viewRecords.html">View Records<br></a><br>
-              <li><a href="patientPrescribedMeds.html">Patient Prescribed Medicines</a><br><br>
+              <li id="viewRecordsVisible"><a href="viewRecords.html">View Records<br></a><br>
             </ul>
         </nav>
-      <div class="column3-2">
-      <br>
-      <p><strong>Status</strong></p><br>
-      <p>(Pending or Approved)</p>
-      </div>
+        <div class="column3-2">
+          <br>
+          <p style="background-color: yellow;" id="approvalTitle"><strong>- - -ATTENTION- - -</strong></p><br>
+          <p id="approvalText">Your account has not been approved by a staff member and has limited access. Upon approval, you will be able to see your records.</p>
+        </div>
     </div>
   </body>
 </html>
