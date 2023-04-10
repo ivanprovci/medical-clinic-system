@@ -345,16 +345,21 @@ public class Controller {
     }
     
     @RequestMapping("/getDoctorProfile")
-    public String getDoctorProfile(@RequestParam(value = "email", required = true) String doctorEmail) {
+    public DoctorAccount getDoctorProfile(@RequestParam(value = "email", required = true) String doctorEmail) {
+    	DoctorAccount returnProfile = new DoctorAccount();
     	try {
 			if ((DatabaseAccessor.retrieveAccountInfo(doctorEmail)) instanceof DoctorAccount) {
-				return ((DoctorAccount) DatabaseAccessor.retrieveAccountInfo(doctorEmail)).getProfile();
+				DoctorAccount d = (DoctorAccount) (DatabaseAccessor.retrieveAccountInfo(doctorEmail));
+				returnProfile.setProfile(d.getProfile());
+				returnProfile.setPhoneNo(d.getPhoneNo());
+				returnProfile.setFirstName(d.getFirstName());
+				returnProfile.setLastName(d.getLastName());
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	return "Error: could not retrieve doctor profile.";
+    	return returnProfile;
     }
     
     @RequestMapping("/deleteAccount")

@@ -9,6 +9,9 @@ public DoctorAccount(String email, String password) {
 		this.setRelatedRecords(new LinkedList<Integer>());
 		// TODO Auto-generated constructor stub
 	}
+public DoctorAccount() {
+	// TODO Auto-generated constructor stub
+}
 private String profile;
 private LinkedList<Integer> relatedRecords;
 
