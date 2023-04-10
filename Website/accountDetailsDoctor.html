@@ -186,10 +186,18 @@
           })
 
         let drProfileURL = "http://localhost:8080/getDoctorProfile?email=" + sessionStorage.getItem("email")
-        let profile = await fetch(drProfileURL)
-          .then(res => res.text())
+        let profile = await fetch(drProfileURL, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: sessionStorage.getItem("email")
+          })
+        })
+          .then(res => res.json())
           .then(data => {
-            document.getElementById("liProfile").innerHTML = "Profile: " + data
+            document.getElementById("liProfile").innerHTML = "Profile: " + data.profile
           })
       }
       function redirect(){
@@ -234,10 +242,10 @@
     <div class="column3">
       <nav class="column3-1" style="margin-bottom:initial">
           <ul>
-              <li><a href="modifyAccountDetail-Universal.html">Modify Account Details</a><br><br>
-              <li><a href="CreateNewRecordsDoctor.html">Create New Records</a><br><br>
-              <li><a href="modifyRecordsDoctor.html">Update Existing Record</a><br><br>
-              <li><a href="viewRecords.html">View Records</a><br><br>
+            <li><a href="modifyAccountDetail-Universal.html">Modify Account Details</a><br><br>
+            <li><a href="CreateNewRecordsDoctor.html">Create New Records</a><br><br>
+            <li><a href="updateRecordsDoctor.html">Update Records</a><br><br>
+            <li><a href="viewRecords.html">View Records</a><br><br>
           </ul>
       </nav>
       <div class="column3-2" style="display:none; ">

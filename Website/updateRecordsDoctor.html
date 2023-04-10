@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create New Record</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+    <style>
+     @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap');
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+.logo 
+{
+     margin-left: 20px;
+    font-weight: 700;
+	font-family: Arial;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    
+}
+	  h1{
+	  color:white;}
+	  h2{
+	  text-align:center;
+	  }
+      .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+    padding: 10px;
+}
+
+      .nav {
+        width: 100%;
+        border: 1px outset black;
+        text-align: center;
+        padding:10px;
+		background-color: #7AD7F0;
+		overflow: hidden;
+		margin-top: 10px;
+      }
+	  .nav a {
+			float: center;
+			color: white;
+			font-weight:normal;
+			font-size: 20px;
+			font-family:arial;
+			text-align: center;
+			padding:  14px 16px;
+			text-decoration: none;
+		}
+		.nav a:hover {
+			background-color: gray;
+		}
+		
+      label {
+            font-weight: bold;
+}
+      .container {
+        display: flex;
+        flex-direction: row;
+      }
+	  
+	  .column2 {
+			display: flex;
+			flex-direction: column;
+			flex-basis: 50%;
+			flex-grow: 1;
+			padding: 10px;
+      padding-left:25px;
+      padding-bottom:25px;
+			background-color: white;
+      border-radius: 25px;
+		}
+    input[type="button"] {
+      padding: 10px 20px;
+      background-color: #7AD7F0;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    input[type="text"] { 
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+    </style>
+    <script>
+        function redirect(){
+            let accountType = sessionStorage.getItem("accountType");
+
+            if (accountType == "p"){
+            window.location.assign("accountDetailsPatient.html");
+            } else if (accountType == "s") {
+            window.location.assign("accountDetailsStaff.html");
+            } else if (accountType == "d"){
+            window.location.assign("accountDetailsDoctor.html");
+            }
+            else {
+            alert("Not logged in!")
+            }
+        }
+
+      function updateVisitRecord(){
+        //get all form inputs
+        const email = sessionStorage.getItem("email")
+        const password = sessionStorage.getItem("password")
+        const recordID = document.getElementById("visitRecordID").value;
+        const visitDate = document.getElementById("visitDate").value;
+        const patientEmail = document.getElementById("patientEmail").value;
+
+
+        let url = `http://localhost:8080/updateVisitRecord?email=${email}&password=${password}&recordID=${recordID}&visitDate=${visitDate}&patientEmail=${patientEmail}`;
+        fetch(url, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            recordID: recordID,
+            visitDate: visitDate,
+            patientEmail: patientEmail
+          })
+        })
+        .then(response => {
+          if (response.ok) {
+            console.log('Data sent successfully')
+          } else {
+            console.log('Error sending data')
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error)
+        })
+
+        document.querySelector("form").reset()
+      }
+
+      function updatePrescription(){
+        //get all form inputs
+        const form = document.getElementById("createPrescription-form")
+        var email = sessionStorage.getItem("email")
+        var password = sessionStorage.getItem("password")
+        var recordID = document.getElementById("prescriptionRecordID").value;
+        var medicineName = document.getElementById("medName").value;
+        var quantity = document.getElementById("medQuantity").value;
+        var dose = document.getElementById("medDose").value;
+        var refillable = form.refillable.value;
+    
+        let url =  `http://localhost:8080/updatePrescription?email=${email}&password=${password}&recordID=${recordID}&medicineName=${medicineName}&quantity=${quantity}&dose=${dose}&refillable=${refillable}`;
+        fetch(url, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            recordID: recordID,
+            medicineName: medicineName,
+            quantity: quantity,
+            dose: dose,
+            refillable: refillable
+    
+          })
+        })
+        .then(response => {
+          if (response.ok) {
+            console.log('Data sent successfully')
+          } else {
+            console.log('Error sending data')
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error)
+        })
+
+        document.getElementById("createPrescription-form").reset()
+      }
+
+      function updateLabExam(){
+        //get all form inputs
+        const email = sessionStorage.getItem("email")
+        const password = sessionStorage.getItem("password")
+        const recordID  = document.getElementById("labExamRecordID").value;
+        const examItem = document.getElementById("examItem").value;
+        const examDate = document.getElementById("examDate").value;
+
+        let url = `http://localhost:8080/updateLabExam?email=${email}&password=${password}&recordID=${recordID}&examItem=${examItem}&examDate=${examDate}`;
+        fetch(url, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            recordID: recordID,
+            examItem: examItem,
+            examDate: examDate
+          })
+        })
+        .then(response => {
+          if (response.ok) {
+            console.log('Data sent successfully')
+          } else {
+            console.log('Error sending data')
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error)
+        })
+
+        document.getElementById("createLabExam-form").reset()
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="header">
+	<div class="logo">
+     <h1> B.C Health & Wellness</h1>
+    </div>
+	</div>
+
+    <div class="nav">
+      <a href="homePage.html">HOME</a>
+      <a onclick="redirect()">ACCOUNT</a>
+    </div>
+    <div class="container">
+	<div class="column1">
+	</div>
+ 
+  <div class="column2">
+    <h2>Update Records</h2><br><br>
+
+    <form id="createVisitRecord-form" method="post">
+      <h3>Update Visit Record</h3>
+      <input type="text" id="visitRecordID"     placeholder="Visit RecordID (required)" size="40" required> <br>
+      <input type="text" id="visitDate"        placeholder="Visit Date YYYY-MM-DD" size="40"> <br>
+      <input type="text" id="patientEmail"      placeholder="Patient Email" size="40"> <br>
+      <input type="button" value="Update Visit Record" onclick="updateVisitRecord();">
+    </form>
+    <br><br>
+    <form id="createLabExam-form" method="post">
+      <h3>Update Lab Exam</h3>
+      <input type="text" id="labExamRecordID"    placeholder="Lab Exam RecordID (required)" size="40" required> <br>
+      <input type="text" id="examDate"              placeholder="Exam Date YYYY-MM-DD" size="40"> <br>
+      <input type="text" id="examItem"              placeholder="Exam Item" size="40"> <br>
+      <input type="button" value="Update Lab Exam" onclick="updateLabExam();">
+    </form>
+    <br><br>
+    <form id="createPrescription-form" method="post">
+      <h3>Update Prescription</h3>
+      <input type="text" id="prescriptionRecordID"    placeholder="Prescription RecordID (required)" size="40" required> <br>
+      <input type="text" id="medName"               placeholder="medName" size="40" > <br>
+      <input type="text" id="medDose"               placeholder="medDose" size="40"> <br>
+      <input type="text" id="medQuantity"           placeholder="medQuantity" size="40"> <br>
+      <p>Prescription refillable?</p>
+        <input type="radio" id="yes" name="refillable" value="true" style="margin-left:10px;">
+        <label for="yes">Yes</label><br>
+        <input type="radio" id="no" name="refillable" value="false" style="margin-left:10px;">
+        <label for="no">No</label><br>
+      <input type="button" value="Update Prescription" onclick="updatePrescription();">
+    </form>
+
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
