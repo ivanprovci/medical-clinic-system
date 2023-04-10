@@ -792,4 +792,19 @@ public class Controller {
     	
     }
     
+    @RequestMapping("/isVerified")
+    public String isVerified(@RequestParam(value = "patientEmail", required = true) String patientEmail) {
+    	Account a;
+		try {
+			a = DatabaseAccessor.retrieveAccountInfo(patientEmail);
+			if (a instanceof PatientAccount) {
+	    		return ((PatientAccount) a).getVerifiedBy();
+	    	}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return null;
+    }
 }
