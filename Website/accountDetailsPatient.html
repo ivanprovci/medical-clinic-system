@@ -207,7 +207,7 @@
         let isPatientVerified = await fetch(url)
           .then(res => res.text())
         
-        //if patient isnt verified
+        //if patient is verified
         if(isPatientVerified != ""){
           document.getElementById("approvalTitle").style.backgroundColor = "initial"
           document.getElementById("approvalTitle").innerHTML = "<strong>Account Status<strong>"
@@ -215,6 +215,7 @@
         }
         else {
           document.getElementById("viewRecordsVisible").style.display ="none"
+          document.getElementById("viewRecordsVisible2").style.display ="none"
         }
       }
     </script>
@@ -249,13 +250,14 @@
         <nav class="column3-1" style="height:initial">
             <ul>
               <li><a href="modifyAccountDetail-Universal.html">Modify Account Detail</a><br><br>
+              <li id="viewRecordsVisible2"><a href="viewDoctorProfile.html">View Doctor Profile</a><br><br>
               <li id="viewRecordsVisible"><a href="viewRecords.html">View Records<br></a><br>
             </ul>
         </nav>
         <div class="column3-2">
           <br>
           <p style="background-color: yellow;" id="approvalTitle"><strong>- - -ATTENTION- - -</strong></p><br>
-          <p id="approvalText">Your account has not been approved by a staff member and has limited access. Upon approval, you will be able to see your records.</p>
+          <p id="approvalText">Your account has not been approved by a staff member and has limited access. Upon approval, you will be able to see your records and check doctor profiles.</p>
         </div>
     </div>
   </body>

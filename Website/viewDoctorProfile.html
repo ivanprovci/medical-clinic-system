@@ -127,10 +127,8 @@
             flex-direction: column;
             flex-basis: 50%;
             flex-grow: 1;
-            padding: 10px;
-            margin-right: 20px;
+            padding: 20px;
             background-color: white;
-            height:400px;
             border-radius: 25px;
         }
         .column3 {
@@ -164,32 +162,16 @@
     </style>
     <script>
       async function getAccountData(){
-        let url = "http://localhost:8080/retrieveAccount?email=" + sessionStorage.getItem("email") + "&password=" + sessionStorage.getItem("password")
-        let info = await fetch(url, {
-          method: "POST",
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: sessionStorage.getItem("email"),
-            password: sessionStorage.getItem("password")
-          })
-        })
+        let drProfileURL = "http://localhost:8080/getDoctorProfile?email=" + document.getElementById("doctorEmail").value
+        let profile = await fetch(drProfileURL)
           .then(res => res.json())
           .then(data => {
             document.getElementById("liName").innerHTML = "Name: " + data.firstName + " " + data.lastName
-            document.getElementById("liEmail").innerHTML = "Email: " + sessionStorage.getItem("email")
             document.getElementById("liPhone").innerHTML = "Phone: " + data.phoneNo
-          })
-
-        let drProfileURL = "http://localhost:8080/getDoctorProfile?email=" + sessionStorage.getItem("email")
-        let profile = await fetch(drProfileURL)
-          .then(res => res.text())
-          .then(data => {
-            document.getElementById("liProfile").innerHTML = "Profile: " + data
-            document.getElementById("email").innerHTML = "Email: " + sessionStorage.getItem("email")
+            document.getElementById("liProfile").innerHTML = "Profile: " + data.profile
           })
       }
+      
       function redirect(){
         let accountType = sessionStorage.getItem("accountType");
 
@@ -206,7 +188,7 @@
       }
     </script>
   </head>
-  <body onload="getAccountData()">
+  <body>
     <div class="header">
     <div class="logo">
      <h1> B.C Health & Wellness</h1>
@@ -221,16 +203,17 @@
     <div class="column1">
     </div>
       <div class="column2">
-        <h2>My Doctor's Details</h2>
-                                  <br>
-          <ul>   <label for="email">Enter Doctor's Email:</label>
-<input type="email" id="email" name="email">
-                     <br>
-                                       <br>
-          <li id="liName">Name: Dr</li><br>
-          <li id="liEmail">Email:</li><br>
-          <li id="liPhone">Phone Number:</li><br>
-          <li id="liProfile">Profile:</li><br>
+        <h2>My Doctor's Details</h2><br>
+          <label for="doctorEmail">Enter Doctor's Email:</label>
+          <input type="email" id="doctorEmail" name="doctorEmail" style="padding:6px"><br>
+
+          <ul>
+            <li id="liName">Name: </li><br>
+            <li id="liPhone">Phone Number:</li><br>
+            <li id="liProfile">Profile:</li><br>
+          </ul>
+
+          <button onclick="getAccountData()">Get Info</button>
 
 
       </div>
