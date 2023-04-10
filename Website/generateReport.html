@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create New Record</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+    <style>
+     @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap');
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+.logo 
+{
+     margin-left: 20px;
+    font-weight: 700;
+	font-family: Arial;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    
+}
+	  h1{
+	  color:white;}
+	  h2{
+	  text-align:center;
+	  }
+      .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+    padding: 10px;
+}
+
+      .nav {
+        width: 100%;
+        border: 1px outset black;
+        text-align: center;
+        padding:10px;
+		background-color: #7AD7F0;
+		overflow: hidden;
+		margin-top: 10px;
+      }
+	  .nav a {
+			float: center;
+			color: white;
+			font-weight:normal;
+			font-size: 20px;
+			font-family:arial;
+			text-align: center;
+			padding:  14px 16px;
+			text-decoration: none;
+		}
+		.nav a:hover {
+			background-color: gray;
+		}
+		
+      label {
+            font-weight: bold;
+}
+      .container {
+        display: flex;
+        flex-direction: row;
+      }
+	  
+	  .column2 {
+			display: flex;
+			flex-direction: column;
+			flex-basis: 50%;
+			flex-grow: 1;
+			padding: 10px;
+      padding-left:25px;
+      padding-bottom:25px;
+			background-color: white;
+      border-radius: 25px;
+		}
+    input[type="button"] {
+      padding: 10px 20px;
+      background-color: #7AD7F0;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    input[type="text"] { 
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+    
+    </style>
+
+    <script>
+      function redirect(){
+        let accountType = sessionStorage.getItem("accountType");
+
+        if (accountType == "p"){
+          window.location.assign("accountDetailsPatient.html");
+        } else if (accountType == "s") {
+          window.location.assign("accountDetailsStaff.html");
+        } else if (accountType == "d"){
+          window.location.assign("accountDetailsDoctor.html");
+        }
+        else {
+          alert("Not logged in!")
+        }
+      }
+
+      function displayFieldsBasedOnReportType(){
+        var reportType = document.getElementById("Report-type").value
+
+        if(reportType == "doctor"){
+            document.getElementById("Email").style.display = "inline"
+            document.getElementById("Email").placeholder = "Dr Email (Required)"
+        } else if (reportType == "patient"){
+            document.getElementById("Email").style.display = "inline"
+            document.getElementById("Email").placeholder = "Patient Email (Required)"
+        } else if (reportType == "prescription"){
+            document.getElementById("Email").style.display = "none"
+        }
+      }
+
+      //creating VisitRecords
+      async function generateReport() {
+        const form = document.getElementById("createPrescription-form");
+        const staffEmail = sessionStorage.getItem("email");
+        const staffPassword = sessionStorage.getItem("password");
+        const reportType = document.getElementById("Report-type").value;
+        const isAnnualReport = form.reportType.value;
+
+        if(reportType == "doctor"){
+            const doctorEmail = document.getElementById("Email").value
+            
+            await fetch(`http://localhost:8080/generateDoctorReport?staffEmail=${staffEmail}&staffPassword=${staffPassword}&isAnnualReport=${isAnnualReport}&doctorEmail=${doctorEmail}`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    staffEmail: staffEmail,
+                    staffPassword: staffPassword,
+                    isAnnualReport: isAnnualReport,
+                    doctorEmail: doctorEmail
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+
+        } else if (reportType == "patient") {
+            const patientEmail = document.getElementById("Email").value
+
+            await fetch(`http://localhost:8080/generatePatientReport?staffEmail=${staffEmail}&staffPassword=${staffPassword}&isAnnualReport=${isAnnualReport}&patientEmail=${patientEmail}`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    staffEmail: staffEmail,
+                    staffPassword: staffPassword,
+                    isAnnualReport: isAnnualReport,
+                    patientEmail: patientEmail
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+
+        } else if (reportType == "prescription") {
+            await fetch(`http://localhost:8080/generatePrescriptionReport?staffEmail=${staffEmail}&staffPassword=${staffPassword}&isAnnualReport=${isAnnualReport}`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    staffEmail: staffEmail,
+                    staffPassword: staffPassword,
+                    isAnnualReport: isAnnualReport,
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+        }
+
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="header">
+	<div class="logo">
+     <h1> B.C Health & Wellness</h1>
+    </div>
+	</div>
+
+    <div class="nav">
+      <a href="homePage.html">HOME</a>
+      <a onclick="redirect()">ACCOUNT</a>
+    </div>
+    <div class="container">
+	<div class="column1">
+	</div>
+ 
+  <div class="column2">
+    <h2>Generate Report</h2><br><br>
+    <p><strong>Doctor Report:</strong> Total patient visits for each doctor</p>
+    <p><strong>Patient Report:</strong> Every patient's visit summary (how many times for each doctor)</p>
+    <p><strong>Prescription Report:</strong>  Top 3 medicines prescribed to patients across the clinic</p> <br>
+    <form id="createPrescription-form" method="post">
+        <label for="Report-type">Report type:&nbsp;</label>
+        <select id="Report-type" onchange="displayFieldsBasedOnReportType()">
+          <option value="doctor">Doctor</option>
+          <option value="patient">Patient</option>
+          <option value="prescription">Prescription</option>
+        </select> <br><br>
+        <p>Report timeframe</p>
+          <input type="radio" id="annual" name="reportType" value="true" style="margin-left:10px;">
+          <label for="annual">Annual</label><br>
+          <input type="radio" id="monthly" name="reportType" value="false" style="margin-left:10px;">
+          <label for="monthly">Monthly</label><br><br>
+      <input type="text" id="Email" name="Email" placeholder="Doctor Email (required)" size="40"  required> <br>
+      <input type="button" value="Generate Report" onclick="generateReport();">
+    </form>
+
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
