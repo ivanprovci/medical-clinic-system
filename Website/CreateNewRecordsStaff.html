@@ -104,8 +104,8 @@
 
   async function createLabExamResult() {
     const form = document.getElementById("createLabExamResult-form");
-    const staffEmail = form.staffEmail.value;
-    const staffPassword = form.staffPassword.value;
+    const staffEmail = sessionStorage.getItem("email");
+    const staffPassword = sessionStorage.getItem("password");
     const relatedLabExam = form.relatedLabExam.value;
     const result = form.result.value;
     const upperBound = form.upperBound.value;
@@ -151,9 +151,7 @@
 
     <form id="createLabExamResult-form" method="post" style="margin-left: 20px;">
       <h3>Create Lab Exam Results </h3>
-      <input type="text" id="staffEmail" name="staffEmail" placeholder="staff Email" size="40" required> 
-      <input type="text" id="staffPassword" name="staffPassword" placeholder="staff Password" size="40" required> <br>
-      <input type="text" id="relatedLabExam" name="relatedLabExam" placeholder="related Lab Exam" size="40"> <br>
+      <input type="text" id="relatedLabExam" name="relatedLabExam" placeholder="Lab Exam ID" size="40"> <br>
       <input type="text" id="result" name="result" placeholder="result" size="40"> <br>
       <input type="text" id="upperBound" name="upperBound" placeholder="upperBound" size="40"> <br>
       <input type="text" id="lowerBound" name="lowerBound" placeholder="lowerBound" size="40"> <br>
