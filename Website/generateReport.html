@@ -156,7 +156,7 @@
                 output.innerHTML=`Visits per doctor:<br>`
 
                 data.forEach(element => {
-                    output.innerHTML += (`${element.prescribingDoctor}: ${element.relatedPatient} <br>`)
+                    output.innerHTML += (`${element.relatedPatient}: ${element.visitDate} <br>`)
                 })
             })
 
@@ -212,18 +212,6 @@
             })
         }
       }
-
-    //   function test(){
-    //     data =  [{relatedPatient: "patient", recordID: 60, prescribingDoctor: "dr"},
-    //              {relatedPatient: "patient", recordID: 62, prescribingDoctor: "dr"}
-    //             ]
-    //     output = document.getElementById("reportOutput")
-    //     data.forEach(element => {
-
-    //         output.innerHTML += (`${element.prescribingDoctor}: ${element.relatedPatient} <br>`)
-    //     })
-        
-    //   }
     </script>
   </head>
 
@@ -260,7 +248,7 @@
         <input type="text" id="Email" name="Email" placeholder="Doctor Email (required)" size="40"  required> <br>
         <input type="button" value="Generate Report" onclick="generateReport();">
         </form>
-        <br>
+        <br> <br>
         <div id="reportOutput"></div>
     </div>
   </body>
