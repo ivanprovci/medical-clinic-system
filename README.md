@@ -1,2 +1,3 @@
-# INFO_2413_Project
-Group project for INFO 2413
+Medical Clinic System
+
+Refactoring in progress...
